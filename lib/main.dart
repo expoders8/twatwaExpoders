@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'Twatwa',
       themeMode: ThemeMode.system,
       theme: Provider.of<ThemeProvider>(context, listen: false).getTheme(),
-      initialRoute: Routes.loginPage,
+      initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     );
   }

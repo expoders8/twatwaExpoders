@@ -69,6 +69,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: const TextStyle(color: kWhiteColor),
       controller: widget.ctrl,
       keyboardType: widget.keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -80,10 +81,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         filled: true,
-        fillColor: const Color(0xFF493F54),
-        contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        fillColor: const Color(0xB3493F54),
         hintStyle: const TextStyle(color: kWhiteColor),
         labelStyle: const TextStyle(color: kWhiteColor),
+        contentPadding: const EdgeInsets.fromLTRB(17, 17, 17, 17),
         prefixIcon: widget.prefixIcon != null
             ? ImageIcon(
                 AssetImage(widget.prefixIcon ?? ''),
@@ -110,19 +111,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           borderRadius: BorderRadius.all(
             Radius.circular(5.0),
           ),
-          borderSide: BorderSide(color: Color(0xFF493F54)),
+          borderSide: BorderSide(color: Color(0xB3493F54)),
         ),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(5.0),
           ),
-          borderSide: BorderSide(color: Color(0xFF493F54)),
+          borderSide: BorderSide(color: Color(0xB3493F54)),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(5.0),
           ),
-          borderSide: BorderSide(color: Color(0xFF493F54)),
+          borderSide: BorderSide(color: Color(0xB3493F54)),
         ),
       ),
       maxLines: widget.maxLines,

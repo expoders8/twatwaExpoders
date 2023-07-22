@@ -9,7 +9,7 @@ class ThemeProvider extends ChangeNotifier {
   // static const fontFamilyMedium = kFuturaPTMedium;
 
   static BoxDecoration scaffoldDecoration =
-      BoxDecoration(color: Color.fromARGB(255, 255, 200, 0));
+      const BoxDecoration(color: Color.fromARGB(255, 255, 200, 0));
 
   static ThemeData primary = ThemeData(
     // fontFamily: fontFamilyNormal,
@@ -48,7 +48,8 @@ class ThemeProvider extends ChangeNotifier {
   );
 
   ThemeProvider(isDarkTheme) {
-    scaffoldDecoration = BoxDecoration(color: Color.fromARGB(255, 255, 200, 0));
+    scaffoldDecoration =
+        const BoxDecoration(color: Color.fromARGB(255, 255, 200, 0));
     _selectedTheme = primary;
   }
 
