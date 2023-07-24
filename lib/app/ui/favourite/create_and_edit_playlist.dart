@@ -38,8 +38,8 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
         //   scale: 7,
         // ),
         title: Text(
-          "${topHeaderName} Playlist",
-          style: TextStyle(color: kWhiteColor, fontSize: 19),
+          "$topHeaderName Playlist",
+          style: const TextStyle(color: kWhiteColor, fontSize: 19),
         ),
         elevation: 1,
       ),

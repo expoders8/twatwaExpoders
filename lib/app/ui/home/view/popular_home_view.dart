@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../config/constant/color_constant.dart';
 import '../../../models/user_list_model.dart';
-import '../../widgets/card_widget.dart';
 
 class PopularHomeView extends StatefulWidget {
   const PopularHomeView({super.key});

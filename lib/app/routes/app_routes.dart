@@ -12,6 +12,9 @@ abstract class Routes {
   static const createPlaylistPage = _Paths.createPlaylistPage;
   static const editPlaylistPage = _Paths.editPlaylistPage;
   static const videoUploadedPage = _Paths.videoUploadedPage;
+  static const menuPage = _Paths.menuPage;
+  static const menuVideoListPage = _Paths.menuVideoListPage;
+  static const videoDetailsPage = _Paths.videoDetailsPage;
 }
 
 abstract class _Paths {
@@ -23,4 +26,7 @@ abstract class _Paths {
   static const createPlaylistPage = '/createPlaylistPage';
   static const editPlaylistPage = '/editPlaylistPage';
   static const videoUploadedPage = '/videoUploadedPage';
+  static const menuPage = '/menuPage';
+  static const menuVideoListPage = '/menuVideoListPage';
+  static const videoDetailsPage = '/videoDetailsPage';
 }

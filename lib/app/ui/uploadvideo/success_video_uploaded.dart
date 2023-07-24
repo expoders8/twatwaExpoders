@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:twatwa/app/ui/home/tab_page.dart';
 
 import '../../../config/constant/color_constant.dart';
-import '../../routes/app_pages.dart';
 
 class VideoUploadedPage extends StatefulWidget {
   const VideoUploadedPage({super.key});
@@ -18,13 +17,19 @@ class _VideoUploadedPageState extends State<VideoUploadedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shadowColor: kButtonSecondaryColor,
         backgroundColor: kBackGroundColor,
         centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Image.asset(
-            "assets/icons/back.png",
-            scale: 9,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Image.asset(
+              "assets/icons/back.png",
+              scale: 9,
+            ),
           ),
         ),
         title: const Text(

@@ -63,24 +63,29 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            const Text(
-                              "Discover",
-                              style: TextStyle(
-                                  color: kWhiteColor,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(top: 5),
-                              height: 20.71,
-                              width: 30.02,
-                              child: Image.asset(
-                                "assets/icons/dropdown.png",
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.menuPage);
+                          },
+                          child: Row(
+                            children: [
+                              const Text(
+                                "Discover",
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          ],
+                              Container(
+                                padding: const EdgeInsets.only(top: 5),
+                                height: 20.71,
+                                width: 30.02,
+                                child: Image.asset(
+                                  "assets/icons/dropdown.png",
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Row(
                           children: [
@@ -138,101 +143,113 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 35),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      const SizedBox(height: 25),
+                      Stack(
+                        clipBehavior: Clip.none,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.only(left: 22),
-                            width: 280,
-                            child: const Text(
-                              "Charlie Puth - We Don’t Talk Anymore feat.Selena Gomez Official Video",
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 37),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                  color: kButtonColor,
-                                  borderRadius: BorderRadius.circular(20)),
-                              height: 42,
-                              width: 42,
-                              child: Image.asset(
-                                "assets/icons/Play.png",
-                                scale: 2,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: 42,
-                                  width: 42,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.asset(
-                                      "assets/images/authBackground.png",
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 22),
+                                    width: 270,
+                                    child: const Text(
+                                      "Charlie Puth - We Don’t Talk Anymore feat.Selena Gomez Official Video",
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Row(
+                                ],
+                              ),
+                              const SizedBox(height: 25),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            "Shivani Sharma",
-                                            style: TextStyle(
-                                                color: kTextsecondarytopColor,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            "23k Follwers",
-                                            style: TextStyle(
-                                              color: kTextsecondarybottomColor,
-                                              fontSize: 11,
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 42,
+                                          width: 42,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.asset(
+                                              "assets/images/authBackground.png",
                                             ),
                                           ),
-                                        ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: const [
+                                                  Text(
+                                                    "Shivani Sharma",
+                                                    style: TextStyle(
+                                                        color:
+                                                            kTextsecondarytopColor,
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  Text(
+                                                    "23k Follwers",
+                                                    style: TextStyle(
+                                                      color:
+                                                          kTextsecondarybottomColor,
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          right: 20, top: 9),
+                                      child: const Text(
+                                        "10,678 Views",
+                                        style: TextStyle(
+                                            color: kTextsecondarytopColor,
+                                            fontSize: 13,
+                                            fontFamily: kFuturaPTDemi),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 20, top: 9),
-                              child: const Text(
-                                "10,678 Views",
-                                style: TextStyle(
-                                    color: kTextsecondarytopColor,
-                                    fontSize: 13,
-                                    fontFamily: kFuturaPTDemi),
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            right: -34,
+                            top: -80,
+                            child: SizedBox(
+                              child: Image.asset(
+                                "assets/images/playbuttonehover.png",
+                                scale: 1.4,
                               ),
                             ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(left: 19),
                         child: Row(
@@ -251,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 30),
                       Column(
                         children: [
                           Padding(

@@ -1,7 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../config/constant/color_constant.dart';
 
@@ -37,19 +36,6 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
     }
   }
 
-  Future _toggleIsDisLikedState() async {
-    setState(() {
-      isLikedState = false;
-    });
-    if (getIsLikedState) {
-      setState(() =>
-          {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
-    } else {
-      setState(() =>
-          {isLikedState = true, widget.likeCount = (widget.likeCount! + 1)});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -57,7 +43,7 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
         GestureDetector(
           onTap: _toggleIsLikedState,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),

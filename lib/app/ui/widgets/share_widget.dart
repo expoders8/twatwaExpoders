@@ -1,13 +1,11 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../../../config/provider/loader_provider.dart';
 
 class ShareWidget extends StatelessWidget {
   final String text;
@@ -65,10 +63,9 @@ class ShareWidget extends StatelessWidget {
     final path = '${temp.path}/image.jpg';
 
     String appUrl = Platform.isIOS ? appStoreUrl : playStoreUrl;
-    final titleText = "test..";
+    const titleText = "test..";
     final appLink = "Get the free app at $appUrl";
 
-    // ignore: deprecated_member_use
     Share.share('$titleText\n$text\n\n$appLink');
   }
 }
