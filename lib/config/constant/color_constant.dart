@@ -10,14 +10,16 @@ const kHintTextStyleColor = Color(0x99FEFEFE);
 const kButtonColor = Color(0xEFFF3465);
 const kButtonSecondaryColor = Color(0xFF797A8E);
 const kErrorColor = Color(0xFFFF2C1D);
+const kCreditCardPrimaryColor = Color(0XffB62CFF);
+const kCreditCardSecondaryColor = Color(0XFF0597BA);
 
 const kBackGroundColor = Color(0xFF121330);
 const kAuthBackGraundColor = Color(0x9B242A52);
 
 const kPrimaryColor = Color(0XFF153165);
 const kTextSecondaryColor = Color(0xFFADBBD6);
-const kCardColor = Color.fromARGB(235, 255, 255, 255);
 const kDottedBorderColor = Color(0Xff707070);
+const kCardColor = Color(0xFF1B1C38);
 
 const kTransparentColor = Color(0x00000000);
 const kWhiteColor = Color(0XFFFFFFFF);

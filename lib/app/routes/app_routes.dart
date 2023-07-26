@@ -15,6 +15,9 @@ abstract class Routes {
   static const menuPage = _Paths.menuPage;
   static const menuVideoListPage = _Paths.menuVideoListPage;
   static const videoDetailsPage = _Paths.videoDetailsPage;
+  static const commentReplyPage = _Paths.commentReplyPage;
+  static const checkOutPaymentPage = _Paths.checkOutPaymentPage;
+  static const profilePage = _Paths.profilePage;
 }
 
 abstract class _Paths {
@@ -29,4 +32,7 @@ abstract class _Paths {
   static const menuPage = '/menuPage';
   static const menuVideoListPage = '/menuVideoListPage';
   static const videoDetailsPage = '/videoDetailsPage';
+  static const commentReplyPage = '/commentReplyPage';
+  static const checkOutPaymentPage = '/checkOutPaymentPage';
+  static const profilePage = '/profilePage';
 }

@@ -1,7 +1,9 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/color_constant.dart';
+import '../../../routes/app_pages.dart';
 import '../../../models/user_list_model.dart';
+import '../../../../config/constant/color_constant.dart';
 
 class BestEnglishSongFavouiteView extends StatefulWidget {
   const BestEnglishSongFavouiteView({super.key});
@@ -38,7 +40,9 @@ class _BestEnglishSongFavouiteViewState
       itemCount: videos.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(Routes.videoDetailsPage);
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

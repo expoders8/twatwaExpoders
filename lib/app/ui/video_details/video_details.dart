@@ -1,12 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../../config/constant/color_constant.dart';
-import '../../../config/constant/font_constant.dart';
+import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
-import '../widgets/playlist_widget.dart';
 import '../widgets/share_widget.dart';
+import '../video_details/about/about.dart';
+import '../video_details/upNext/upnext.dart';
+import '../video_details/comments/comments.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../../config/constant/color_constant.dart';
 
 class VideoDetailsPage extends StatefulWidget {
   const VideoDetailsPage({super.key});
@@ -17,228 +20,579 @@ class VideoDetailsPage extends StatefulWidget {
 
 class _MatrimonialListPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
-  TabController? _tabController;
-  var tabList = [
-    "UP NEXT VIDEOS",
-    "ABOUT",
-    "COMMENTS",
+  int tabindex = 0;
+  int dishblevalue = 0;
+  bool isChecked = false;
+  List selectedItemsList = [];
+  final List<ListItem> _items = [
+    ListItem('Save for later', false),
+    ListItem('My Favourite video', false),
+    ListItem('Songs', false),
+    ListItem('Comedy', false),
   ];
+
   @override
   Widget build(BuildContext context) {
-    _tabController = TabController(
-      length: tabList.length,
-      vsync: this,
-      initialIndex: 0,
-    );
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 250,
-            width: Get.width,
-            child: Image.asset(
-              "assets/images/imagebg.png",
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              SizedBox(
-                                width: 210,
-                                child: Text(
-                                  "We Don’t Talk Anymore feat. Selena Gomezfsdfsdfsdfdfsfsdfsdf",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: kTextsecondarytopColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "12th, July 2019",
-                                style: TextStyle(
-                                  color: kTextsecondarybottomColor,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 20, top: 0),
-                  child: const Text(
-                    "10,678 Views",
-                    style: TextStyle(
-                        color: kTextsecondarytopColor,
-                        fontSize: 13,
-                        fontFamily: kFuturaPTDemi),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 19),
-            child: Row(
-              children: [
-                LikeWidget(
-                  isLiked: false,
-                  likeCount: 1,
-                  dislikeCount: 1,
-                  isdisLiked: false,
-                ),
-                const SizedBox(width: 10),
-                const ShareWidget(title: "", imageUrl: "", text: ""),
-                const SizedBox(width: 10),
-                PlaylistWidget(isLiked: false, likeCount: 1),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            "---------------------------------------------------",
-            style: TextStyle(
-                fontWeight: FontWeight.w100,
-                letterSpacing: 3,
-                color: kButtonSecondaryColor,
-                fontSize: 10,
-                fontFamily: kFuturaPTBook),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 22),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      height: 42,
-                      width: 42,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          "assets/images/authBackground.png",
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Shivani Sharma",
-                                style: TextStyle(
-                                    color: kTextsecondarytopColor,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "23k Follwers",
-                                style: TextStyle(
-                                  color: kTextsecondarybottomColor,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 28),
-                  // width: 150,
-                  child: CupertinoButton(
-                    padding: const EdgeInsets.all(8),
-                    color: kButtonColor,
-                    borderRadius: BorderRadius.circular(25),
-                    onPressed: () {},
-                    child: const Text(
-                      '23K FOLLOW',
-                      style: TextStyle(
-                          color: kWhiteColor, letterSpacing: 1.5, fontSize: 12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Column(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              Theme(
-                data: ThemeData(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                ),
-                child: Container(
-                  color: kBackGroundColor,
-                  child: TabBar(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                    isScrollable: true,
-                    controller: _tabController,
-                    labelStyle: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w300),
-                    labelColor: kButtonColor,
-                    unselectedLabelColor: kWhiteColor,
-                    indicatorWeight: 1,
-                    indicator: const BoxDecoration(
-                        color: kTransparentColor,
-                        border: Border(
-                            bottom:
-                                BorderSide(color: kButtonColor, width: 0.5))),
-                    tabs: List.generate(
-                      tabList.length,
-                      (index) => Column(
-                        children: [
-                          Tab(text: tabList[index]),
-                        ],
-                      ),
-                    ),
-                  ),
+              SizedBox(
+                height: 250,
+                width: Get.width,
+                child: Image.asset(
+                  "assets/images/imagebg.png",
+                  fit: BoxFit.cover,
                 ),
               ),
+              const SizedBox(height: 10),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  SizedBox(
+                                    width: 210,
+                                    child: Text(
+                                      "We Don’t Talk Anymore feat. Selena Gomezfsdfsdfsdfdfsfsdfsdf",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          color: kTextsecondarytopColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "12th, July 2019",
+                                    style: TextStyle(
+                                      color: kTextsecondarybottomColor,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 20, top: 0),
+                      child: const Text(
+                        "10,678 Views",
+                        style: TextStyle(
+                            color: kTextsecondarytopColor,
+                            fontSize: 13,
+                            fontFamily: kFuturaPTDemi),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 19),
+                child: Row(
+                  children: [
+                    LikeWidget(
+                      isLiked: false,
+                      likeCount: 1,
+                      dislikeCount: 1,
+                      isdisLiked: false,
+                    ),
+                    const SizedBox(width: 10),
+                    const ShareWidget(title: "", imageUrl: "", text: ""),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: playlistbottomsheet,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 11.0, vertical: 8),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: kButtonSecondaryColor, width: 1),
+                            borderRadius: BorderRadius.circular(50),
+                            color: const Color(0xFF121330),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: kBlack38Color,
+                                blurRadius: 5,
+                                offset: Offset(1, 1),
+                              ),
+                            ]),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 18,
+                              height: 17,
+                              child: Image.asset(
+                                "assets/icons/unplaylist.png",
+                                scale: 1.5,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            const Text(
+                              "105",
+                              style: TextStyle(
+                                  fontSize: 14, color: kButtonSecondaryColor),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "---------------------------------------------------",
+                style: TextStyle(
+                    fontWeight: FontWeight.w100,
+                    letterSpacing: 3,
+                    color: kButtonSecondaryColor,
+                    fontSize: 10,
+                    fontFamily: kFuturaPTBook),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 22),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 42,
+                          width: 42,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              "assets/images/authBackground.png",
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    "Shivani Sharma",
+                                    style: TextStyle(
+                                        color: kTextsecondarytopColor,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "23k Follwers",
+                                    style: TextStyle(
+                                      color: kTextsecondarybottomColor,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.checkOutPaymentPage);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                top: 10, bottom: 10, right: 6, left: 6),
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xD212D2D9), width: 1),
+                                borderRadius: BorderRadius.circular(25)),
+                            // width: 150,
+                            child: Row(
+                              children: const [
+                                Text(
+                                  'DONATE',
+                                  style: TextStyle(
+                                      color: Color(0xD212D2D9),
+                                      letterSpacing: 1.5,
+                                      fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, right: 6, left: 6),
+                          margin: const EdgeInsets.only(right: 24),
+                          decoration: BoxDecoration(
+                              color: kButtonColor,
+                              borderRadius: BorderRadius.circular(25)),
+                          child: const Text(
+                            '23K FOLLOW',
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                letterSpacing: 1.5,
+                                fontSize: 10),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        tabindex = 0;
+                      });
+                    },
+                    child: Container(
+                      width: 120,
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      margin: const EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: tabindex == 0
+                                    ? kButtonColor
+                                    : kBackGroundColor,
+                                width: 1)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Center(
+                          child: Text("UP NEXT VIDEOS",
+                              style: TextStyle(
+                                  color: tabindex == 0
+                                      ? kButtonColor
+                                      : kWhiteColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        tabindex = 1;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      width: 80,
+                      decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: tabindex == 1
+                                    ? kButtonColor
+                                    : kBackGroundColor,
+                                width: 1)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Center(
+                          child: Text("ABOUT",
+                              style: TextStyle(
+                                  color: tabindex == 1
+                                      ? kButtonColor
+                                      : kWhiteColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        tabindex = 2;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      margin: const EdgeInsets.only(right: 20),
+                      width: 100,
+                      decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: tabindex == 2
+                                    ? kButtonColor
+                                    : kBackGroundColor,
+                                width: 1)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Center(
+                          child: Text("COMMENTS",
+                              style: TextStyle(
+                                  color: tabindex == 2
+                                      ? kButtonColor
+                                      : kWhiteColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                  height: Get.height / 2.7,
+                  child: tabindex == 0
+                      ? const UpNextPage()
+                      : tabindex == 1
+                          ? const AboutPage()
+                          : const CommentsPage()),
+
+              // Column(
+              //   children: [
+              //     Theme(
+              //       data: ThemeData(
+              //         splashColor: Colors.transparent,
+              //         highlightColor: Colors.transparent,
+              //       ),
+              //       child: Container(
+              //         color: kBackGroundColor,
+              //         child: TabBar(
+              //           padding: const EdgeInsets.symmetric(
+              //               horizontal: 5, vertical: 5),
+              //           isScrollable: true,
+              //           controller: _tabController,
+              //           labelStyle: const TextStyle(
+              //               fontSize: 14, fontWeight: FontWeight.w300),
+              //           labelColor: kButtonColor,
+              //           unselectedLabelColor: kWhiteColor,
+              //           indicatorWeight: 1,
+              //           indicator: const BoxDecoration(
+              //               color: kTransparentColor,
+              //               border: Border(
+              //                   bottom:
+              //                       BorderSide(color: kButtonColor, width: 0.5))),
+              //           tabs: List.generate(
+              //             tabList.length,
+              //             (index) => Column(
+              //               children: [
+              //                 Tab(
+              //                   text: tabList[index],
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // Expanded(
+              //   child: TabBarView(
+              //     controller: _tabController,
+              //     children: List.generate(
+              //         tabList.length,
+              //         (index) => index == 0
+              //             ? const UpNextPage()
+              //             : index == 1
+              //                 ? const AboutPage()
+              //                 : const CommentsPage()),
+              //   ),
+              // ),
             ],
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: List.generate(
-                tabList.length,
-                (index) => Container(),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+
+  playlistbottomsheet() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    return showModalBottomSheet(
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40.0),
+            topRight: Radius.circular(40.0),
+          ),
+        ),
+        backgroundColor: kAppBottomSheetColor,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(// this is new
+              builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+                height: 451,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      decoration:
+                          BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                      height: 60,
+                      width: 100,
+                      child: Image.asset(
+                        "assets/images/imagebg.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Save to",
+                      style: TextStyle(
+                        color: kTextsecondarytopColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      "-------------------------------------------------",
+                      style: TextStyle(
+                          color: kButtonSecondaryColor,
+                          fontSize: 10,
+                          letterSpacing: 4,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    SizedBox(
+                      height: 190,
+                      child: ListView.builder(
+                        itemCount: _items.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: <Widget>[
+                              CheckboxListTile(
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                dense: true,
+                                checkColor: kButtonColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6.0),
+                                ),
+                                side: MaterialStateBorderSide.resolveWith(
+                                  (states) => BorderSide(
+                                      width: 1.0,
+                                      color: isChecked
+                                          ? kButtonColor
+                                          : kButtonSecondaryColor),
+                                ),
+                                title: Text(
+                                  _items[index].title,
+                                  style: const TextStyle(
+                                      color: kTextsecondarytopColor,
+                                      fontSize: 16,
+                                      fontFamily: kFuturaPTDemi),
+                                ),
+                                activeColor: kAppBottomSheetColor,
+                                selected: isChecked,
+                                value: _items[index].isSelected,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _items[index].isSelected = newValue!;
+                                    _items[index].isSelected == true
+                                        ? dishblevalue = 1
+                                        : dishblevalue = 0;
+                                  });
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const Text(
+                      "-------------------------------------------------",
+                      style: TextStyle(
+                          color: kButtonSecondaryColor,
+                          fontSize: 10,
+                          letterSpacing: 4,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          var paymentLink = {
+                            "headerName": "Create",
+                          };
+                          Get.toNamed(Routes.createPlaylistPage,
+                              parameters: paymentLink);
+                        },
+                        child: Container(
+                          width: 200,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              border:
+                                  Border.all(width: 0.8, color: kButtonColor)),
+                          child: const Center(
+                            child: Text(
+                              "Create playlist",
+                              style: TextStyle(
+                                  color: kTextsecondarytopColor,
+                                  fontSize: 16,
+                                  fontFamily: kFuturaPTDemi),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20),
+                      child: SizedBox(
+                        width: Get.width,
+                        child: CupertinoButton(
+                          color: kButtonColor,
+                          borderRadius: BorderRadius.circular(25),
+                          onPressed: () {},
+                          child: const Text(
+                            'DONE',
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                letterSpacing: 2,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ));
+          });
+        });
+  }
+}
+
+class ListItem {
+  final String title;
+  bool isSelected;
+
+  ListItem(this.title, this.isSelected);
 }

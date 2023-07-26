@@ -26,24 +26,29 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Text(
-                widget.title,
-                style: const TextStyle(
-                    color: kWhiteColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 5),
-                height: 20.71,
-                width: 30.02,
-                child: Image.asset(
-                  "assets/icons/dropdown.png",
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.menuPage);
+            },
+            child: Row(
+              children: [
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                      color: kWhiteColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsets.only(top: 5),
+                  height: 20.71,
+                  width: 30.02,
+                  child: Image.asset(
+                    "assets/icons/dropdown.png",
+                  ),
+                ),
+              ],
+            ),
           ),
           Row(
             children: [
@@ -57,7 +62,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.loginPage);
+                  Get.toNamed(Routes.profilePage);
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 16),

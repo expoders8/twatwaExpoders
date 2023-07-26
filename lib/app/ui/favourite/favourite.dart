@@ -197,7 +197,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    border: Border.all(width: 0.5, color: kButtonColor)),
+                    border: Border.all(width: 0.7, color: kButtonColor)),
                 child: const Center(
                   child: Text(
                     "Create playlist",
@@ -256,14 +256,14 @@ class _FavouritePageState extends State<FavouritePage> {
                           child: Text(
                             "Edit",
                             style: TextStyle(
-                                color: kTextsecondarytopColor, fontSize: 20),
+                                color: kTextsecondarytopColor, fontSize: 16),
                           ),
                         ),
                       ),
                       const Padding(
                         padding: EdgeInsets.only(top: 4.0, bottom: 5),
                         child: Text(
-                          "------------------------------------------------",
+                          "--------------------------------------------------",
                           style: TextStyle(
                               color: kTextsecondarytopColor,
                               fontSize: 13,
@@ -275,7 +275,7 @@ class _FavouritePageState extends State<FavouritePage> {
                         child: Text(
                           "Delete",
                           style: TextStyle(
-                              color: kTextsecondarytopColor, fontSize: 20),
+                              color: kTextsecondarytopColor, fontSize: 16),
                         ),
                       ),
                     ],

@@ -1,11 +1,11 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
+import '../widgets/appbar.dart';
+import '../../routes/app_pages.dart';
 import '../../models/tranding_list_model.dart';
 import '../../../config/constant/color_constant.dart';
-import '../widgets/appbar.dart';
 
 // ignore: camel_case_types
 class TrendingPage extends StatefulWidget {
@@ -61,7 +61,9 @@ class _TrendingPageState extends State<TrendingPage> {
         itemCount: tranding.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Get.toNamed(Routes.videoDetailsPage);
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

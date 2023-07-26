@@ -1,7 +1,9 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/color_constant.dart';
+import '../../../routes/app_pages.dart';
 import '../../../models/user_list_model.dart';
+import '../../../../config/constant/color_constant.dart';
 
 class MyFavouriteView extends StatefulWidget {
   const MyFavouriteView({super.key});
@@ -36,7 +38,9 @@ class _MyFavouriteViewState extends State<MyFavouriteView> {
       itemCount: videos.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(Routes.videoDetailsPage);
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

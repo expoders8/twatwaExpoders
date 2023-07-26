@@ -1,7 +1,5 @@
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:twatwa/app/routes/app_pages.dart';
 
 import '../../../config/constant/color_constant.dart';

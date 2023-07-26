@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -238,12 +239,36 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           Positioned(
-                            right: -34,
+                            right: -20,
                             top: -80,
-                            child: SizedBox(
-                              child: Image.asset(
-                                "assets/images/playbuttonehover.png",
-                                scale: 1.4,
+                            child: AvatarGlow(
+                              glowColor: kWhiteColor,
+                              endRadius: 90.0,
+                              duration: const Duration(milliseconds: 2000),
+                              repeat: true,
+                              showTwoGlows: true,
+                              repeatPauseDuration:
+                                  const Duration(milliseconds: 100),
+                              child: Material(
+                                // Replace this child with your own
+                                elevation: 8.0,
+                                shape: const CircleBorder(),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: kButtonColor,
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                          width: 0.7, color: kButtonColor)),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(15),
+                                    width: 45,
+                                    height: 45,
+                                    child: Image.asset(
+                                      "assets/icons/Play.png",
+                                      scale: 9,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           )

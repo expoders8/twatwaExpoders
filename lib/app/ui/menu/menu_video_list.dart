@@ -83,7 +83,7 @@ class _MenuVideoListPageState extends State<MenuVideoListPage> {
         elevation: 1,
       ),
       body: ListView.builder(
-        padding: EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         scrollDirection: Axis.vertical,
         itemCount: 15,
         itemBuilder: (context, index) {

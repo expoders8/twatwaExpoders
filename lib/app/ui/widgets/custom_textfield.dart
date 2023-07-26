@@ -81,8 +81,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         filled: true,
-        fillColor: const Color(0xB3493F54),
-        hintStyle: const TextStyle(color: kWhiteColor),
+        fillColor:
+            widget.name == "comment" ? kCardColor : const Color(0xB3493F54),
+        hintStyle: TextStyle(
+            color:
+                widget.name == "comment" ? kButtonSecondaryColor : kWhiteColor),
         labelStyle: const TextStyle(color: kWhiteColor),
         contentPadding: const EdgeInsets.fromLTRB(17, 17, 17, 17),
         prefixIcon: widget.prefixIcon != null
@@ -107,23 +110,32 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 },
               )
             : null,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
+        border: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(
             Radius.circular(5.0),
           ),
-          borderSide: BorderSide(color: Color(0xB3493F54)),
+          borderSide: BorderSide(
+              color: widget.name == "comment"
+                  ? kCardColor
+                  : const Color(0xB3493F54)),
         ),
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(
             Radius.circular(5.0),
           ),
-          borderSide: BorderSide(color: Color(0xB3493F54)),
+          borderSide: BorderSide(
+              color: widget.name == "comment"
+                  ? kCardColor
+                  : const Color(0xB3493F54)),
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
+        focusedBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(
             Radius.circular(5.0),
           ),
-          borderSide: BorderSide(color: Color(0xB3493F54)),
+          borderSide: BorderSide(
+              color: widget.name == "comment"
+                  ? kCardColor
+                  : const Color(0xB3493F54)),
         ),
       ),
       maxLines: widget.maxLines,

@@ -43,93 +43,95 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
         ),
         elevation: 1,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20.0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "PLAYLIST NAME",
-                  style: TextStyle(
-                      color: kTextsecondarytopColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  "Lorem Ipsum is simply dummy text of the printing",
-                  style: TextStyle(
-                    color: kTextsecondarybottomColor,
-                    fontSize: 11,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "PLAYLIST NAME",
+                    style: TextStyle(
+                        color: kTextsecondarytopColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            CustomTextFormField(
-              hintText: 'Enter Playlist Name',
-              maxLines: 1,
-              ctrl: playlistNameController,
-              name: "playlistname",
-              // formSubmitted: isFormSubmitted,
-              // validationMsg: 'Please enter email',
-            ),
-            const SizedBox(height: 30),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "SHARE WITH",
-                  style: TextStyle(
-                      color: kTextsecondarytopColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  "Lorem Ipsum is simply dummy text of the printing",
-                  style: TextStyle(
-                    color: kTextsecondarybottomColor,
-                    fontSize: 11,
+                  SizedBox(height: 5),
+                  Text(
+                    "Lorem Ipsum is simply dummy text of the printing",
+                    style: TextStyle(
+                      color: kTextsecondarybottomColor,
+                      fontSize: 11,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                buildDonationAmountList("PUBLIC", 0),
-                buildDonationAmountList("FRIENDS", 1),
-                buildDonationAmountList("ONLY ME", 2),
-              ],
-            ),
-            const SizedBox(height: 290),
-            SizedBox(
-              width: Get.width,
-              child: CupertinoButton(
-                color: kButtonColor,
-                borderRadius: BorderRadius.circular(25),
-                onPressed: () {},
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                      color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                ],
+              ),
+              const SizedBox(height: 30),
+              CustomTextFormField(
+                hintText: 'Enter Playlist Name',
+                maxLines: 1,
+                ctrl: playlistNameController,
+                name: "playlistname",
+                // formSubmitted: isFormSubmitted,
+                // validationMsg: 'Please enter email',
+              ),
+              const SizedBox(height: 30),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "SHARE WITH",
+                    style: TextStyle(
+                        color: kTextsecondarytopColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    "Lorem Ipsum is simply dummy text of the printing",
+                    style: TextStyle(
+                      color: kTextsecondarybottomColor,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  buildSelectFunction("PUBLIC", 0),
+                  buildSelectFunction("FRIENDS", 1),
+                  buildSelectFunction("ONLY ME", 2),
+                ],
+              ),
+              const SizedBox(height: 290),
+              SizedBox(
+                width: Get.width,
+                child: CupertinoButton(
+                  color: kButtonColor,
+                  borderRadius: BorderRadius.circular(25),
+                  onPressed: () {},
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(
+                        color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget buildDonationAmountList(
+  Widget buildSelectFunction(
     String name,
     int value,
   ) {

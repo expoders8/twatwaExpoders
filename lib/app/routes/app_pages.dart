@@ -6,10 +6,13 @@ import '../ui/home/tab_page.dart';
 import '../ui/auth/login/login.dart';
 import '../ui/auth/signup/signup.dart';
 import '../ui/menu/menu_video_list.dart';
+import '../ui/profile/profile.dart';
 import '../ui/video_details/video_details.dart';
 import '../ui/auth/forgotpassword/forgotpassword.dart';
 import '../ui/favourite/create_and_edit_playlist.dart';
-import '../ui/uploadvideo/success_video_uploaded.dart';
+import '../ui/uploadVideo/success_video_uploaded.dart';
+import '../ui/video_details/comments/comments_reply.dart';
+import '../ui/video_details/checkout_Payment/checkout_payment.dart';
 
 part 'app_routes.dart';
 
@@ -58,6 +61,18 @@ class AppPages {
     GetPage(
       name: _Paths.videoDetailsPage,
       page: () => const VideoDetailsPage(),
+    ),
+    GetPage(
+      name: _Paths.commentReplyPage,
+      page: () => const CommentReplyPage(),
+    ),
+    GetPage(
+      name: _Paths.checkOutPaymentPage,
+      page: () => const CheckOutPaymentPage(),
+    ),
+    GetPage(
+      name: _Paths.profilePage,
+      page: () => const ProfilePage(),
     ),
   ];
 }

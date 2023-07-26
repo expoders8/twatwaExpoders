@@ -7,7 +7,7 @@ import 'package:twatwa/app/ui/tranding/tranding.dart';
 import 'package:twatwa/app/ui/notification/notification.dart';
 
 import '../../../config/constant/color_constant.dart';
-import '../uploadvideo/upload_video.dart';
+import '../uploadVideo/upload_video.dart';
 
 class TabPage extends StatefulWidget {
   final String? tabIndexSubscription;
