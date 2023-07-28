@@ -15,8 +15,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
     return Scaffold(
       body: ListView.builder(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-        scrollDirection: Axis.vertical,
-        itemCount: 7,
+        itemCount: 25,
         itemBuilder: (context, index) {
           return SizedBox(
               height: 90,

@@ -1,33 +1,33 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
+import '../routes/app_pages.dart';
+import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
-class JobsHomeView extends StatefulWidget {
-  const JobsHomeView({super.key});
+class TrandingHomeView extends StatefulWidget {
+  const TrandingHomeView({super.key});
 
   @override
-  State<JobsHomeView> createState() => _JobsHomeViewState();
+  State<TrandingHomeView> createState() => _TrandingHomeViewState();
 }
 
-class _JobsHomeViewState extends State<JobsHomeView> {
+class _TrandingHomeViewState extends State<TrandingHomeView> {
   List<Videos> videos = [
     Videos(
-      image: "assets/images/jobs1.png",
-      title: "Ed Sheeran - Shape of You",
-      views: "681,298 views",
+      image: "assets/images/tranding1.png",
+      title: "Shawn Mendes - Treat You Better",
+      views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/jobs2.png",
+      image: "assets/images/tranding2.png",
       title: "Marshmello & Anne-Marie Friends",
       views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/jobs3.png",
+      image: "assets/images/tranding3.png",
       title: "The Chainsmokers & Coldplay - Something",
-      views: "681,298 views",
+      views: "1,854,681,298 views",
     )
   ];
   @override

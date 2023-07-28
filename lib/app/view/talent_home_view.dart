@@ -1,37 +1,37 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
+import '../routes/app_pages.dart';
+import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
-class FollowingHomeView extends StatefulWidget {
-  const FollowingHomeView({super.key});
+class TalentHomeView extends StatefulWidget {
+  const TalentHomeView({super.key});
 
   @override
-  State<FollowingHomeView> createState() => _FollowingHomeViewState();
+  State<TalentHomeView> createState() => _TalentHomeViewState();
 }
 
-class _FollowingHomeViewState extends State<FollowingHomeView> {
+class _TalentHomeViewState extends State<TalentHomeView> {
+  List<Videos> videos = [
+    Videos(
+      image: "assets/images/talent1.png",
+      title: "Ed Sheeran - Shape of You",
+      views: "681,298 views",
+    ),
+    Videos(
+      image: "assets/images/talent2.png",
+      title: "Marshmello & Anne-Marie Friends",
+      views: "1,854,681,298 views",
+    ),
+    Videos(
+      image: "assets/images/talent3.png",
+      title: "The Chainsmokers & Coldplay - Something",
+      views: "681,298 views",
+    )
+  ];
   @override
   Widget build(BuildContext context) {
-    List<Videos> videos = [
-      Videos(
-        image: "assets/images/following1.png",
-        title: "Ed Sheeran - Shape of You",
-        views: "681,298 views",
-      ),
-      Videos(
-        image: "assets/images/following2.png",
-        title: "Marshmello & Anne-Marie Friends",
-        views: "1,854,681,298 views",
-      ),
-      Videos(
-        image: "assets/images/following3.png",
-        title: "The Chainsmokers & Coldplay - Something",
-        views: "681,298 views",
-      )
-    ];
     return ListView.builder(
       padding: const EdgeInsets.only(left: 15),
       scrollDirection: Axis.horizontal,

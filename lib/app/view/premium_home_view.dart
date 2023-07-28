@@ -1,18 +1,18 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
+import '../routes/app_pages.dart';
+import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
-class DescoverHomeView extends StatefulWidget {
-  const DescoverHomeView({super.key});
+class PremiumHomeView extends StatefulWidget {
+  const PremiumHomeView({super.key});
 
   @override
-  State<DescoverHomeView> createState() => _DescoverHomeViewState();
+  State<PremiumHomeView> createState() => _PremiumHomeViewState();
 }
 
-class _DescoverHomeViewState extends State<DescoverHomeView> {
+class _PremiumHomeViewState extends State<PremiumHomeView> {
   List<Videos> videos = [
     Videos(
       image: "assets/images/imagebg.png",

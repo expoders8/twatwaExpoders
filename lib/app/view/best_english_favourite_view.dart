@@ -1,33 +1,35 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
+import '../models/user_list_model.dart';
+import '../routes/app_pages.dart';
 
-class EducationHomeView extends StatefulWidget {
-  const EducationHomeView({super.key});
+class BestEnglishSongFavouiteView extends StatefulWidget {
+  const BestEnglishSongFavouiteView({super.key});
 
   @override
-  State<EducationHomeView> createState() => _EducationHomeViewState();
+  State<BestEnglishSongFavouiteView> createState() =>
+      _BestEnglishSongFavouiteViewState();
 }
 
-class _EducationHomeViewState extends State<EducationHomeView> {
+class _BestEnglishSongFavouiteViewState
+    extends State<BestEnglishSongFavouiteView> {
   List<Videos> videos = [
     Videos(
-      image: "assets/images/education1.png",
-      title: "Ed Sheeran - Shape of You",
-      views: "681,298 views",
+      image: "assets/images/imagebg.png",
+      title: "Shawn Mendes - Treat You Better",
+      views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/education2.png",
+      image: "assets/images/imagebg1.png",
       title: "Marshmello & Anne-Marie Friends",
       views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/education3.png",
+      image: "assets/images/imagebg2.png",
       title: "The Chainsmokers & Coldplay - Something",
-      views: "681,298 views",
+      views: "1,854,681,298 views",
     )
   ];
   @override

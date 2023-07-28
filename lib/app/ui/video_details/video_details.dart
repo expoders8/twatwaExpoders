@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,18 +40,126 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 250,
-                width: Get.width,
-                child: Image.asset(
-                  "assets/images/imagebg.png",
-                  fit: BoxFit.cover,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 250,
+              width: Get.width,
+              child: Image.asset(
+                "assets/images/imagebg.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: SizedBox(
+                height: Get.height,
+                child: NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxScrolled) {
+                    return <Widget>[
+                      createSilverAppBar1(),
+                    ];
+                  },
+                  body: Container(
+                    color: kBackGroundColor,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            buildTabindex("UP NEXT VIDEOS", 0, 120),
+                            buildTabindex("ABOUT", 1, 80),
+                            buildTabindex("COMMENTS", 2, 100)
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: SizedBox(
+                              height: Get.height,
+                              child: tabindex == 0
+                                  ? const UpNextPage()
+                                  : tabindex == 1
+                                      ? const AboutPage()
+                                      : const CommentsPage()),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
+            ),
+
+            // Column(
+            //   children: [
+            //     Theme(
+            //       data: ThemeData(
+            //         splashColor: Colors.transparent,
+            //         highlightColor: Colors.transparent,
+            //       ),
+            //       child: Container(
+            //         color: kBackGroundColor,
+            //         child: TabBar(
+            //           padding: const EdgeInsets.symmetric(
+            //               horizontal: 5, vertical: 5),
+            //           isScrollable: true,
+            //           controller: _tabController,
+            //           labelStyle: const TextStyle(
+            //               fontSize: 14, fontWeight: FontWeight.w300),
+            //           labelColor: kButtonColor,
+            //           unselectedLabelColor: kWhiteColor,
+            //           indicatorWeight: 1,
+            //           indicator: const BoxDecoration(
+            //               color: kTransparentColor,
+            //               border: Border(
+            //                   bottom:
+            //                       BorderSide(color: kButtonColor, width: 0.5))),
+            //           tabs: List.generate(
+            //             tabList.length,
+            //             (index) => Column(
+            //               children: [
+            //                 Tab(
+            //                   text: tabList[index],
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Expanded(
+            //   child: TabBarView(
+            //     controller: _tabController,
+            //     children: List.generate(
+            //         tabList.length,
+            //         (index) => index == 0
+            //             ? const UpNextPage()
+            //             : index == 1
+            //                 ? const AboutPage()
+            //                 : const CommentsPage()),
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverAppBar createSilverAppBar1() {
+    return SliverAppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: kBackGroundColor,
+      expandedHeight: Platform.isAndroid ? 160 : 145,
+      floating: false,
+      flexibleSpace: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        return FlexibleSpaceBar(
+          collapseMode: CollapseMode.parallax,
+          background: Scaffold(
+              body: Column(
+            children: [
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -67,6 +176,7 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
+                                  SizedBox(height: 10),
                                   SizedBox(
                                     width: 210,
                                     child: Text(
@@ -94,7 +204,7 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
                       ],
                     ),
                     Container(
-                      margin: const EdgeInsets.only(right: 20, top: 0),
+                      margin: const EdgeInsets.only(right: 20, top: 11),
                       child: const Text(
                         "10,678 Views",
                         style: TextStyle(
@@ -266,169 +376,40 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        tabindex = 0;
-                      });
-                    },
-                    child: Container(
-                      width: 120,
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      margin: const EdgeInsets.only(left: 10),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: tabindex == 0
-                                    ? kButtonColor
-                                    : kBackGroundColor,
-                                width: 1)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: Center(
-                          child: Text("UP NEXT VIDEOS",
-                              style: TextStyle(
-                                  color: tabindex == 0
-                                      ? kButtonColor
-                                      : kWhiteColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        tabindex = 1;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 12.0),
-                      width: 80,
-                      decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: tabindex == 1
-                                    ? kButtonColor
-                                    : kBackGroundColor,
-                                width: 1)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: Center(
-                          child: Text("ABOUT",
-                              style: TextStyle(
-                                  color: tabindex == 1
-                                      ? kButtonColor
-                                      : kWhiteColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        tabindex = 2;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 12.0),
-                      margin: const EdgeInsets.only(right: 20),
-                      width: 100,
-                      decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: tabindex == 2
-                                    ? kButtonColor
-                                    : kBackGroundColor,
-                                width: 1)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: Center(
-                          child: Text("COMMENTS",
-                              style: TextStyle(
-                                  color: tabindex == 2
-                                      ? kButtonColor
-                                      : kWhiteColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                  height: Get.height / 2.7,
-                  child: tabindex == 0
-                      ? const UpNextPage()
-                      : tabindex == 1
-                          ? const AboutPage()
-                          : const CommentsPage()),
-
-              // Column(
-              //   children: [
-              //     Theme(
-              //       data: ThemeData(
-              //         splashColor: Colors.transparent,
-              //         highlightColor: Colors.transparent,
-              //       ),
-              //       child: Container(
-              //         color: kBackGroundColor,
-              //         child: TabBar(
-              //           padding: const EdgeInsets.symmetric(
-              //               horizontal: 5, vertical: 5),
-              //           isScrollable: true,
-              //           controller: _tabController,
-              //           labelStyle: const TextStyle(
-              //               fontSize: 14, fontWeight: FontWeight.w300),
-              //           labelColor: kButtonColor,
-              //           unselectedLabelColor: kWhiteColor,
-              //           indicatorWeight: 1,
-              //           indicator: const BoxDecoration(
-              //               color: kTransparentColor,
-              //               border: Border(
-              //                   bottom:
-              //                       BorderSide(color: kButtonColor, width: 0.5))),
-              //           tabs: List.generate(
-              //             tabList.length,
-              //             (index) => Column(
-              //               children: [
-              //                 Tab(
-              //                   text: tabList[index],
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Expanded(
-              //   child: TabBarView(
-              //     controller: _tabController,
-              //     children: List.generate(
-              //         tabList.length,
-              //         (index) => index == 0
-              //             ? const UpNextPage()
-              //             : index == 1
-              //                 ? const AboutPage()
-              //                 : const CommentsPage()),
-              //   ),
-              // ),
             ],
-          ),
+          )),
+        );
+      }),
+    );
+  }
+
+  buildTabindex(String text, int index, double size) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          tabindex = index;
+        });
+      },
+      child: Container(
+        width: size,
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        margin: const EdgeInsets.only(left: 10),
+        decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: tabindex == index ? kButtonColor : kBackGroundColor,
+                  width: 1)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Center(
+              child: DefaultTextStyle(
+            style: TextStyle(
+                color: tabindex == index ? kButtonColor : kWhiteColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w300),
+            child: Text(text),
+          )),
         ),
       ),
     );

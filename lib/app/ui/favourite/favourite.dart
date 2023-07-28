@@ -1,15 +1,14 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:twatwa/app/routes/app_pages.dart';
 
 import '../widgets/appbar.dart';
+import '../../view/my_all_time_favourite_view.dart';
+import '../../view/myfavourite_favourite_view.dart';
+import '../../view/best_english_favourite_view.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../favourite/view/myfavourite_favourite_view.dart';
-import '../favourite/view/best_english_favourite_view.dart';
-import '../favourite/view/my_all_time_favourite_view.dart';
 
 class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});

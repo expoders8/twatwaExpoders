@@ -1,18 +1,18 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
+import '../routes/app_pages.dart';
+import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
-class PremiumHomeView extends StatefulWidget {
-  const PremiumHomeView({super.key});
+class MyAllTimeFavouriteView extends StatefulWidget {
+  const MyAllTimeFavouriteView({super.key});
 
   @override
-  State<PremiumHomeView> createState() => _PremiumHomeViewState();
+  State<MyAllTimeFavouriteView> createState() => _MyAllTimeFavouriteViewState();
 }
 
-class _PremiumHomeViewState extends State<PremiumHomeView> {
+class _MyAllTimeFavouriteViewState extends State<MyAllTimeFavouriteView> {
   List<Videos> videos = [
     Videos(
       image: "assets/images/imagebg.png",

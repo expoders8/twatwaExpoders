@@ -1,18 +1,18 @@
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
+import '../../view/jobs_home_view.dart';
 import '../widgets/playlist_widget.dart';
-import '../home/view/jobs_home_view.dart';
-import '../home/view/talent_home_view.dart';
-import '../home/view/premium_home_view.dart';
-import '../home/view/popular_home_view.dart';
-import '../home/view/tranding_home_view.dart';
-import '../home/view/descovery_home_view.dart';
-import '../home/view/education_home_view.dart';
+import '../../view/talent_home_view.dart';
+import '../../view/premium_home_view.dart';
+import '../../view/popular_home_view.dart';
+import '../../view/tranding_home_view.dart';
+import '../../view/descovery_home_view.dart';
+import '../../view/education_home_view.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/constant/font_constant.dart';
 

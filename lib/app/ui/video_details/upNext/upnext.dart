@@ -17,7 +17,7 @@ class _UpNextPageState extends State<UpNextPage> {
       body: ListView.builder(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
         scrollDirection: Axis.vertical,
-        itemCount: 7,
+        itemCount: 10,
         itemBuilder: (context, index) {
           return SizedBox(
               height: 90,

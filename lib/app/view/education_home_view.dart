@@ -1,31 +1,31 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
+import '../routes/app_pages.dart';
+import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
-class TalentHomeView extends StatefulWidget {
-  const TalentHomeView({super.key});
+class EducationHomeView extends StatefulWidget {
+  const EducationHomeView({super.key});
 
   @override
-  State<TalentHomeView> createState() => _TalentHomeViewState();
+  State<EducationHomeView> createState() => _EducationHomeViewState();
 }
 
-class _TalentHomeViewState extends State<TalentHomeView> {
+class _EducationHomeViewState extends State<EducationHomeView> {
   List<Videos> videos = [
     Videos(
-      image: "assets/images/talent1.png",
+      image: "assets/images/education1.png",
       title: "Ed Sheeran - Shape of You",
       views: "681,298 views",
     ),
     Videos(
-      image: "assets/images/talent2.png",
+      image: "assets/images/education2.png",
       title: "Marshmello & Anne-Marie Friends",
       views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/talent3.png",
+      image: "assets/images/education3.png",
       title: "The Chainsmokers & Coldplay - Something",
       views: "681,298 views",
     )

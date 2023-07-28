@@ -1,31 +1,31 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../../models/user_list_model.dart';
+import '../routes/app_pages.dart';
+import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
-class PopularHomeView extends StatefulWidget {
-  const PopularHomeView({super.key});
+class MyFavouriteView extends StatefulWidget {
+  const MyFavouriteView({super.key});
 
   @override
-  State<PopularHomeView> createState() => _PopularHomeViewState();
+  State<MyFavouriteView> createState() => _MyFavouriteViewState();
 }
 
-class _PopularHomeViewState extends State<PopularHomeView> {
+class _MyFavouriteViewState extends State<MyFavouriteView> {
   List<Videos> videos = [
     Videos(
-      image: "assets/images/popular1.png",
+      image: "assets/images/imagebg.png",
       title: "Shawn Mendes - Treat You Better",
       views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/popular2.png",
+      image: "assets/images/imagebg1.png",
       title: "Marshmello & Anne-Marie Friends",
       views: "1,854,681,298 views",
     ),
     Videos(
-      image: "assets/images/popular3.png",
+      image: "assets/images/imagebg2.png",
       title: "The Chainsmokers & Coldplay - Something",
       views: "1,854,681,298 views",
     )

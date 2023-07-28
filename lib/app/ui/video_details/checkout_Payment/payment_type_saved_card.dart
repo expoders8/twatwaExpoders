@@ -48,7 +48,7 @@ class _PaymentTypeSavedCardState extends State<PaymentTypeSavedCard> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       gradient: LinearGradient(
                         colors: [

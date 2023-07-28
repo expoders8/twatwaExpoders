@@ -75,23 +75,9 @@ class _CheckOutPaymentPageState extends State<CheckOutPaymentPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // CupertinoSwitch(
-                  //   trackColor: const Color(0xFF2A2B45),
-                  //   activeColor: const Color(0xFF2A2B45),
-                  //   thumbColor: kButtonColor,
-                  //   value: _switchValue,
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       _switchValue = value;
-                  //     });
-                  //   },
-                  // ),
-                  Switch(
-                    activeColor:
-                        kButtonColor, // Set the active color when the switch is turned on.
-                    inactiveTrackColor: const Color(0xFF2A2B45),
-                    activeTrackColor: const Color(0xFF2A2B45),
-                    inactiveThumbColor: kButtonSecondaryColor,
+                  CupertinoSwitch(
+                    activeColor: kTextSecondaryColor,
+                    thumbColor: kButtonColor,
                     value: _switchValue,
                     onChanged: (value) {
                       setState(() {
