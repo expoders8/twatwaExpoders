@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:twatwa/app/routes/app_pages.dart';
 
 import '../widgets/appbar.dart';
+import '../../routes/app_pages.dart';
 import '../../view/my_all_time_favourite_view.dart';
 import '../../view/myfavourite_favourite_view.dart';
 import '../../view/best_english_favourite_view.dart';

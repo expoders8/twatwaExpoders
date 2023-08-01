@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ],
                                 ),
                                 const Text(
-                                  "WELCOME TO TWATWA",
+                                  "WELCOME TO OPENTREND",
                                   style: TextStyle(
                                       color: kWhiteColor,
                                       fontSize: 35,

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:twatwa/app/ui/home/tab_page.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../home/tab_page.dart';
 
 class VideoUploadedPage extends StatefulWidget {
   const VideoUploadedPage({super.key});

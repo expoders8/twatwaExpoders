@@ -1,9 +1,11 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:twatwa/app/routes/app_pages.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stts;
 
 import '../../../config/constant/color_constant.dart';
 import '../../models/tranding_list_model.dart';
+import '../../routes/app_pages.dart';
 
 class MenuVideoListPage extends StatefulWidget {
   const MenuVideoListPage({super.key});
@@ -13,6 +15,11 @@ class MenuVideoListPage extends StatefulWidget {
 }
 
 class _MenuVideoListPageState extends State<MenuVideoListPage> {
+  bool sendButton = false, islisteing = false;
+  String text = "";
+  var speechToText = stts.SpeechToText();
+  final TextEditingController videolistcontroller = TextEditingController();
+
   List<Tranding> tranding = [
     Tranding(
       image: "assets/images/imagebg.png",
@@ -59,26 +66,52 @@ class _MenuVideoListPageState extends State<MenuVideoListPage> {
           ),
         ),
         title: TextField(
-          style: const TextStyle(color: kWhiteColor),
+          controller: videolistcontroller,
+          style: const TextStyle(color: kButtonSecondaryColor),
           decoration: InputDecoration(
-              hintText: 'Educational',
-              hintStyle: const TextStyle(color: kWhiteColor),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.fromLTRB(17, 17, 0, 17),
-              prefixIcon: Image.asset(
-                "assets/icons/search.png",
-                scale: 24,
-                color: kButtonSecondaryColor,
-              ),
-              suffixIcon: IconButton(
-                splashColor: kTransparentColor,
-                highlightColor: kTransparentColor,
-                icon: Image.asset(
-                  "assets/icons/mic.png",
-                  scale: 1.4,
-                ),
-                onPressed: () {},
-              )),
+            hintText: 'Educational',
+            hintStyle: const TextStyle(color: kButtonSecondaryColor),
+            border: InputBorder.none,
+
+            contentPadding: const EdgeInsets.fromLTRB(17, 17, 0, 17),
+            prefixIcon: Image.asset(
+              "assets/icons/search.png",
+              scale: 24,
+              color: kButtonSecondaryColor,
+            ),
+            suffixIcon: IconButton(
+              icon: sendButton
+                  ? const Icon(
+                      Icons.send,
+                      color: kButtonSecondaryColor,
+                    )
+                  : AvatarGlow(
+                      animate: islisteing,
+                      repeat: true,
+                      endRadius: 50,
+                      glowColor: kWhiteColor,
+                      duration: const Duration(milliseconds: 1000),
+                      child: const Image(
+                        image: AssetImage(
+                          "assets/icons/mic.png",
+                        ),
+                        width: 15,
+                      ),
+                    ),
+              onPressed: () async {
+                listen();
+              },
+            ),
+            // IconButton(
+            //   splashColor: kTransparentColor,
+            //   highlightColor: kTransparentColor,
+            //   icon: Image.asset(
+            //     "assets/icons/mic.png",
+            //     scale: 1.4,
+            //   ),
+            //   onPressed: () {},
+            // ),
+          ),
         ),
         elevation: 1,
       ),
@@ -157,5 +190,35 @@ class _MenuVideoListPageState extends State<MenuVideoListPage> {
         },
       ),
     );
+  }
+
+  void listen() async {
+    if (!islisteing) {
+      bool available = await speechToText.initialize();
+      if (available) {
+        setState(() {
+          islisteing = true;
+        });
+        speechToText.listen(
+          onResult: (result) => setState(
+            () {
+              text = result.recognizedWords;
+              videolistcontroller.text = text;
+              if (text != "") {
+                setState(() {
+                  sendButton = true;
+                  islisteing = false;
+                });
+              }
+            },
+          ),
+        );
+      }
+    } else {
+      setState(() {
+        islisteing = false;
+      });
+      speechToText.stop();
+    }
   }
 }

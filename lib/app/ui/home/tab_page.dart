@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:twatwa/app/ui/favourite/favourite.dart';
-import 'package:twatwa/app/ui/home/home.dart';
-import 'package:twatwa/app/ui/tranding/tranding.dart';
-import 'package:twatwa/app/ui/notification/notification.dart';
+import 'package:opentrend/app/ui/home/home.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../favourite/favourite.dart';
+import '../notification/notification.dart';
+import '../tranding/tranding.dart';
 import '../uploadVideo/upload_video.dart';
 
 class TabPage extends StatefulWidget {

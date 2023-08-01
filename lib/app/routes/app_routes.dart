@@ -18,6 +18,7 @@ abstract class Routes {
   static const commentReplyPage = _Paths.commentReplyPage;
   static const checkOutPaymentPage = _Paths.checkOutPaymentPage;
   static const profilePage = _Paths.profilePage;
+  static const otherUserProfilePage = _Paths.otherUserProfilePage;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const commentReplyPage = '/commentReplyPage';
   static const checkOutPaymentPage = '/checkOutPaymentPage';
   static const profilePage = '/profilePage';
+  static const otherUserProfilePage = '/otherUserProfilePage';
 }

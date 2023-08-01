@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:twatwa/config/constant/font_constant.dart';
 
 import '../../../../config/constant/color_constant.dart';
+import '../../../../config/constant/font_constant.dart';
 
 typedef StringCallback = void Function(String val);
 

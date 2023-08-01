@@ -1,7 +1,7 @@
 // import 'package:get_storage/get_storage.dart';
 
 const String baseUrl = "https://opentales-api.azurewebsites.net/";
-const String androidAppId = "com.app.twatwa";
+const String androidAppId = "com.app.opentrend";
 const String iOsAppId = "";
 
 const String playStoreUrl =

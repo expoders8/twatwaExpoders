@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
+import '../video_details/video_player.dart';
 import '../widgets/share_widget.dart';
 import '../video_details/about/about.dart';
 import '../video_details/upNext/upnext.dart';
@@ -45,10 +46,7 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
             SizedBox(
               height: 250,
               width: Get.width,
-              child: Image.asset(
-                "assets/images/imagebg.png",
-                fit: BoxFit.cover,
-              ),
+              child: const VideoPlayerPage(),
             ),
             Expanded(
               child: SizedBox(
@@ -151,7 +149,7 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid ? 160 : 145,
+      expandedHeight: Platform.isAndroid ? 170 : 145,
       floating: false,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -289,13 +287,24 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
                   children: [
                     Row(
                       children: [
-                        SizedBox(
-                          height: 42,
-                          width: 42,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              "assets/images/authBackground.png",
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.otherUserProfilePage);
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) =>
+                            //         const OtherUserProfilePage(),
+                            //   ),
+                            // );
+                          },
+                          child: SizedBox(
+                            height: 42,
+                            width: 42,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                "assets/images/authBackground.png",
+                              ),
                             ),
                           ),
                         ),
