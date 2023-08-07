@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "781774163103",
+    "project_id": "opentrend-cf1e3",
+    "storage_bucket": "opentrend-cf1e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781774163103:android:1604dac7ea80099d0966aa",
+        "android_client_info": {
+          "package_name": "com.app.opentrend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781774163103-5sqa8j175dpkvl7otu470c5vonn05vet.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.opentrend",
+            "certificate_hash": "1c07923d4fd0b9e56b6dbb98651e0b99e2a3ce93"
+          }
+        },
+        {
+          "client_id": "781774163103-o8fbui52sf8u1vcr6nrvtq8v22ecc6vv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIXlMNSU3GYu2nzyTgHmiwCePqBSLnGJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781774163103-dtji7sub3oji4hk71eknkurqr8i162nd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

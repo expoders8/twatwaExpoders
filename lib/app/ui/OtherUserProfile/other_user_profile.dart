@@ -136,28 +136,39 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
           background: Scaffold(
               body: Stack(
             children: [
-              Container(
-                foregroundDecoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF121330),
-                      Colors.transparent,
-                      Colors.transparent,
-                      Color(0xFF121330)
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0, 0.5, 0.1, 3],
+              Stack(
+                children: [
+                  Container(
+                    foregroundDecoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF121330),
+                          Colors.transparent,
+                          Colors.transparent,
+                          Color(0xFF121330)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0, 0, 0.5, 1.7],
+                      ),
+                    ),
+                    child: SizedBox(
+                      height: 400,
+                      width: Get.height,
+                      child: Image.asset(
+                        "assets/images/cityImage.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-                child: SizedBox(
-                  height: 400,
-                  width: Get.height,
-                  child: Image.asset(
-                    "assets/images/cityImage.jpg",
-                    fit: BoxFit.cover,
+                  Positioned(
+                    child: Container(
+                      height: 400,
+                      width: Get.height,
+                      color: const Color(0xFF121330).withOpacity(0.4),
+                    ),
                   ),
-                ),
+                ],
               ),
               Positioned(
                 child: Column(
@@ -167,8 +178,8 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                           const EdgeInsets.only(top: 42, left: 20, bottom: 10),
                       decoration: const BoxDecoration(
                           border: Border(
-                              bottom:
-                                  BorderSide(color: kWhiteColor, width: 0.6))),
+                              bottom: BorderSide(
+                                  color: kTextSecondaryColor, width: 0.4))),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -232,7 +243,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 26.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

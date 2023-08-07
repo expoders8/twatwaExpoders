@@ -13,8 +13,7 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
-  bool isLikedState = false;
-  bool isdisLikedState = false;
+  bool isLikedState = false, isdisLikedState = false, iconshow = false;
   int likeCount = 0;
   int dislikeCount = 0;
   get getIsLikedState => isLikedState == true;
@@ -56,13 +55,57 @@ class _CommentsPageState extends State<CommentsPage> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(13, 5, 13, 0),
-            child: CustomTextFormField(
-              hintText: 'Enter your comment',
+            child: TextFormField(
+              style: const TextStyle(color: kWhiteColor),
+              decoration: InputDecoration(
+                hintText: "Enter your comment",
+                hintStyle: const TextStyle(color: kWhiteColor),
+                labelStyle: const TextStyle(color: kWhiteColor),
+                contentPadding: const EdgeInsets.fromLTRB(17, 17, 17, 17),
+                fillColor: kCardColor,
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                  borderSide: BorderSide(color: kCardColor),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                    borderSide: BorderSide(color: kCardColor)),
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                  borderSide: BorderSide(color: kCardColor),
+                ),
+                suffixIcon: iconshow
+                    ? InkWell(
+                        child: const Icon(
+                          Icons.send,
+                          size: 30,
+                          color: kButtonSecondaryColor,
+                        ),
+                        onTap: () {
+                          commentController.clear();
+                        },
+                      )
+                    : null,
+              ),
+              controller: commentController,
+              onChanged: (value) {
+                if (commentController.text != "") {
+                  setState(() {
+                    iconshow = true;
+                  });
+                } else {
+                  setState(() {
+                    iconshow = false;
+                  });
+                }
+              },
               maxLines: 1,
-              ctrl: commentController,
-              name: "comment",
-              // formSubmitted: isFormSubmitted,
-              // validationMsg: 'Please enter email',
             ),
           ),
           const SizedBox(height: 10),

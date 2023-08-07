@@ -1,11 +1,13 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
-import '../video_details/video_player.dart';
 import '../widgets/share_widget.dart';
 import '../video_details/about/about.dart';
 import '../video_details/upNext/upnext.dart';
@@ -17,129 +19,145 @@ class VideoDetailsPage extends StatefulWidget {
   const VideoDetailsPage({super.key});
 
   @override
-  State<VideoDetailsPage> createState() => _MatrimonialListPageState();
+  State<VideoDetailsPage> createState() => _VideoDetailsPageState();
 }
 
-class _MatrimonialListPageState extends State<VideoDetailsPage>
+class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
-  int tabindex = 0;
-  int dishblevalue = 0;
-  bool isChecked = false;
-  List selectedItemsList = [];
+  int tabindex = 0, dishblevalue = 0;
+  bool isChecked = false,
+      showOverlay = true,
+      _isPlaying = false,
+      _isFullScreen = false;
+  double _sliderValue = 0.0;
+  late VideoPlayerController _controller;
   final List<ListItem> _items = [
     ListItem('Save for later', false),
     ListItem('My Favourite video', false),
     ListItem('Songs', false),
     ListItem('Comedy', false),
   ];
+  @override
+  void initState() {
+    super.initState();
+    var getURL = Get.parameters['value'];
+    var getQualityValue = Get.parameters['qualityValue'];
+    if (getURL == "false") {
+      _exitFullScreen();
+    }
+    Future.delayed(const Duration(milliseconds: 180), () async {
+      showOverlay = false;
+      _isPlaying = true;
+    });
+
+    // ignore: deprecated_member_use
+    _controller = VideoPlayerController.network(
+        "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")
+      ..initialize().then((_) {
+        setState(() {});
+      });
+    _controller.addListener(() {
+      if (_controller.value.isPlaying) {
+        setState(() {
+          _sliderValue = _controller.value.position.inMilliseconds.toDouble();
+        });
+      }
+    });
+    _controller.play();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+      body: WillPopScope(
+        onWillPop: () {
+          _exitFullScreen();
+          Get.back();
+          return Future.value(false);
         },
-        child: Column(
-          children: [
-            SizedBox(
-              height: 250,
-              width: Get.width,
-              child: const VideoPlayerPage(),
-            ),
-            Expanded(
-              child: SizedBox(
-                height: Get.height,
-                child: NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxScrolled) {
-                    return <Widget>[
-                      createSilverAppBar1(),
-                    ];
-                  },
-                  body: Container(
-                    color: kBackGroundColor,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            buildTabindex("UP NEXT VIDEOS", 0, 120),
-                            buildTabindex("ABOUT", 1, 80),
-                            buildTabindex("COMMENTS", 2, 100)
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: SizedBox(
-                              height: Get.height,
-                              child: tabindex == 0
-                                  ? const UpNextPage()
-                                  : tabindex == 1
-                                      ? const AboutPage()
-                                      : const CommentsPage()),
-                        ),
-                      ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Column(
+            children: [
+              // SizedBox(
+              //   height: 250,
+              //   width: Get.width,
+              //   child: VideoPlayerPage(
+              //       videoUrl:
+              //           'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+              // ),
+              SizedBox(height: _isFullScreen ? 10 : 40),
+              SizedBox(
+                width: Get.width,
+                height: _isFullScreen ? Get.height - 18 : 240,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    _controller.value.isInitialized
+                        ? VideoPlayer(_controller)
+                        : const Center(
+                            child: Padding(
+                            padding: EdgeInsets.only(bottom: 15.0),
+                            child: CircularProgressIndicator(
+                              color: Colors.white60,
+                              backgroundColor: kButtonSecondaryColor,
+                              strokeWidth: 2,
+                            ),
+                          )),
+                    _buildControls()
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: Get.height,
+                  child: NestedScrollView(
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxScrolled) {
+                      return <Widget>[
+                        createSilverAppBar1(),
+                      ];
+                    },
+                    body: Container(
+                      color: kBackGroundColor,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              buildTabindex("UP NEXT VIDEOS", 0, 120),
+                              buildTabindex("ABOUT", 1, 80),
+                              buildTabindex("COMMENTS", 2, 100)
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: SizedBox(
+                                height: Get.height,
+                                child: tabindex == 0
+                                    ? const UpNextPage()
+                                    : tabindex == 1
+                                        ? const AboutPage()
+                                        : const CommentsPage()),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-
-            // Column(
-            //   children: [
-            //     Theme(
-            //       data: ThemeData(
-            //         splashColor: Colors.transparent,
-            //         highlightColor: Colors.transparent,
-            //       ),
-            //       child: Container(
-            //         color: kBackGroundColor,
-            //         child: TabBar(
-            //           padding: const EdgeInsets.symmetric(
-            //               horizontal: 5, vertical: 5),
-            //           isScrollable: true,
-            //           controller: _tabController,
-            //           labelStyle: const TextStyle(
-            //               fontSize: 14, fontWeight: FontWeight.w300),
-            //           labelColor: kButtonColor,
-            //           unselectedLabelColor: kWhiteColor,
-            //           indicatorWeight: 1,
-            //           indicator: const BoxDecoration(
-            //               color: kTransparentColor,
-            //               border: Border(
-            //                   bottom:
-            //                       BorderSide(color: kButtonColor, width: 0.5))),
-            //           tabs: List.generate(
-            //             tabList.length,
-            //             (index) => Column(
-            //               children: [
-            //                 Tab(
-            //                   text: tabList[index],
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // Expanded(
-            //   child: TabBarView(
-            //     controller: _tabController,
-            //     children: List.generate(
-            //         tabList.length,
-            //         (index) => index == 0
-            //             ? const UpNextPage()
-            //             : index == 1
-            //                 ? const AboutPage()
-            //                 : const CommentsPage()),
-            //   ),
-            // ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -149,7 +167,11 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid ? 170 : 145,
+      expandedHeight: Platform.isAndroid
+          ? _isFullScreen
+              ? 200
+              : 170
+          : 145,
       floating: false,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -577,6 +599,219 @@ class _MatrimonialListPageState extends State<VideoDetailsPage>
                 ));
           });
         });
+  }
+
+  Widget _buildControls() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          showOverlay = !showOverlay;
+        });
+      },
+      child: AnimatedOpacity(
+        // If the widget is visible, animate to 0.0 (invisible).
+        // If the widget is hidden, animate to 1.0 (fully visible).
+        opacity: showOverlay ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 500),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+          color: Colors.black.withOpacity(0.7),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: _isFullScreen ? 50 : 10,
+                    vertical: _isFullScreen ? 10 : 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        _exitFullScreen();
+                      },
+                      child: SizedBox(
+                        height: 16,
+                        width: 26,
+                        child: Image.asset(
+                          "assets/icons/back_white.png",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.videoQualityPage);
+                      },
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Image.asset(
+                          "assets/icons/setting.png",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _isFullScreen ? 90 : 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: Image.asset(
+                      "assets/icons/previousNext.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(width: _isFullScreen ? 60 : 30),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isPlaying ? _controller.pause() : _controller.play();
+                        _isPlaying = !_isPlaying;
+                      });
+                      Future.delayed(const Duration(milliseconds: 2000),
+                          () async {
+                        showOverlay = !showOverlay;
+                      });
+                    },
+                    child: SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: Image.asset(
+                        _isPlaying
+                            ? "assets/icons/vdeoPause.png"
+                            : "assets/icons/Play.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: _isFullScreen ? 60 : 30),
+                  SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: Image.asset(
+                      "assets/icons/nextVideo.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: _isFullScreen ? 120 : 65),
+              Container(
+                padding:
+                    EdgeInsets.symmetric(horizontal: _isFullScreen ? 30 : 10),
+                color: Colors.black.withOpacity(0.7),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _formatDuration(_controller.value.position),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        activeColor: kButtonColor,
+                        inactiveColor: kButtonSecondaryColor,
+                        value: _sliderValue,
+                        min: 0.0,
+                        max: _controller.value.duration.inMilliseconds
+                            .toDouble(),
+                        onChanged: _onSliderChange,
+                      ),
+                    ),
+                    Text(
+                      _formatDuration(_controller.value.duration),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(width: _isFullScreen ? 25 : 15),
+                    GestureDetector(
+                      onTap: () {
+                        _toggleFullScreen();
+                        Future.delayed(const Duration(milliseconds: 500),
+                            () async {
+                          setState(() {
+                            showOverlay = !showOverlay;
+                          });
+                        });
+                      },
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Image.asset(
+                          _isFullScreen
+                              ? "assets/icons/fullscreen.png"
+                              : "assets/icons/smallscreen.png",
+                          color: kWhiteColor,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: _isFullScreen ? 0 : 10),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return "$minutes:$seconds";
+  }
+
+  void _onSliderChange(double value) {
+    setState(() {
+      _sliderValue = value;
+      _controller.seekTo(Duration(milliseconds: value.toInt()));
+    });
+    Future.delayed(const Duration(milliseconds: 5000), () async {
+      setState(() {
+        showOverlay = !showOverlay;
+      });
+    });
+  }
+
+  void _toggleFullScreen() {
+    setState(() {
+      _isFullScreen ? _exitFullScreen() : _enterFullScreen();
+      _isFullScreen = !_isFullScreen;
+    });
+  }
+
+  void _enterFullScreen() {
+    setState(() {
+      _controller.play();
+      _isFullScreen = false;
+      _isPlaying = true;
+    });
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    setState(() {
+      _controller.play();
+      _isFullScreen = false;
+      _isPlaying = true;
+    });
+  }
+
+  void _exitFullScreen() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 }
 

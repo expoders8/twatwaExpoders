@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../config/constant/color_constant.dart';
-import '../../widgets/custom_textfield.dart';
 
 class CommentReplyPage extends StatefulWidget {
   const CommentReplyPage({super.key});
@@ -12,8 +11,7 @@ class CommentReplyPage extends StatefulWidget {
 }
 
 class _CommentReplyPageState extends State<CommentReplyPage> {
-  bool isLikedState = false;
-  bool isdisLikedState = false;
+  bool isLikedState = false, isdisLikedState = false, iconshow = false;
   int likeCount = 0;
   int dislikeCount = 0;
   get getIsLikedState => isLikedState == true;
@@ -351,13 +349,57 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(13, 10, 13, 3),
-              child: CustomTextFormField(
-                hintText: 'Reply@ Jenny Smith',
+              child: TextFormField(
+                style: const TextStyle(color: kWhiteColor),
+                decoration: InputDecoration(
+                  hintText: "Reply@ Jenny Smith",
+                  hintStyle: const TextStyle(color: kWhiteColor),
+                  labelStyle: const TextStyle(color: kWhiteColor),
+                  contentPadding: const EdgeInsets.fromLTRB(17, 17, 17, 17),
+                  fillColor: kCardColor,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                    borderSide: BorderSide(color: kCardColor),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0),
+                      ),
+                      borderSide: BorderSide(color: kCardColor)),
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                    borderSide: BorderSide(color: kCardColor),
+                  ),
+                  suffixIcon: iconshow
+                      ? InkWell(
+                          child: const Icon(
+                            Icons.send,
+                            size: 30,
+                            color: kButtonSecondaryColor,
+                          ),
+                          onTap: () {
+                            commentController.clear();
+                          },
+                        )
+                      : null,
+                ),
+                controller: commentController,
+                onChanged: (value) {
+                  if (commentController.text != "") {
+                    setState(() {
+                      iconshow = true;
+                    });
+                  } else {
+                    setState(() {
+                      iconshow = false;
+                    });
+                  }
+                },
                 maxLines: 1,
-                ctrl: commentController,
-                name: "comment",
-                // formSubmitted: isFormSubmitted,
-                // validationMsg: 'Please enter email',
               ),
             ),
           ],

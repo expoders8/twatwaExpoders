@@ -542,7 +542,23 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 7),
+                              child: Row(
+                                children: [
+                                  buildcard("HOLLYWOOD"),
+                                  buildcard("LOVE"),
+                                  buildcard("COMEDY"),
+                                  buildcard("MOVIES"),
+                                  buildcard("BOLLYWOOD"),
+                                ],
+                              ),
+                            ),
+                          ),
                           const SizedBox(
                             height: 180,
                             child: PopularHomeView(),
@@ -556,6 +572,25 @@ class _HomePageState extends State<HomePage> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  buildcard(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 10),
+        decoration: BoxDecoration(
+            color: const Color(0xFF21203C),
+            borderRadius: BorderRadius.circular(20)),
+        child: Text(
+          text,
+          style: const TextStyle(
+              color: kTextSecondaryColor,
+              fontSize: 15,
+              fontFamily: kFuturaPTDemi),
         ),
       ),
     );

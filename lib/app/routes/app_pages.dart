@@ -7,6 +7,8 @@ import '../ui/profile/profile.dart';
 import '../ui/auth/login/login.dart';
 import '../ui/auth/signup/signup.dart';
 import '../ui/menu/menu_video_list.dart';
+import '../ui/widgets/video_quality.dart';
+import '../ui/uploadvideo/upload_video.dart';
 import '../ui/video_details/video_details.dart';
 import '../ui/auth/forgotpassword/forgotpassword.dart';
 import '../ui/favourite/create_and_edit_playlist.dart';
@@ -52,6 +54,10 @@ class AppPages {
       page: () => const VideoUploadedPage(),
     ),
     GetPage(
+      name: _Paths.uploadVideoPage,
+      page: () => const UploadVideoPage(),
+    ),
+    GetPage(
       name: _Paths.menuPage,
       page: () => const MenuPage(),
     ),
@@ -78,6 +84,10 @@ class AppPages {
     GetPage(
       name: _Paths.otherUserProfilePage,
       page: () => const OtherUserProfilePage(),
+    ),
+    GetPage(
+      name: _Paths.videoQualityPage,
+      page: () => const VideoQualityPage(),
     ),
   ];
 }

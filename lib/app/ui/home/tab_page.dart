@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:opentrend/app/ui/home/home.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../routes/app_pages.dart';
 import '../favourite/favourite.dart';
 import '../notification/notification.dart';
 import '../tranding/tranding.dart';
-import '../uploadVideo/upload_video.dart';
 
 class TabPage extends StatefulWidget {
   final String? tabIndexSubscription;
@@ -34,11 +35,11 @@ class _TabPageState extends State<TabPage> {
         backgroundColor: kButtonColor,
         child: const Icon(Icons.video_call),
         onPressed: () {
-          // showTypeBottomSheet();
-          setState(() {
-            currentScreen = const UploadVideoPage();
-            currentTab = 2;
-          });
+          showTypeBottomSheet();
+          // setState(() {
+          //   currentScreen = const UploadVideoPage();
+          //   currentTab = 2;
+          // });
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -200,94 +201,228 @@ class _TabPageState extends State<TabPage> {
     );
   }
 
-  // showTypeBottomSheet() {
-  //   FocusScope.of(context).requestFocus(FocusNode());
-  //   return showModalBottomSheet<dynamic>(
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //         topLeft: Radius.circular(60.0),
-  //         topRight: Radius.circular(60.0),
-  //       ),
-  //     ),
-  //     isScrollControlled: true,
-  //     backgroundColor: kTransparentColor,
-  //     context: context,
-  //     builder: (context) {
-  //       return Wrap(
-  //         children: [
-  //           Theme(
-  //             data: ThemeData(
-  //               splashColor: Colors.transparent,
-  //               highlightColor: Colors.transparent,
-  //             ),
-  //             child: Container(
-  //                 height: 200,
-  //                 width: Get.width,
-  //                 decoration: const BoxDecoration(
-  //                   color: kButtonColor,
-  //                   borderRadius: BorderRadius.only(
-  //                     topLeft: Radius.circular(300.0),
-  //                     topRight: Radius.circular(300.0),
-  //                   ),
-  //                 ),
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   mainAxisAlignment: MainAxisAlignment.end,
-  //                   children: [
-  //                     Container(
-  //                       margin: EdgeInsets.only(left: 100, top: 10),
-  //                       child: RotationTransition(
-  //                         turns: new AlwaysStoppedAnimation(-140 / 360),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.end,
-  //                           children: const [
-  //                             Text(
-  //                               "Lorem ipsum",
-  //                               style: TextStyle(color: kGreenColor),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 60),
-  //                     Container(
-  //                       margin: EdgeInsets.only(left: 30),
-  //                       child: RotationTransition(
-  //                         turns: new AlwaysStoppedAnimation(-160 / 360),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.end,
-  //                           children: const [
-  //                             Text(
-  //                               "----------------",
-  //                               style: TextStyle(
-  //                                   color: kWhiteColor, letterSpacing: 3),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 60),
-  //                     Container(
-  //                       margin: EdgeInsets.only(left: 30),
-  //                       child: RotationTransition(
-  //                         turns: new AlwaysStoppedAnimation(-180 / 360),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.end,
-  //                           children: const [
-  //                             Text(
-  //                               "Lorem ipsum",
-  //                               style: TextStyle(color: kWhiteColor),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 )),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  showTypeBottomSheet() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    return showModalBottomSheet<dynamic>(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(60.0),
+          topRight: Radius.circular(60.0),
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: kTransparentColor,
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            Theme(
+              data: ThemeData(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+              ),
+              child: Stack(
+                children: [
+                  Container(
+                    height: 200,
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      color: Colors.pink[600],
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(300.0),
+                        topRight: Radius.circular(300.0),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 170,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.uploadVideoPage);
+                      },
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(-20 / 360),
+                        child: Container(
+                          height: 50,
+                          width: 100,
+                          margin: const EdgeInsets.only(left: 240, top: 0),
+                          child: const RotationTransition(
+                            turns: AlwaysStoppedAnimation(-20 / 360),
+                            child: Center(
+                              child: Text(
+                                "Jobs Videos",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 120,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 180, top: 0),
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(-45 / 360),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Text(
+                              "-------------------------",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  letterSpacing: 3,
+                                  fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 150,
+                    left: 53,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.uploadVideoPage);
+                      },
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(-68 / 360),
+                        child: Container(
+                          height: 50,
+                          width: 100,
+                          margin: const EdgeInsets.only(left: 185, top: 0),
+                          child: const Center(
+                            child: Text(
+                              "Talent Videos",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 60,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 72, top: 0),
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(268 / 360),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Text(
+                              "---------------------------------",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  letterSpacing: 3,
+                                  fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 100,
+                    left: 57,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.uploadVideoPage);
+                      },
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(-120 / 360),
+                        child: Container(
+                          height: 50,
+                          margin: const EdgeInsets.only(left: 70, top: 0),
+                          child: const Center(
+                            child: Text(
+                              "Education Videos",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 130,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10, top: 0),
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(-140 / 360),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Text(
+                              "-----------------------------",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  letterSpacing: 3,
+                                  fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 150,
+                    left: 19,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.uploadVideoPage);
+                      },
+                      child: RotationTransition(
+                        turns: const AlwaysStoppedAnimation(-160 / 360),
+                        child: Container(
+                          height: 50,
+                          margin: const EdgeInsets.only(left: 30, top: 0),
+                          child: const Center(
+                            child: Text(
+                              "Premium Shows",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 170,
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      margin: const EdgeInsets.only(left: 150, top: 0),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

@@ -19,6 +19,8 @@ abstract class Routes {
   static const checkOutPaymentPage = _Paths.checkOutPaymentPage;
   static const profilePage = _Paths.profilePage;
   static const otherUserProfilePage = _Paths.otherUserProfilePage;
+  static const videoQualityPage = _Paths.videoQualityPage;
+  static const uploadVideoPage = _Paths.uploadVideoPage;
 }
 
 abstract class _Paths {
@@ -37,4 +39,6 @@ abstract class _Paths {
   static const checkOutPaymentPage = '/checkOutPaymentPage';
   static const profilePage = '/profilePage';
   static const otherUserProfilePage = '/otherUserProfilePage';
+  static const videoQualityPage = '/videoQualityPage';
+  static const uploadVideoPage = '/uploadVideoPage';
 }
