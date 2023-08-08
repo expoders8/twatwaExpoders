@@ -24,10 +24,12 @@ class VideoDetailsPage extends StatefulWidget {
 
 class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
-  int tabindex = 0, dishblevalue = 0;
+  int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
+  String qualityname = "";
   bool isChecked = false,
       showOverlay = true,
       _isPlaying = false,
+      click = false,
       _isFullScreen = false;
   double _sliderValue = 0.0;
   late VideoPlayerController _controller;
@@ -95,10 +97,10 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
               //       videoUrl:
               //           'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
               // ),
-              SizedBox(height: _isFullScreen ? 10 : 40),
+              SizedBox(height: _isFullScreen ? 0 : 30),
               SizedBox(
                 width: Get.width,
-                height: _isFullScreen ? Get.height - 18 : 240,
+                height: _isFullScreen ? Get.height : 240,
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
@@ -601,6 +603,466 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
         });
   }
 
+  videoQualitySelectBottomsheet() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    return showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: kAppBottomSheetColor,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(// this is new
+              builder: (BuildContext context, StateSetter setState) {
+            return SingleChildScrollView(
+              child: SizedBox(
+                height: Get.height - 50,
+                width: _isFullScreen ? Get.width - 380 : Get.width,
+                child: Column(
+                  children: [
+                    Container(
+                      padding:
+                          const EdgeInsets.only(top: 25, left: 20, bottom: 15),
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  color: kTextSecondaryColor, width: 0.4))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.back();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Image.asset(
+                                "assets/icons/back.png",
+                                scale: 9,
+                                color: kWhiteColor,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: GestureDetector(
+                              child: const Text(
+                                "Video Quality",
+                                style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            "        ",
+                            style: TextStyle(
+                              color: kWhiteColor,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: Get.height - 125,
+                      child: ListView.builder(
+                        itemCount: 1,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 0;
+                                    qualityname = "1080p";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                        color: kCardColor,
+                                        shape: RoundedRectangleBorder(
+                                            side: new BorderSide(
+                                                color:
+                                                    selectvideoQualityIndex == 0
+                                                        ? kButtonColor
+                                                        : kCardColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "1080p",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "FHD",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 1;
+                                    qualityname = "720p";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                        color: kCardColor,
+                                        shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color:
+                                                    selectvideoQualityIndex == 1
+                                                        ? kButtonColor
+                                                        : kCardColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "720p",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "HD",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 2;
+                                    qualityname = "480p";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                        color: kCardColor,
+                                        shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color:
+                                                    selectvideoQualityIndex == 2
+                                                        ? kButtonColor
+                                                        : kCardColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "480p",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 3;
+                                    qualityname = "360p";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                        color: kCardColor,
+                                        shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color:
+                                                    selectvideoQualityIndex == 3
+                                                        ? kButtonColor
+                                                        : kCardColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "360p",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 4;
+                                    qualityname = "240p";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                        color: kCardColor,
+                                        shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color:
+                                                    selectvideoQualityIndex == 4
+                                                        ? kButtonColor
+                                                        : kCardColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "240p",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 5;
+                                    qualityname = "144p";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                        color: kCardColor,
+                                        shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color:
+                                                    selectvideoQualityIndex == 5
+                                                        ? kButtonColor
+                                                        : kCardColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "144p",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectvideoQualityIndex = 6;
+                                    qualityname = "Auto";
+                                  });
+                                  Get.back();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5),
+                                  child: Container(
+                                    width: _isFullScreen
+                                        ? Get.width - 300
+                                        : Get.width,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Card(
+                                      color: kCardColor,
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color:
+                                                  selectvideoQualityIndex == 6
+                                                      ? kButtonColor
+                                                      : kCardColor,
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(4.0)),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "Auto",
+                                              style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                color: kButtonColor,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
   Widget _buildControls() {
     return GestureDetector(
       onTap: () {
@@ -609,8 +1071,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
         });
       },
       child: AnimatedOpacity(
-        // If the widget is visible, animate to 0.0 (invisible).
-        // If the widget is hidden, animate to 1.0 (fully visible).
         opacity: showOverlay ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 500),
         child: Container(
@@ -641,11 +1101,12 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.videoQualityPage);
+                        videoQualitySelectBottomsheet();
                       },
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
+                      child: Container(
+                        padding: EdgeInsets.all(13),
+                        height: 50,
+                        width: 50,
                         child: Image.asset(
                           "assets/icons/setting.png",
                           fit: BoxFit.cover,
@@ -655,7 +1116,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                   ],
                 ),
               ),
-              SizedBox(height: _isFullScreen ? 90 : 30),
+              SizedBox(height: _isFullScreen ? 60 : 0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -667,9 +1128,9 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(width: _isFullScreen ? 60 : 30),
-                  GestureDetector(
-                    onTap: () {
+                  SizedBox(width: _isFullScreen ? 60 : 33),
+                  IconButton(
+                    onPressed: () {
                       setState(() {
                         _isPlaying ? _controller.pause() : _controller.play();
                         _isPlaying = !_isPlaying;
@@ -679,13 +1140,14 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                         showOverlay = !showOverlay;
                       });
                     },
-                    child: SizedBox(
-                      height: 25,
-                      width: 25,
+                    icon: SizedBox(
+                      width: 40,
+                      height: 40,
                       child: Image.asset(
                         _isPlaying
                             ? "assets/icons/vdeoPause.png"
                             : "assets/icons/Play.png",
+                        scale: 3,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -701,7 +1163,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                   ),
                 ],
               ),
-              SizedBox(height: _isFullScreen ? 120 : 65),
+              SizedBox(height: _isFullScreen ? 100 : 40),
               Container(
                 padding:
                     EdgeInsets.symmetric(horizontal: _isFullScreen ? 30 : 10),
@@ -728,9 +1190,9 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                       _formatDuration(_controller.value.duration),
                       style: const TextStyle(color: Colors.white),
                     ),
-                    SizedBox(width: _isFullScreen ? 25 : 15),
-                    GestureDetector(
-                      onTap: () {
+                    SizedBox(width: _isFullScreen ? 25 : 5),
+                    IconButton(
+                      onPressed: () {
                         _toggleFullScreen();
                         Future.delayed(const Duration(milliseconds: 500),
                             () async {
@@ -739,7 +1201,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                           });
                         });
                       },
-                      child: SizedBox(
+                      icon: SizedBox(
                         height: 20,
                         width: 20,
                         child: Image.asset(
@@ -751,7 +1213,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                         ),
                       ),
                     ),
-                    SizedBox(width: _isFullScreen ? 0 : 10),
                   ],
                 ),
               ),

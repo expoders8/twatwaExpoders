@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                                   "WELCOME TO OPENTREND",
                                   style: TextStyle(
                                       color: kWhiteColor,
-                                      fontSize: 35,
+                                      fontSize: 33,
                                       letterSpacing: 2,
                                       fontFamily: kFuturalRiftSoftBold),
                                 ),

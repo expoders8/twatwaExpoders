@@ -21,12 +21,10 @@ class UploadVideoPage extends StatefulWidget {
 }
 
 class _UploadVideoPageState extends State<UploadVideoPage> {
-  File? imageFile;
-  File? videoFile;
+  File? imageFile, videoFile;
   double uploadProgress = 0.0;
-  bool isUploading = false;
-  bool processingValue = false;
-  String videostatus = "";
+  bool isUploading = false, processingValue = false;
+  String videostatus = "", fileSize = '';
   TextEditingController descriptionController = TextEditingController();
   TextEditingController aboutController = TextEditingController();
   TextEditingController tagcontroller = TextEditingController();
@@ -174,13 +172,36 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                                   ),
                           ),
                           const SizedBox(height: 5),
-                          const Text(
-                            "Lorem Ipsum is simply dummy ",
-                            style: TextStyle(
-                              color: kTextsecondarybottomColor,
-                              fontSize: 11,
-                            ),
-                          ),
+                          processingValue
+                              ? isUploading
+                                  ? const Text(
+                                      "Lorem Ipsum is simply dummy",
+                                      style: TextStyle(
+                                        color: kTextsecondarybottomColor,
+                                        fontSize: 11,
+                                      ),
+                                    )
+                                  : Text(
+                                      fileSize,
+                                      style: TextStyle(
+                                        color: kTextsecondarybottomColor,
+                                        fontSize: 11,
+                                      ),
+                                    )
+                              : const Text(
+                                  "Lorem Ipsum is simply dummy",
+                                  style: TextStyle(
+                                    color: kTextsecondarybottomColor,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                          // const Text(
+                          //   "Lorem Ipsum is simply dummy ",
+                          //   style: TextStyle(
+                          //     color: kTextsecondarybottomColor,
+                          //     fontSize: 11,
+                          //   ),
+                          // ),
                           const SizedBox(height: 5),
                           processingValue
                               ? isUploading
@@ -521,6 +542,11 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
         _controller = VideoPlayerController.file(File(pickedFile.path));
         await _controller.initialize();
         await _simulateUpload();
+        double bytes = videoFile!.lengthSync().toDouble();
+        double megabytes = bytes / (1024 * 1024);
+        setState(() {
+          fileSize = '${megabytes.toStringAsFixed(2)} MB';
+        });
       },
     );
   }

@@ -23,6 +23,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int tabindex = 0;
   String profileScreen = "profile";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,7 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 26.0),
+                      padding: const EdgeInsets.only(top: 21.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
