@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid ? 310 : 145,
+      expandedHeight: Platform.isAndroid ? 310 : 300,
       floating: false,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>781774163103-111og9vt8acupskcqc9227u2oame7e3v.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.781774163103-111og9vt8acupskcqc9227u2oame7e3v</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>781774163103-5sqa8j175dpkvl7otu470c5vonn05vet.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyASc4jKnf4gLcRKXKKcq7FM9eW1znbmz-o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>781774163103</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.app.opentrend</string>
+	<key>PROJECT_ID</key>
+	<string>opentrend-cf1e3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>opentrend-cf1e3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:781774163103:ios:6219c01bf052e0320966aa</string>
+</dict>
+</plist>
