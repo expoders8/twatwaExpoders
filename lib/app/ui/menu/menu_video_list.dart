@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/dotted_line_provider.dart';
 import '../../models/tranding_list_model.dart';
 import '../../routes/app_pages.dart';
 
@@ -126,7 +127,7 @@ class _MenuVideoListPageState extends State<MenuVideoListPage> {
             },
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
               child: Column(
                 children: [
                   Row(
@@ -175,12 +176,12 @@ class _MenuVideoListPageState extends State<MenuVideoListPage> {
                       ),
                     ],
                   ),
-                  const Text(
-                    "------------------------------------------------",
-                    style: TextStyle(
-                      color: kTextsecondarybottomColor,
-                      letterSpacing: 3,
-                      fontSize: 13,
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: Get.width - 25,
+                    height: 25,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
                     ),
                   ),
                 ],

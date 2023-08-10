@@ -113,48 +113,48 @@ class AuthService {
     }
   }
 
-  // Future<LoginModel> socialLogin(
-  //   String? firstName,
-  //   String? lastName,
-  //   String? email,
-  //   String? profilePicture,
-  //   String? googleToken,
-  //   String? provider,
-  //   String? fcmToken,
-  // ) async {
-  //   try {
-  //     var response = await http.post(Uri.parse('$baseUrl/api/Auth/SocialLogin'),
-  //         body: json.encode({
-  //           "firstName": firstName,
-  //           "lastName": lastName,
-  //           "email": email,
-  //           "profilePicture": profilePicture,
-  //           "googleToken": googleToken,
-  //           "provider": provider,
-  //           "currency": "",
-  //           "fcmToken": fcmToken
-  //         }),
-  //         headers: {'Content-type': 'application/json'});
-  //     if (response.statusCode == 200) {
-  //       var decodedUser = jsonDecode(response.body);
-  //       var userObj = decodedUser["data"];
-  //       if (userObj != null && decodedUser["success"]) {
-  //         box.write('user', jsonEncode(decodedUser["data"]));
-  //         box.write('authToken', decodedUser["data"]['authToken']);
-  //       }
-  //       return LoginModel.fromJson(decodedUser);
-  //     } else {
-  //       LoaderX.hide();
-  //       SnackbarUtils.showErrorSnackbar("Server Error",
-  //           "Error while user login, Please try after some time.");
-  //       return Future.error("Server Error");
-  //     }
-  //   } catch (e) {
-  //     LoaderX.hide();
-  //     SnackbarUtils.showErrorSnackbar("Failed to login", e.toString());
-  //     throw e.toString();
-  //   }
-  // }
+  Future<LoginModel> socialLogin(
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? profilePicture,
+    String? googleToken,
+    String? provider,
+    String? fcmToken,
+  ) async {
+    try {
+      var response = await http.post(Uri.parse('$baseUrl/api/Auth/SocialLogin'),
+          body: json.encode({
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "profilePicture": profilePicture,
+            "googleToken": googleToken,
+            "provider": provider,
+            "currency": "",
+            "fcmToken": fcmToken
+          }),
+          headers: {'Content-type': 'application/json'});
+      if (response.statusCode == 200) {
+        var decodedUser = jsonDecode(response.body);
+        var userObj = decodedUser["data"];
+        if (userObj != null && decodedUser["success"]) {
+          box.write('user', jsonEncode(decodedUser["data"]));
+          box.write('authToken', decodedUser["data"]['authToken']);
+        }
+        return LoginModel.fromJson(decodedUser);
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while user login, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar("Failed to login", e.toString());
+      throw e.toString();
+    }
+  }
 
   Future<ResetPasswordModel> changePassowrd(
       String userId, String oldPass, String newPass, String currentPass) async {

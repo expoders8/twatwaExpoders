@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/dotted_line_provider.dart';
 import '../../models/tranding_list_model.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -58,7 +60,8 @@ class _NotificationPageState extends State<NotificationPage> {
         itemCount: 15,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.5),
             child: Column(
               children: [
                 Row(
@@ -128,12 +131,12 @@ class _NotificationPageState extends State<NotificationPage> {
                     ),
                   ],
                 ),
-                const Text(
-                  "------------------------------------------------",
-                  style: TextStyle(
-                    color: kTextsecondarybottomColor,
-                    letterSpacing: 3,
-                    fontSize: 13,
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: Get.width - 25,
+                  height: 15,
+                  child: CustomPaint(
+                    painter: DottedLinePainter(),
                   ),
                 ),
               ],

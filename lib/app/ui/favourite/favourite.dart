@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../../config/provider/dotted_line_provider.dart';
 import '../widgets/appbar.dart';
 import '../../routes/app_pages.dart';
 import '../../view/my_all_time_favourite_view.dart';
@@ -259,14 +260,14 @@ class _FavouritePageState extends State<FavouritePage> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 4.0, bottom: 5),
-                        child: Text(
-                          "--------------------------------------------------",
-                          style: TextStyle(
-                              color: kTextsecondarytopColor,
-                              fontSize: 13,
-                              letterSpacing: 3),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12.0, bottom: 0),
+                        child: SizedBox(
+                          width: Get.width - 25,
+                          height: 20,
+                          child: CustomPaint(
+                            painter: DottedLinePainter(),
+                          ),
                         ),
                       ),
                       const Padding(

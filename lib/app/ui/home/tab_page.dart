@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:opentrend/app/ui/home/home.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/dotted_line_provider.dart';
 import '../../routes/app_pages.dart';
 import '../favourite/favourite.dart';
 import '../notification/notification.dart';
@@ -271,13 +272,13 @@ class _TabPageState extends State<TabPage> {
                         turns: const AlwaysStoppedAnimation(-45 / 360),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "-------------------------",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  letterSpacing: 3,
-                                  fontSize: 13),
+                          children: [
+                            SizedBox(
+                              width: Get.width - 190,
+                              height: 15,
+                              child: CustomPaint(
+                                painter: DottedLinePainter(),
+                              ),
                             ),
                           ],
                         ),
@@ -314,18 +315,18 @@ class _TabPageState extends State<TabPage> {
                   Positioned(
                     top: 60,
                     child: Container(
-                      margin: const EdgeInsets.only(left: 72, top: 0),
+                      margin: const EdgeInsets.only(left: 90, top: 0),
                       child: RotationTransition(
                         turns: const AlwaysStoppedAnimation(268 / 360),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "---------------------------------",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  letterSpacing: 3,
-                                  fontSize: 13),
+                          children: [
+                            SizedBox(
+                              width: Get.width - 160,
+                              height: 25,
+                              child: CustomPaint(
+                                painter: DottedLinePainter(),
+                              ),
                             ),
                           ],
                         ),
@@ -359,20 +360,20 @@ class _TabPageState extends State<TabPage> {
                     ),
                   ),
                   Positioned(
-                    top: 130,
+                    top: 120,
                     child: Container(
                       margin: const EdgeInsets.only(left: 10, top: 0),
                       child: RotationTransition(
-                        turns: const AlwaysStoppedAnimation(-140 / 360),
+                        turns: const AlwaysStoppedAnimation(-145 / 360),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "-----------------------------",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  letterSpacing: 3,
-                                  fontSize: 13),
+                          children: [
+                            SizedBox(
+                              width: Get.width - 154,
+                              height: 25,
+                              child: CustomPaint(
+                                painter: DottedLinePainter(),
+                              ),
                             ),
                           ],
                         ),

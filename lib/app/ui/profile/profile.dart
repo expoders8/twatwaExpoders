@@ -27,7 +27,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int tabindex = 0;
   String profileScreen = "profile";
-  String firstName = "", lastName = "", userEmail = "", userImage = "";
+  String userName = "", userEmail = "", userImage = "";
   final _googleSignIn = GoogleSignIn();
 
   @override
@@ -41,8 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var getUserData = jsonDecode(data);
     if (getUserData != null) {
       setState(() {
-        firstName = getUserData['firstName'] ?? "";
-        lastName = getUserData['lastName'] ?? "";
+        userName = getUserData['userName'] ?? "";
         userEmail = getUserData['email'] ?? "";
         userImage = getUserData['profilePicture'] ?? "";
       });
@@ -387,17 +386,46 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5.0),
-                              child: Image.asset(
-                                "assets/images/authBackground.png",
+                              child: Image.network(
+                                userImage.toString(),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                  "assets/images/blank_profile.png",
+                                  fit: BoxFit.fill,
+                                ),
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: kPrimaryColor,
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "$firstName $lastName",
+                            "$userName  ",
                             style: const TextStyle(
                               color: kWhiteColor,
-                              fontSize: 25,
+                              fontSize: 23,
                             ),
                           ),
                         ],

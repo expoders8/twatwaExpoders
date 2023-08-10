@@ -428,16 +428,19 @@ class _SignUpPageState extends State<SignUpPage> {
             if (value.success == true) {
               await authService
                   .verifyEmail(value.data!.emailVerificationToken.toString())
-                  .then((value) {
-                if (value["success"]) {
+                  .then((data) {
+                if (data["success"]) {
                   LoaderX.hide();
-                  Get.offAll(() => const LoginPage());
                 } else {
                   LoaderX.hide();
                   SnackbarUtils.showErrorSnackbar(
                       "Failed to SignUp", value.message.toString());
                 }
               });
+              var userPhone = {
+                "phoneno": value.data!.userPhone.toString(),
+              };
+              Get.toNamed(Routes.otpScreen, parameters: userPhone);
               LoaderX.hide();
             } else {
               LoaderX.hide();

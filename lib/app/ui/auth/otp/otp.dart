@@ -20,7 +20,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class OtpScreenState extends State<OtpScreen> {
-  String code = "";
+  String code = "", userPhone = "";
   String otpValidateMessage = "";
   int secondsRemaining = 20;
   bool enableResend = false;
@@ -28,6 +28,14 @@ class OtpScreenState extends State<OtpScreen> {
 
   succsesOTP() {
     // SnackbarUtils.showSnackbar("Success", "");
+  }
+  @override
+  void initState() {
+    super.initState();
+    var getPhoneno = Get.parameters['phoneno'];
+    setState(() {
+      userPhone = getPhoneno.toString();
+    });
   }
 
   @override

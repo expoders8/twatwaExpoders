@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../config/provider/dotted_line_provider.dart';
 import '../../../models/user_list_model.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
@@ -158,12 +159,11 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               ],
             ),
             const SizedBox(height: 10),
-            const Text(
-              "--------------------------------------------------------",
-              style: TextStyle(
-                color: kButtonSecondaryColor,
-                letterSpacing: 3,
-                fontSize: 10,
+            SizedBox(
+              width: Get.width - 25,
+              height: 25,
+              child: CustomPaint(
+                painter: DottedLinePainter(),
               ),
             ),
             SizedBox(
@@ -216,12 +216,11 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              "--------------------------------------------------------",
-              style: TextStyle(
-                color: kButtonSecondaryColor,
-                letterSpacing: 3,
-                fontSize: 10,
+            SizedBox(
+              width: Get.width - 25,
+              height: 25,
+              child: CustomPaint(
+                painter: DottedLinePainter(),
               ),
             ),
             Expanded(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../../config/provider/dotted_line_provider.dart';
 import '../../../models/user_list_model.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
@@ -147,12 +149,11 @@ class _FollowersPageState extends State<FollowersPage> {
                   ],
                 ),
               ),
-              const Text(
-                "--------------------------------------------------------",
-                style: TextStyle(
-                  color: kButtonSecondaryColor,
-                  letterSpacing: 3,
-                  fontSize: 10,
+              SizedBox(
+                width: Get.width - 25,
+                height: 10,
+                child: CustomPaint(
+                  painter: DottedLinePainter(),
                 ),
               ),
             ],

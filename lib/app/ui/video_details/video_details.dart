@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../config/provider/dotted_line_provider.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
@@ -292,15 +293,22 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
-                "---------------------------------------------------",
-                style: TextStyle(
-                    fontWeight: FontWeight.w100,
-                    letterSpacing: 3,
-                    color: kButtonSecondaryColor,
-                    fontSize: 10,
-                    fontFamily: kFuturaPTBook),
+              SizedBox(
+                width: Get.width - 25,
+                height: 1, // Height of the line
+                child: CustomPaint(
+                  painter: DottedLinePainter(),
+                ),
               ),
+              // const Text(
+              //   "---------------------------------------------------",
+              //   style: TextStyle(
+              //       fontWeight: FontWeight.w100,
+              //       letterSpacing: 3,
+              //       color: kButtonSecondaryColor,
+              //       fontSize: 10,
+              //       fontFamily: kFuturaPTBook),
+              // ),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 22),
