@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../services/auth_service.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
+import '../../../../config/provider/loader_provider.dart';
+import '../../../../config/provider/snackbar_provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -16,6 +19,7 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   bool isFormSubmitted = false;
+  AuthService authService = AuthService();
   final _forgotPasswordFormKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   @override
@@ -43,7 +47,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   child: Container(
                     width: Get.width,
                     height: Get.height,
-                    color: kAuthBackGraundColor,
+                    color: const Color(0xFF121330).withOpacity(0.7),
                     child: SingleChildScrollView(
                       child: Form(
                         key: _forgotPasswordFormKey,
@@ -53,12 +57,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 45),
                                 Image.asset(
-                                  "assets/icons/twatwa.png",
-                                  scale: 1.5,
+                                  "assets/Opentrend_light_applogo.jpeg",
+                                  scale: 4.3,
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 25),
                                 const Text(
                                   "FORGOT YOUR \nPASSWORD?",
                                   style: TextStyle(
@@ -148,7 +152,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     Future.delayed(const Duration(milliseconds: 100), () async {
       if (_forgotPasswordFormKey.currentState!.validate()) {
-        Get.toNamed(Routes.loginPage);
+        LoaderX.show(context, 70.0);
+        FocusScope.of(context).requestFocus(FocusNode());
+        await authService.forgotPassowrd(emailController.text).then((value) {
+          LoaderX.hide();
+          return value.success == true
+              ? SnackbarUtils.showSnackbar("Sent Successfully",
+                  "Link sent to your email, please check your mail inbox for the reset password link.")
+              : SnackbarUtils.showErrorSnackbar(
+                  "Failed to send email", value.message.toString());
+        });
       }
     });
   }

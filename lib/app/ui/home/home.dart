@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 
+import '../../../config/constant/constant.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
@@ -24,6 +25,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String authToken = "";
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  Future getUser() async {
+    var data = box.read('authToken');
+    if (data != null) {
+      setState(() {
+        authToken = data ?? "";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +117,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.toNamed(Routes.loginPage);
+                                authToken == ""
+                                    ? Get.toNamed(Routes.loginPage)
+                                    : Get.toNamed(Routes.profilePage);
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(right: 16),
@@ -108,9 +127,14 @@ class _HomePageState extends State<HomePage> {
                                 width: 42,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5.0),
-                                  child: Image.asset(
-                                    "assets/images/authBackground.png",
-                                  ),
+                                  child: authToken == ""
+                                      ? Image.asset(
+                                          "assets/images/blank_profile.png",
+                                          scale: 9,
+                                        )
+                                      : Image.asset(
+                                          "assets/images/authBackground.png",
+                                        ),
                                 ),
                               ),
                             ),

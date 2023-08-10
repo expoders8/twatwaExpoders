@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../../config/constant/color_constant.dart';
 import '../../../routes/app_pages.dart';
-import '../../widgets/custom_textfield.dart';
 
 class CommentsPage extends StatefulWidget {
   const CommentsPage({super.key});

@@ -2,11 +2,15 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../home/tab_page.dart';
 import '../../../routes/app_pages.dart';
+import '../../../services/auth_service.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/social_login_widget.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
+import '../../../../config/provider/loader_provider.dart';
+import '../../../../config/provider/snackbar_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,6 +22,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isFormSubmitted = false;
   final _loginFormKey = GlobalKey<FormState>();
+  AuthService authService = AuthService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -45,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     width: Get.width,
                     height: Get.height,
-                    color: kAuthBackGraundColor,
+                    color: const Color(0xFF121330).withOpacity(0.7),
                     child: SingleChildScrollView(
                       child: Form(
                         key: _loginFormKey,
@@ -55,12 +60,12 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const SizedBox(height: 30),
+                                const SizedBox(height: 35),
                                 Image.asset(
-                                  "assets/icons/twatwa.png",
-                                  scale: 1.5,
+                                  "assets/Opentrend_light_applogo.jpeg",
+                                  scale: 4.3,
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 25),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -77,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 10),
                                 const Text(
                                   "WELCOME TO OPENTREND",
                                   style: TextStyle(
@@ -206,7 +212,25 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     Future.delayed(const Duration(milliseconds: 100), () async {
       if (_loginFormKey.currentState!.validate()) {
-        Get.toNamed(Routes.tabPage);
+        LoaderX.show(context, 70.0);
+        await authService
+            .login(
+          emailController.text,
+          passwordController.text,
+        )
+            .then(
+          (value) async {
+            if (value.success == true) {
+              LoaderX.hide();
+              Get.offAll(() => const TabPage());
+            } else {
+              LoaderX.hide();
+              SnackbarUtils.showErrorSnackbar(
+                  "Failed to SignUp", value.message.toString());
+            }
+            return null;
+          },
+        );
       }
     });
   }

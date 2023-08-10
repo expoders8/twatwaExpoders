@@ -38,7 +38,7 @@ class OtpScreenState extends State<OtpScreen> {
         return Future.value(false);
       },
       child: Scaffold(
-        backgroundColor: kAuthBackGraundColor,
+        backgroundColor: const Color(0xFF121330).withOpacity(0.7),
         body: Stack(
           children: [
             Container(
@@ -52,7 +52,7 @@ class OtpScreenState extends State<OtpScreen> {
             ),
             Positioned(
               child: Container(
-                color: kAuthBackGraundColor,
+                color: const Color(0xFF121330).withOpacity(0.7),
                 child: SafeArea(
                     child: Column(
                   children: <Widget>[

@@ -1,8 +1,12 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:opentrend/app/ui/home/tab_page.dart';
 
+import '../../../config/constant/constant.dart';
+import '../auth/login/login.dart';
 import '../profile/updateprofile.dart';
 import '../profile/MyVideo/myvideo.dart';
 import '../profile/Analytics/analytics.dart';
@@ -23,155 +27,258 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int tabindex = 0;
   String profileScreen = "profile";
+  String firstName = "", lastName = "", userEmail = "", userImage = "";
+  final _googleSignIn = GoogleSignIn();
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  Future getUser() async {
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    if (getUserData != null) {
+      setState(() {
+        firstName = getUserData['firstName'] ?? "";
+        lastName = getUserData['lastName'] ?? "";
+        userEmail = getUserData['email'] ?? "";
+        userImage = getUserData['profilePicture'] ?? "";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+      body: WillPopScope(
+        onWillPop: () {
+          Get.offAll(() => const TabPage());
+          return Future.value(false);
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: Get.height,
-                child: NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxScrolled) {
-                    return <Widget>[
-                      createSilverAppBar1(),
-                    ];
-                  },
-                  body: Container(
-                    color: kBackGroundColor,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 30),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (profileScreen == "profileSettting") {
-                                setState(() {
-                                  profileScreen = "profile";
-                                });
-                              } else {
-                                if (profileScreen == "profile") {
-                                  setState(() {
-                                    profileScreen = "profileSettting";
-                                  });
-                                }
-                              }
-                            },
-                            child: Container(
-                              width: 100,
-                              padding: const EdgeInsets.all(11),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                    width: 1, color: kButtonSecondaryColor),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  profileScreen == "profile"
-                                      ? SizedBox(
-                                          height: 13,
-                                          width: 13,
-                                          child: Image.asset(
-                                            "assets/icons/setting.png",
-                                            color: kButtonColor,
-                                            scale: 1,
-                                          ),
-                                        )
-                                      : Container(),
-                                  profileScreen == "profile"
-                                      ? const SizedBox(width: 8)
-                                      : Container(),
-                                  Text(
-                                    profileScreen == "profile"
-                                        ? "PROFILE"
-                                        : "My profile",
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        color: kButtonSecondaryColor),
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Column(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: Get.height,
+                  child: NestedScrollView(
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxScrolled) {
+                      return <Widget>[
+                        createSilverAppBar1(),
+                      ];
+                    },
+                    body: Container(
+                      color: kBackGroundColor,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 30),
+                          Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    if (profileScreen == "profileSettting") {
+                                      setState(() {
+                                        profileScreen = "profile";
+                                      });
+                                    } else {
+                                      if (profileScreen == "profile") {
+                                        setState(() {
+                                          profileScreen = "profileSettting";
+                                        });
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(11),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                          width: 1,
+                                          color: kButtonSecondaryColor),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        profileScreen == "profile"
+                                            ? SizedBox(
+                                                height: 13,
+                                                width: 13,
+                                                child: Image.asset(
+                                                  "assets/icons/setting.png",
+                                                  color: kButtonColor,
+                                                  scale: 1,
+                                                ),
+                                              )
+                                            : Container(),
+                                        profileScreen == "profile"
+                                            ? const SizedBox(width: 8)
+                                            : Container(),
+                                        Text(
+                                          profileScreen == "profile"
+                                              ? "PROFILE"
+                                              : "My profile",
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: kButtonSecondaryColor),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(width: 10),
+                                GestureDetector(
+                                  onTap: logoutConfirmationDialog,
+                                  child: Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                          width: 1,
+                                          color: kButtonSecondaryColor),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.logout_outlined,
+                                          color: kButtonSecondaryColor,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "Logout",
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: kButtonSecondaryColor),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        profileScreen == "profile"
-                            ? SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    buildTabSelection("My Videos", 120.0, 0),
-                                    buildTabSelection("My Playlist", 100.0, 1),
-                                    buildTabSelection("Analytics", 100.0, 2),
-                                    buildTabSelection("Followers", 100.0, 3),
-                                    buildTabSelection("Following", 100.0, 4),
-                                  ],
+                          const SizedBox(height: 20),
+                          profileScreen == "profile"
+                              ? SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      buildTabSelection("My Videos", 120.0, 0),
+                                      buildTabSelection(
+                                          "My Playlist", 100.0, 1),
+                                      buildTabSelection("Analytics", 100.0, 2),
+                                      buildTabSelection("Followers", 100.0, 3),
+                                      buildTabSelection("Following", 100.0, 4),
+                                    ],
+                                  ),
+                                )
+                              : SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      buildTabSelection("Profile", 100.0, 0),
+                                      buildTabSelection("Password", 110.0, 1),
+                                      buildTabSelection(
+                                          "Notifications", 110.0, 2),
+                                      buildTabSelection("Billing", 90.0, 3),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            : SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    buildTabSelection("Profile", 100.0, 0),
-                                    buildTabSelection("Password", 110.0, 1),
-                                    buildTabSelection(
-                                        "Notifications", 110.0, 2),
-                                    buildTabSelection("Billing", 90.0, 3),
-                                  ],
+                          const SizedBox(height: 5),
+                          profileScreen == "profile"
+                              ? Expanded(
+                                  child: SizedBox(
+                                      height: Get.height,
+                                      child: tabindex == 0
+                                          ? const MyVideoPage()
+                                          : tabindex == 1
+                                              ? const MyPlaylistPage()
+                                              : tabindex == 2
+                                                  ? const AnalyticsPage()
+                                                  : tabindex == 3
+                                                      ? const FollowersPage()
+                                                      : tabindex == 4
+                                                          ? const FollowingPage()
+                                                          : Container()),
+                                )
+                              : Expanded(
+                                  child: SizedBox(
+                                      height: Get.height,
+                                      child: tabindex == 0
+                                          ? const UpdateProfilePage()
+                                          : tabindex == 1
+                                              ? const ChangePasswordPage()
+                                              : tabindex == 2
+                                                  ? const NotificationSettingPage()
+                                                  : tabindex == 3
+                                                      ? const FollowersPage()
+                                                      : tabindex == 4
+                                                          ? const FollowingPage()
+                                                          : Container()),
                                 ),
-                              ),
-                        const SizedBox(height: 5),
-                        profileScreen == "profile"
-                            ? Expanded(
-                                child: SizedBox(
-                                    height: Get.height,
-                                    child: tabindex == 0
-                                        ? const MyVideoPage()
-                                        : tabindex == 1
-                                            ? const MyPlaylistPage()
-                                            : tabindex == 2
-                                                ? const AnalyticsPage()
-                                                : tabindex == 3
-                                                    ? const FollowersPage()
-                                                    : tabindex == 4
-                                                        ? const FollowingPage()
-                                                        : Container()),
-                              )
-                            : Expanded(
-                                child: SizedBox(
-                                    height: Get.height,
-                                    child: tabindex == 0
-                                        ? const UpdateProfilePage()
-                                        : tabindex == 1
-                                            ? const ChangePasswordPage()
-                                            : tabindex == 2
-                                                ? const NotificationSettingPage()
-                                                : tabindex == 3
-                                                    ? const FollowersPage()
-                                                    : tabindex == 4
-                                                        ? const FollowingPage()
-                                                        : Container()),
-                              ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  logoutConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Alert !"),
+        elevation: 5,
+        titleTextStyle: const TextStyle(fontSize: 18, color: kRedColor),
+        content: const Text("Are you sure want to logout?"),
+        contentPadding: const EdgeInsets.only(left: 25, top: 10),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              _googleSignIn.disconnect();
+              Get.back();
+              box.remove('user');
+              box.remove('authToken');
+              Get.offAll(() => const TabPage());
+            },
+            child: const Text(
+              'Yes',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              'No',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -239,7 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Get.back();
+                              Get.offAll(() => const TabPage());
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8.0),
@@ -286,9 +393,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            "Riya Patel",
-                            style: TextStyle(
+                          Text(
+                            "$firstName $lastName",
+                            style: const TextStyle(
                               color: kWhiteColor,
                               fontSize: 25,
                             ),

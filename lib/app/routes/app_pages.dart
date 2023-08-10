@@ -10,7 +10,7 @@ import '../ui/menu/menu_video_list.dart';
 import '../ui/widgets/video_quality.dart';
 import '../ui/uploadvideo/upload_video.dart';
 import '../ui/video_details/video_details.dart';
-import '../ui/auth/forgotpassword/forgotpassword.dart';
+import '../ui/auth/forgotpassword/forgot_passowrd.dart';
 import '../ui/favourite/create_and_edit_playlist.dart';
 import '../ui/uploadVideo/success_video_uploaded.dart';
 import '../ui/OtherUserProfile/other_user_profile.dart';

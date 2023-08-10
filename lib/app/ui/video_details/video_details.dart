@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
@@ -691,7 +690,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                     child: Card(
                                         color: kCardColor,
                                         shape: RoundedRectangleBorder(
-                                            side: new BorderSide(
+                                            side: BorderSide(
                                                 color:
                                                     selectvideoQualityIndex == 0
                                                         ? kButtonColor
@@ -1104,7 +1103,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                         videoQualitySelectBottomsheet();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(13),
+                        padding: const EdgeInsets.all(13),
                         height: 50,
                         width: 50,
                         child: Image.asset(

@@ -54,9 +54,35 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             }
           }
         }
+        if (widget.name == 'username') {
+          if (value.isEmpty) {
+            widget.validationMsg;
+          } else {
+            // const pattern = r"^[A-Za-z][A-Za-z0-9._-]{5,15}$";
+            // final regExp = RegExp(pattern);
+
+            // if (!regExp.hasMatch(value.toString())) {
+            //   return "Please enter valid username";
+            // }
+            if (!RegExp(r"^[A-Za-z@][A-Za-z0-9._-]{5,15}$").hasMatch(value)) {
+              return 'Please enter valid username';
+            }
+          }
+        }
         if (widget.name == "password") {
           if (value.isEmpty) {
             widget.validationMsg;
+          }
+        }
+        if (widget.name == "phoneno") {
+          if (value.isEmpty) {
+            widget.validationMsg;
+          } else {
+            if (value.length < 9) {
+              return "Please Enter valid number";
+            } else if (value.length > 13) {
+              return "Please Enter valid number";
+            }
           }
         }
         return null;
@@ -85,7 +111,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             widget.name == "comment" ? kCardColor : const Color(0xB3493F54),
         hintStyle: TextStyle(
             color:
-                widget.name == "comment" ? kButtonSecondaryColor : kWhiteColor),
+                widget.name == "comment" ? kButtonSecondaryColor : kWhiteColor,
+            fontSize: 14),
         labelStyle: const TextStyle(color: kWhiteColor),
         contentPadding: const EdgeInsets.fromLTRB(17, 17, 17, 17),
         prefixIcon: widget.prefixIcon != null

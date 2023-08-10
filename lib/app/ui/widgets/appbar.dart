@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/constant/constant.dart';
 import '../../routes/app_pages.dart';
 
 typedef StringCallback = void Function(String val);
@@ -19,6 +20,21 @@ class AppBarWidget extends StatefulWidget {
 
 class _AppBarWidgetState extends State<AppBarWidget> {
   TextEditingController searchController = TextEditingController();
+  String authToken = "";
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  Future getUser() async {
+    var data = box.read('authToken');
+    if (data != null) {
+      setState(() {
+        authToken = data ?? "";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +86,13 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                   width: 42,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
-                    child: Image.asset(
-                      "assets/images/authBackground.png",
-                    ),
+                    child: authToken == ""
+                        ? Image.asset(
+                            "assets/images/blank_profile.png",
+                          )
+                        : Image.asset(
+                            "assets/images/authBackground.png",
+                          ),
                   ),
                 ),
               ),

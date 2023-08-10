@@ -183,7 +183,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                                     )
                                   : Text(
                                       fileSize,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: kTextsecondarybottomColor,
                                         fontSize: 11,
                                       ),
