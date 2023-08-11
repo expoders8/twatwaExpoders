@@ -4,15 +4,17 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../config/provider/loader_provider.dart';
+import '../../../../config/provider/snackbar_provider.dart';
+import '../../../services/auth_service.dart';
+import '../../home/tab_page.dart';
 import '../../widgets/numeric_pad.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/constant/font_constant.dart';
 
 class OtpScreen extends StatefulWidget {
-  final String? phonenumber;
   const OtpScreen({
     super.key,
-    this.phonenumber,
   });
 
   @override
@@ -25,10 +27,81 @@ class OtpScreenState extends State<OtpScreen> {
   int secondsRemaining = 20;
   bool enableResend = false;
   Timer? timer;
+  bool screentimevalue = true;
+  AuthService authService = AuthService();
 
-  succsesOTP() {
-    // SnackbarUtils.showSnackbar("Success", "");
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
+
+  otpVerification(code) async {
+    LoaderX.show(context, 70.0);
+    await authService.otpVerification(userPhone, code).then(
+      (value) async {
+        if (value["success"]) {
+          LoaderX.hide();
+          Get.offAll(() => const TabPage());
+        } else {
+          LoaderX.hide();
+          SnackbarUtils.showErrorSnackbar(
+              "Failed to send Otp", value["message"].toString());
+        }
+        return null;
+      },
+    );
+  }
+
+  sendOtp() async {
+    setState(() {
+      screentimevalue = false;
+    });
+    await authService.otpSend(userPhone).then(
+      (value) async {
+        if (value["success"]) {
+          LoaderX.hide();
+          code.isNotEmpty ? code = "" : null;
+          screenCountTime();
+          SnackbarUtils.showSnackbar("Otp send succesfully", "");
+        } else {
+          LoaderX.hide();
+          SnackbarUtils.showErrorSnackbar(
+              "Failed to send Otp", value["message"].toString());
+        }
+        return null;
+      },
+    );
+  }
+
+  screenCountTime() {
+    setState(() {
+      secondsRemaining = 20;
+    });
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (secondsRemaining != 0) {
+        setState(() {
+          secondsRemaining--;
+          screentimevalue = false;
+        });
+      } else {
+        setState(() {
+          screentimevalue = true;
+          enableResend = true;
+        });
+      }
+    });
+    // timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    //   setState(() {
+    //     if (secondsRemaining > 0) {
+    //       secondsRemaining--;
+    //     } else {
+    //       timer.cancel();
+    //     }
+    //   });
+    // });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -159,11 +232,13 @@ class OtpScreenState extends State<OtpScreen> {
                             width: 8,
                           ),
                           GestureDetector(
-                            onTap: () {},
-                            child: const Text(
+                            onTap: sendOtp,
+                            child: Text(
                               "RESEND",
                               style: TextStyle(
-                                color: Color.fromARGB(255, 252, 35, 86),
+                                color: screentimevalue
+                                    ? const Color.fromARGB(255, 252, 35, 86)
+                                    : kTextSecondaryColor,
                                 fontFamily: kFuturaPTBook,
                                 fontSize: 15,
                               ),
@@ -184,7 +259,7 @@ class OtpScreenState extends State<OtpScreen> {
                                 0, code.isNotEmpty ? code.length - 1 : null);
                           }
                         });
-                        code.length == 4 ? succsesOTP() : null;
+                        code.length == 4 ? otpVerification(code) : null;
                       },
                     ),
                   ],

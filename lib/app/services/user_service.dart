@@ -10,44 +10,82 @@ import '../../config/provider/snackbar_provider.dart';
 class UserService {
   Future<LoginModel> updateUserProfile(
       String userId,
-      String firstname,
+      String firstName,
       String lastName,
       String userEmail,
       String userName,
       File? profilePhoto) async {
     try {
       var token = box.read('authToken');
-      var response = await http.post(
-          Uri.parse('$baseUrl/api/User/UpdateProfile'),
-          body: json.encode({
-            "userId": userId,
-            "firstName": firstname,
-            "lastName": lastName,
-            "userEmail": userEmail,
-            "userName": userName,
-            "profilePhoto": "profilePhoto"
-          }),
-          headers: {
-            'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
-          });
+      http.Response response;
+      var request = http.MultipartRequest(
+          "POST", Uri.parse("$baseUrl/api/User/UpdateProfile"))
+        ..fields['userId'] = userId
+        ..fields['firstName'] = firstName
+        ..fields['lastName'] = lastName
+        ..fields['userName'] = userName
+        ..fields['userEmail'] = userEmail;
+      // ..fields['profilePhoto'] = profilePhoto!.path;
+      if (profilePhoto != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profilePhoto', profilePhoto.path));
+      }
+      request.headers.addAll({"Authorization": "Bearer $token"});
+      response = await http.Response.fromStream(await request.send());
+
       if (response.statusCode == 200) {
-        var decodedUser = jsonDecode(response.body);
-        var userObj = decodedUser["data"];
-        if (userObj != null && decodedUser["success"]) {
-          box.write('user', jsonEncode(decodedUser["data"]));
+        final responseData = json.decode(response.body);
+        if (responseData["success"] == true) {
+          var userObj = responseData["data"];
+          if (userObj != null) {
+            box.write('user', jsonEncode(responseData["data"]));
+          }
         }
-        return LoginModel.fromJson(decodedUser);
+        return LoginModel.fromJson(responseData);
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while user login, Please try after some time.");
+            "Error while update profile, Please try after some time.");
         return Future.error("Server Error");
       }
-    } catch (e) {
+    } catch (error) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to login", e.toString());
-      throw e.toString();
+      SnackbarUtils.showErrorSnackbar("Failed to update", error.toString());
+      return Future.error(error);
     }
+    // try {
+    //   var token = box.read('authToken');
+    //   var response = await http.post(
+    //       Uri.parse('$baseUrl/api/User/UpdateProfile'),
+    //       body: json.encode({
+    //         "userId": userId,
+    //         "firstName": firstname,
+    //         "lastName": lastName,
+    //         "userEmail": userEmail,
+    //         "userName": userName,
+    //         "profilePhoto": "profilePhoto"
+    //       }),
+    //       headers: {
+    //         'Content-type': 'application/json',
+    //         "Authorization": "Bearer $token"
+    //       });
+    //   if (response.statusCode == 200) {
+    //     var decodedUser = jsonDecode(response.body);
+    //     var userObj = decodedUser["data"];
+    //     if (userObj != null && decodedUser["success"]) {
+    //       box.write('user', jsonEncode(decodedUser["data"]));
+    //     }
+    //     return LoginModel.fromJson(decodedUser);
+    //   } else {
+    //     LoaderX.hide();
+    //     SnackbarUtils.showErrorSnackbar("Server Error",
+    //         "Error while user login, Please try after some time.");
+    //     return Future.error("Server Error");
+    //   }
+    // } catch (e) {
+    //   LoaderX.hide();
+    //   SnackbarUtils.showErrorSnackbar("Failed to login", e.toString());
+    //   throw e.toString();
+    // }
   }
 }

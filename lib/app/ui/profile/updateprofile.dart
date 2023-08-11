@@ -53,7 +53,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         firstName = getUserData['firstName'] ?? "";
         lastName = getUserData['lastName'] ?? "";
         userEmail = getUserData['userEmail'] ?? "";
-        userImage = getUserData['profilePicture'] ?? "";
+        userImage = getUserData['profilePhoto'] ?? "";
         userName = getUserData['userName'] ?? "";
       });
     }
@@ -92,6 +92,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                               borderRadius: BorderRadius.circular(5.0),
                               child: Image.network(
                                 userImage.toString(),
+                                fit: BoxFit.fill,
                                 errorBuilder: (context, error, stackTrace) =>
                                     Image.asset(
                                   "assets/images/blank_profile.png",

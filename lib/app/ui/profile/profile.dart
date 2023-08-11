@@ -43,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         userName = getUserData['userName'] ?? "";
         userEmail = getUserData['email'] ?? "";
-        userImage = getUserData['profilePicture'] ?? "";
+        userImage = getUserData['profilePhoto'] ?? "";
       });
     }
   }
@@ -388,6 +388,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               borderRadius: BorderRadius.circular(5.0),
                               child: Image.network(
                                 userImage.toString(),
+                                fit: BoxFit.fill,
                                 errorBuilder: (context, error, stackTrace) =>
                                     Image.asset(
                                   "assets/images/blank_profile.png",
@@ -404,7 +405,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     height: 50,
                                     child: Center(
                                       child: CircularProgressIndicator(
-                                        color: kPrimaryColor,
+                                        color: kWhiteColor,
                                         value: loadingProgress
                                                     .expectedTotalBytes !=
                                                 null

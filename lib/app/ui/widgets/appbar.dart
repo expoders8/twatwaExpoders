@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
+import '../../routes/app_pages.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/constant/constant.dart';
-import '../../routes/app_pages.dart';
 
 typedef StringCallback = void Function(String val);
 
@@ -20,7 +21,7 @@ class AppBarWidget extends StatefulWidget {
 
 class _AppBarWidgetState extends State<AppBarWidget> {
   TextEditingController searchController = TextEditingController();
-  String authToken = "";
+  String authToken = "", userImage = "";
   @override
   void initState() {
     super.initState();
@@ -28,10 +29,13 @@ class _AppBarWidgetState extends State<AppBarWidget> {
   }
 
   Future getUser() async {
-    var data = box.read('authToken');
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    var token = box.read('authToken');
     if (data != null) {
       setState(() {
-        authToken = data ?? "";
+        authToken = token ?? "";
+        userImage = getUserData['profilePhoto'] ?? "";
       });
     }
   }
@@ -90,8 +94,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                         ? Image.asset(
                             "assets/images/blank_profile.png",
                           )
-                        : Image.asset(
-                            "assets/images/authBackground.png",
+                        : Image.network(
+                            userImage.toString(),
+                            fit: BoxFit.fill,
                           ),
                   ),
                 ),

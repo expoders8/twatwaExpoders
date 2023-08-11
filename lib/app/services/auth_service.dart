@@ -188,25 +188,52 @@ class AuthService {
     }
   }
 
-  // getUserProfile() async {
-  //   var token = box.read('authToken');
-  //   try {
-  //     var response = await http.get(Uri.parse("$baseUrl/api/User/GetProfile"),
-  //         headers: {"Authorization": "Bearer $token"});
-  //     if (response.statusCode == 200) {
-  //       var decodedUser = jsonDecode(response.body);
-  //       var userObj = decodedUser["data"];
-  //       if (userObj != null && decodedUser["success"]) {
-  //         box.write('user', jsonEncode(decodedUser["data"]));
-  //       }
-  //       return decodedUser;
-  //     } else {
-  //       SnackbarUtils.showErrorSnackbar("Server Error",
-  //           "Error while user login, Please try after some time.");
-  //       return Future.error("Server Error");
-  //     }
-  //   } catch (error) {
-  //     return Future.error(error);
-  //   }
-  // }
+  otpVerification(String phoneNumber, String otp) async {
+    try {
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/Auth/OTPVerification'),
+              body: json.encode({
+                "phoneNumber": phoneNumber,
+                "otp": otp,
+              }),
+              headers: {'Content-type': 'application/json'});
+      if (response.statusCode == 200) {
+        var decodedUser = jsonDecode(response.body);
+        return decodedUser;
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while Verification the Otp, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar(
+          "Failed to Verification Otp", e.toString());
+      throw e.toString();
+    }
+  }
+
+  otpSend(String phoneNumber) async {
+    try {
+      var response = await http.post(Uri.parse('$baseUrl/api/Auth/OTPSend'),
+          body: json.encode({
+            "phoneNumber": phoneNumber,
+          }),
+          headers: {'Content-type': 'application/json'});
+      if (response.statusCode == 200) {
+        var decodedUser = jsonDecode(response.body);
+        return decodedUser;
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while Send the Otp, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar("Failed to Send Otp", e.toString());
+      throw e.toString();
+    }
+  }
 }

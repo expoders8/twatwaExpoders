@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String authToken = "";
+  String authToken = "", userImage = "";
   @override
   void initState() {
     super.initState();
@@ -33,10 +35,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getUser() async {
-    var data = box.read('authToken');
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    var token = box.read('authToken');
     if (data != null) {
       setState(() {
-        authToken = data ?? "";
+        authToken = token ?? "";
+        userImage = getUserData['profilePhoto'] ?? "";
       });
     }
   }
@@ -132,9 +137,20 @@ class _HomePageState extends State<HomePage> {
                                           "assets/images/blank_profile.png",
                                           scale: 9,
                                         )
-                                      : Image.asset(
-                                          "assets/images/authBackground.png",
+                                      : Image.network(
+                                          userImage.toString(),
+                                          errorBuilder:
+                                              (context, error, stackTrace) =>
+                                                  Image.asset(
+                                            "assets/images/blank_profile.png",
+                                            fit: BoxFit.fill,
+                                          ),
+                                          fit: BoxFit.fill,
                                         ),
+
+                                  // Image.asset(
+                                  //     "assets/images/authBackground.png",
+                                  //   ),
                                 ),
                               ),
                             ),
