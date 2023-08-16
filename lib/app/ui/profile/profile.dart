@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:opentrend/app/ui/home/tab_page.dart';
 
-import '../../../config/constant/constant.dart';
-import '../auth/login/login.dart';
 import '../profile/updateprofile.dart';
 import '../profile/MyVideo/myvideo.dart';
 import '../profile/Analytics/analytics.dart';
 import '../profile/Followers/followers.dart';
 import '../profile/Following/following.dart';
 import '../profile/MyPlaylist/myplaylist.dart';
+import '../../../config/constant/constant.dart';
 import '../auth/ChangePassword/changepassword.dart';
 import '../../../config/constant/color_constant.dart';
 import '../profile/NotificationSetting/notificationsetting.dart';

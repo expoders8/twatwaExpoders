@@ -103,7 +103,7 @@ class _VideoQualityPageState extends State<VideoQualityPage> {
           child: Card(
               color: kCardColor,
               shape: RoundedRectangleBorder(
-                  side: new BorderSide(
+                  side: BorderSide(
                       color: selectvideoQualityIndex == selectCard
                           ? kButtonColor
                           : kCardColor,
@@ -115,15 +115,15 @@ class _VideoQualityPageState extends State<VideoQualityPage> {
                 children: [
                   Text(
                     quality,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: kWhiteColor,
                       fontSize: 14,
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
                     quality1,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: kButtonColor,
                       fontSize: 14,
                     ),

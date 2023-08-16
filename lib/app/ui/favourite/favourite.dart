@@ -261,7 +261,7 @@ class _FavouritePageState extends State<FavouritePage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 12.0, bottom: 0),
+                        padding: const EdgeInsets.only(top: 12.0, bottom: 0),
                         child: SizedBox(
                           width: Get.width - 25,
                           height: 20,

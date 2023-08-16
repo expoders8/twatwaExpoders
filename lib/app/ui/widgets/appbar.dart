@@ -43,6 +43,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackGroundColor,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -6,6 +6,9 @@ import 'package:avatar_glow/avatar_glow.dart';
 
 import '../../../config/constant/constant.dart';
 import '../../routes/app_pages.dart';
+import '../../view/descovery_home_view.dart';
+import '../../view/following_home_view.dart';
+import '../../view/tranding_home_view.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
 import '../../view/jobs_home_view.dart';
@@ -13,8 +16,6 @@ import '../widgets/playlist_widget.dart';
 import '../../view/talent_home_view.dart';
 import '../../view/premium_home_view.dart';
 import '../../view/popular_home_view.dart';
-import '../../view/tranding_home_view.dart';
-import '../../view/descovery_home_view.dart';
 import '../../view/education_home_view.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/constant/font_constant.dart';
@@ -145,6 +146,32 @@ class _HomePageState extends State<HomePage> {
                                             "assets/images/blank_profile.png",
                                             fit: BoxFit.fill,
                                           ),
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: kWhiteColor,
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                           fit: BoxFit.fill,
                                         ),
 
@@ -425,7 +452,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 10),
                           const SizedBox(
                             height: 180,
-                            child: DescoverHomeView(),
+                            child: FollowingHomeView(),
                           ),
                         ],
                       ),

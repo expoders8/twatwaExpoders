@@ -8,8 +8,8 @@ class DottedLinePainter extends CustomPainter {
       ..strokeWidth = 0.8; // Width of the line
 
     // Define the spacing and dash pattern for the dotted line
-    final double dashWidth = 4;
-    final double dashSpace = 5;
+    const double dashWidth = 4;
+    const double dashSpace = 5;
 
     double currentX = 0;
 

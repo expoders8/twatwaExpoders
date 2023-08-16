@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:opentrend/app/ui/auth/login/login.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 

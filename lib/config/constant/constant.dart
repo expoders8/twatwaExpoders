@@ -1,6 +1,7 @@
 import 'package:get_storage/get_storage.dart';
 
 const String baseUrl = "https://opentrend-api.azurewebsites.net/";
+const String videobBaseUrl = "https://opentrend-video-api.azurewebsites.net/";
 const String androidAppId = "com.app.opentrend";
 const String iOsAppId = "";
 

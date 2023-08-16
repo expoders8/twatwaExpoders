@@ -41,7 +41,7 @@ class LoaderUtils {
     return const Center(
       child: SpinKitSpinningLines(
         size: 50.0,
-        color: kBlackColor,
+        color: kWhiteColor,
       ),
     );
   }

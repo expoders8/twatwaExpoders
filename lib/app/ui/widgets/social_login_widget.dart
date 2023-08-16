@@ -49,9 +49,9 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
         setState(() {
           idToken = googleSignInAuthentication.idToken.toString();
         });
-        final AuthCredential authCredential = GoogleAuthProvider.credential(
-            idToken: googleSignInAuthentication.idToken,
-            accessToken: googleSignInAuthentication.accessToken);
+        // final AuthCredential authCredential = GoogleAuthProvider.credential(
+        //     idToken: googleSignInAuthentication.idToken,
+        //     accessToken: googleSignInAuthentication.accessToken);
 
         // UserCredential result = await auth.signInWithCredential(authCredential);
         // User? user = result.user;
