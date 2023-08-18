@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             );
                                           },
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
                                         ),
 
                                   // Image.asset(

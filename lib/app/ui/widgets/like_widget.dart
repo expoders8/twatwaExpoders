@@ -3,17 +3,21 @@
 import 'package:flutter/material.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
+import '../../../config/provider/snackbar_provider.dart';
+import '../../services/like_service.dart';
 
+// ignore: must_be_immutable
 class LikeWidget extends StatefulWidget {
   final bool isLiked;
   final bool isdisLiked;
-  final String? storyId;
+  final String? videoId;
   late int? likeCount = 0;
-  late int? dislikeCount = 0;
+  late int? dislikeCount;
   LikeWidget(
       {Key? key,
       required this.isLiked,
-      this.storyId,
+      this.videoId,
       this.likeCount,
       this.dislikeCount,
       required this.isdisLiked})
@@ -28,6 +32,7 @@ class _LikeWidgetState extends State<LikeWidget> {
   bool isdisLikedState = false;
   get getIsLikedState => isLikedState == true;
   get getIsdisLikedState => isdisLikedState == true;
+  LikeStoryService likeStoryService = LikeStoryService();
 
   @override
   void initState() {
@@ -40,26 +45,63 @@ class _LikeWidgetState extends State<LikeWidget> {
     if (getIsLikedState) {
       setState(() =>
           {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
+      await likeStoryService.videoLike(widget.videoId).then(
+        (value) {
+          if (value["success"] == true) {
+            LoaderX.hide();
+          } else {
+            LoaderX.hide();
+            SnackbarUtils.showErrorSnackbar(value["message"], "");
+          }
+        },
+      );
     } else {
       setState(() =>
           {isLikedState = true, widget.likeCount = (widget.likeCount! + 1)});
+      await likeStoryService.videoLike(widget.videoId).then(
+        (value) {
+          if (value["success"] == true) {
+            LoaderX.hide();
+          } else {
+            LoaderX.hide();
+            SnackbarUtils.showErrorSnackbar(value["message"], "");
+          }
+        },
+      );
     }
   }
 
   Future _toggleIsDisLikedState() async {
-    setState(() {
-      isdisLikedState = false;
-    });
     if (getIsdisLikedState) {
       setState(() => {
             isdisLikedState = false,
             widget.dislikeCount = widget.dislikeCount! - 1
           });
+      await likeStoryService.videoDisLike(widget.videoId).then(
+        (value) {
+          if (value["success"] == true) {
+            LoaderX.hide();
+          } else {
+            LoaderX.hide();
+            SnackbarUtils.showErrorSnackbar(value["message"], "");
+          }
+        },
+      );
     } else {
       setState(() => {
             isdisLikedState = true,
             widget.dislikeCount = (widget.dislikeCount! + 1)
           });
+      await likeStoryService.videoDisLike(widget.videoId).then(
+        (value) {
+          if (value["success"] == true) {
+            LoaderX.hide();
+          } else {
+            LoaderX.hide();
+            SnackbarUtils.showErrorSnackbar(value["message"], "");
+          }
+        },
+      );
     }
   }
 

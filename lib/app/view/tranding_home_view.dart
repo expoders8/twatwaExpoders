@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../routes/app_pages.dart';
 import '../controller/video_controller.dart';
+import '../ui/video_details/video_details.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
@@ -53,7 +53,12 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                   int seconds = data.videoDurationInSeconds! % 60;
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.videoDetailsPage);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              VideoDetailsPage(videoId: data.id.toString()),
+                        ),
+                      );
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

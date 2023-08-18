@@ -97,7 +97,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                           )
                         : Image.network(
                             userImage.toString(),
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           ),
                   ),
                 ),

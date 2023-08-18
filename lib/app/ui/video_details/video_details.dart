@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../config/provider/dotted_line_provider.dart';
+import '../../../config/provider/loader_provider.dart';
+import '../../models/video_model.dart';
 import '../../routes/app_pages.dart';
+import '../../services/video_service.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
 import '../video_details/about/about.dart';
@@ -16,7 +20,8 @@ import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 
 class VideoDetailsPage extends StatefulWidget {
-  const VideoDetailsPage({super.key});
+  final String? videoId;
+  const VideoDetailsPage({super.key, this.videoId});
 
   @override
   State<VideoDetailsPage> createState() => _VideoDetailsPageState();
@@ -26,6 +31,8 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
   int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
   String qualityname = "";
+  VideoService videoService = VideoService();
+  late Future<GetVideoByIdModel> _futureDetail;
   bool isChecked = false,
       showOverlay = true,
       _isPlaying = false,
@@ -43,7 +50,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   void initState() {
     super.initState();
     var getURL = Get.parameters['value'];
-    var getQualityValue = Get.parameters['qualityValue'];
+    callApi();
     if (getURL == "false") {
       _exitFullScreen();
     }
@@ -68,6 +75,10 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     _controller.play();
   }
 
+  callApi() async {
+    _futureDetail = videoService.getByIdVideo(widget.videoId!);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -78,94 +89,132 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      body: WillPopScope(
-        onWillPop: () {
-          _exitFullScreen();
-          Get.back();
-          return Future.value(false);
-        },
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Column(
-            children: [
-              // SizedBox(
-              //   height: 250,
-              //   width: Get.width,
-              //   child: VideoPlayerPage(
-              //       videoUrl:
-              //           'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-              // ),
-              SizedBox(height: _isFullScreen ? 0 : 30),
-              SizedBox(
-                width: Get.width,
-                height: _isFullScreen ? Get.height : 240,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    _controller.value.isInitialized
-                        ? VideoPlayer(_controller)
-                        : const Center(
-                            child: Padding(
-                            padding: EdgeInsets.only(bottom: 15.0),
-                            child: CircularProgressIndicator(
-                              color: Colors.white60,
-                              backgroundColor: kButtonSecondaryColor,
-                              strokeWidth: 2,
-                            ),
-                          )),
-                    _buildControls()
-                  ],
-                ),
-              ),
-              Expanded(
-                child: SizedBox(
-                  height: Get.height,
-                  child: NestedScrollView(
-                    headerSliverBuilder:
-                        (BuildContext context, bool innerBoxScrolled) {
-                      return <Widget>[
-                        createSilverAppBar1(),
-                      ];
+      body: FutureBuilder(
+          future: _futureDetail,
+          builder: (context, AsyncSnapshot<GetVideoByIdModel> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                var data = snapshot.data!.data;
+                String formattedDate = DateFormat('yyyy-MMMM-dd')
+                    .format(DateTime.parse(data!.createdOn.toString()));
+                final splittedDate = formattedDate.split("-");
+                final splityear = splittedDate[0];
+                final splitmonth = splittedDate[1];
+                final splitday = splittedDate[2];
+                return WillPopScope(
+                  onWillPop: () {
+                    _exitFullScreen();
+                    Get.back();
+                    return Future.value(false);
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
                     },
-                    body: Container(
-                      color: kBackGroundColor,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Column(
+                      children: [
+                        // SizedBox(
+                        //   height: 250,
+                        //   width: Get.width,
+                        //   child: VideoPlayerPage(
+                        //       videoUrl:
+                        //           'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+                        // ),
+                        SizedBox(height: _isFullScreen ? 0 : 30),
+                        SizedBox(
+                          width: Get.width,
+                          height: _isFullScreen ? Get.height : 240,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
                             children: [
-                              buildTabindex("UP NEXT VIDEOS", 0, 120),
-                              buildTabindex("ABOUT", 1, 80),
-                              buildTabindex("COMMENTS", 2, 100)
+                              _controller.value.isInitialized
+                                  ? VideoPlayer(_controller)
+                                  : const Center(
+                                      child: Padding(
+                                      padding: EdgeInsets.only(bottom: 15.0),
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white60,
+                                        backgroundColor: kButtonSecondaryColor,
+                                        strokeWidth: 2,
+                                      ),
+                                    )),
+                              _buildControls()
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: SizedBox(
-                                height: Get.height,
-                                child: tabindex == 0
-                                    ? const UpNextPage()
-                                    : tabindex == 1
-                                        ? const AboutPage()
-                                        : const CommentsPage()),
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            height: Get.height,
+                            child: NestedScrollView(
+                              headerSliverBuilder: (BuildContext context,
+                                  bool innerBoxScrolled) {
+                                return <Widget>[
+                                  createSilverAppBar1(
+                                      data.title.toString(),
+                                      data.userName,
+                                      data.numberOfViews,
+                                      data.numberOfLikes,
+                                      data.numberOfDislikes,
+                                      splitday,
+                                      splitmonth,
+                                      splityear,
+                                      data.id),
+                                ];
+                              },
+                              body: Container(
+                                color: kBackGroundColor,
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        buildTabindex("UP NEXT VIDEOS", 0, 120),
+                                        buildTabindex("ABOUT", 1, 80),
+                                        buildTabindex("COMMENTS", 2, 100)
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Expanded(
+                                      child: SizedBox(
+                                          height: Get.height,
+                                          child: tabindex == 0
+                                              ? const UpNextPage()
+                                              : tabindex == 1
+                                                  ? const AboutPage()
+                                                  : const CommentsPage()),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    "video not found",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17,
+                    ),
+                  ),
+                );
+              }
+            } else {
+              return LoaderUtils.showLoader();
+            }
+          }),
     );
   }
 
-  SliverAppBar createSilverAppBar1() {
+  SliverAppBar createSilverAppBar1(String title, username, numberOfViews,
+      islike, isdislike, day, month, year, id) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
@@ -197,23 +246,23 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  SizedBox(height: 10),
+                                children: [
+                                  const SizedBox(height: 10),
                                   SizedBox(
                                     width: 210,
                                     child: Text(
-                                      "We Don’t Talk Anymore feat. Selena Gomezfsdfsdfsdfdfsfsdfsdf",
+                                      title,
                                       maxLines: 2,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: kTextsecondarytopColor,
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500),
                                     ),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
-                                    "12th, July 2019",
-                                    style: TextStyle(
+                                    "${day}th, $month $year",
+                                    style: const TextStyle(
                                       color: kTextsecondarybottomColor,
                                       fontSize: 11,
                                     ),
@@ -227,9 +276,9 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                     ),
                     Container(
                       margin: const EdgeInsets.only(right: 20, top: 11),
-                      child: const Text(
-                        "10,678 Views",
-                        style: TextStyle(
+                      child: Text(
+                        "$numberOfViews Views",
+                        style: const TextStyle(
                             color: kTextsecondarytopColor,
                             fontSize: 13,
                             fontFamily: kFuturaPTDemi),
@@ -238,14 +287,16 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 19),
                 child: Row(
                   children: [
                     LikeWidget(
+                      videoId: id,
                       isLiked: false,
-                      likeCount: 1,
-                      dislikeCount: 1,
+                      likeCount: islike,
+                      dislikeCount: isdislike,
                       isdisLiked: false,
                     ),
                     const SizedBox(width: 10),
@@ -292,24 +343,15 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               SizedBox(
                 width: Get.width - 25,
-                height: 1, // Height of the line
+                height: 1,
                 child: CustomPaint(
                   painter: DottedLinePainter(),
                 ),
               ),
-              // const Text(
-              //   "---------------------------------------------------",
-              //   style: TextStyle(
-              //       fontWeight: FontWeight.w100,
-              //       letterSpacing: 3,
-              //       color: kButtonSecondaryColor,
-              //       fontSize: 10,
-              //       fontFamily: kFuturaPTBook),
-              // ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.only(left: 22),
                 child: Row(
@@ -321,12 +363,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.otherUserProfilePage);
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         const OtherUserProfilePage(),
-                            //   ),
-                            // );
                           },
                           child: SizedBox(
                             height: 42,

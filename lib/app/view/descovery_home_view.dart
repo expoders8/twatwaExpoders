@@ -6,6 +6,7 @@ import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
 import '../controller/video_controller.dart';
 import '../routes/app_pages.dart';
+import '../ui/video_details/video_details.dart';
 
 class DescoverHomeView extends StatefulWidget {
   const DescoverHomeView({super.key});
@@ -52,7 +53,12 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                   int seconds = data.videoDurationInSeconds! % 60;
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.videoDetailsPage);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              VideoDetailsPage(videoId: data.id.toString()),
+                        ),
+                      );
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

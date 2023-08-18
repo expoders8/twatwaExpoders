@@ -92,11 +92,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                               borderRadius: BorderRadius.circular(5.0),
                               child: Image.network(
                                 userImage.toString(),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
                                     Image.asset(
                                   "assets/images/blank_profile.png",
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 ),
                                 loadingBuilder: (BuildContext context,
                                     Widget child,
