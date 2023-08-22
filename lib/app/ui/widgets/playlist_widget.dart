@@ -1,9 +1,8 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:flutter/material.dart';
 
 import '../../../config/constant/color_constant.dart';
 
+// ignore: must_be_immutable
 class PlaylistWidget extends StatefulWidget {
   final bool isLiked;
   final String? storyId;

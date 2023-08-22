@@ -90,7 +90,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                                   padding: const EdgeInsets.all(4),
                                   child: Text(
                                     "$minutes : $seconds",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: kWhiteColor, fontSize: 12),
                                   ),
                                 ),

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/constant/color_constant.dart';
+import '../../../../config/constant/constant.dart';
+import '../../../services/notification_service.dart';
 
 class NotificationSettingPage extends StatefulWidget {
   const NotificationSettingPage({super.key});
@@ -12,14 +16,56 @@ class NotificationSettingPage extends StatefulWidget {
 }
 
 class _NotificationSettingPageState extends State<NotificationSettingPage> {
-  bool _switchValue = false;
-  bool _switchValue1 = false;
-  bool _switchValue2 = true;
-  bool _switchValue3 = false;
-  bool _switchValue4 = false;
-  bool _switchValue5 = true;
-  bool _switchValue6 = false;
-  bool _switchValue7 = false;
+  bool _switchValue = false,
+      _switchValue1 = false,
+      _switchValue2 = true,
+      _switchValue3 = false,
+      _switchValue4 = false,
+      _switchValue5 = true,
+      _switchValue6 = true;
+
+  String userId = "", id = "";
+  NotificationService notificationService = NotificationService();
+  @override
+  void initState() {
+    getUser();
+    callapi();
+    super.initState();
+  }
+
+  Future getUser() async {
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    if (getUserData != null) {
+      setState(() {
+        userId = getUserData['id'] ?? "";
+      });
+    }
+  }
+
+  callapi() async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      await notificationService.getNotificationSetting(userId).then(
+            (value) => {
+              if (value['success'])
+                {
+                  setState(() {
+                    id = value['data']['id'];
+                    _switchValue = value['data']['subscriptionAlert'];
+                    _switchValue1 = value['data']['recommendedVideoAlert'];
+                    _switchValue2 = value['data']['activityOnChannelAlert'];
+                    _switchValue3 = value['data']['activityOnCommentAlert'];
+                    _switchValue4 = value['data']['replyOnCommentAlert'];
+                    _switchValue5 = value['data']['mentionAlert'];
+                    _switchValue6 =
+                        value['data']['activityOnOtherChannelAlert'];
+                  }),
+                },
+            },
+          );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +117,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -122,6 +169,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue1 = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -173,6 +221,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue2 = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -224,6 +273,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue3 = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -276,6 +326,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue4 = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -326,6 +377,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue5 = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -375,6 +427,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue6 = value;
+                                  updateNotificationSetting();
                                 });
                               },
                             ),
@@ -390,6 +443,26 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
         ),
       ),
     );
+  }
+
+  updateNotificationSetting() async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      await notificationService
+          .updateNotificationSetting(
+            id,
+            userId,
+            _switchValue,
+            _switchValue1,
+            _switchValue2,
+            _switchValue3,
+            _switchValue4,
+            _switchValue5,
+            _switchValue6,
+          )
+          .then((value) => {
+                if (value['success']) {callapi()}
+              });
+    });
   }
 
   buildCardWidget(String title1, String title2, bool value) {
@@ -433,10 +506,10 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                 child: CupertinoSwitch(
                   activeColor: kButtonSecondaryColor,
                   thumbColor: kButtonColor,
-                  value: _switchValue7,
+                  value: _switchValue6,
                   onChanged: (value) {
                     setState(() {
-                      _switchValue7 = value;
+                      _switchValue6 = value;
                     });
                   },
                 ),

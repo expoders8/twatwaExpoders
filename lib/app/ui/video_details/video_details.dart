@@ -61,7 +61,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
 
     // ignore: deprecated_member_use
     _controller = VideoPlayerController.network(
-        "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")
+        "https://lp-playback.com/hls/4fc8czsen4agp3yz/index.m3u8")
       ..initialize().then((_) {
         setState(() {});
       });

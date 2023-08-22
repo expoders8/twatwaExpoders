@@ -2,10 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../config/constant/color_constant.dart';
-import '../../../config/provider/loader_provider.dart';
-import '../../../config/provider/snackbar_provider.dart';
 import '../../services/like_service.dart';
+import '../../../config/constant/color_constant.dart';
 
 // ignore: must_be_immutable
 class LikeWidget extends StatefulWidget {
@@ -43,31 +41,37 @@ class _LikeWidgetState extends State<LikeWidget> {
 
   Future _toggleIsLikedState() async {
     if (getIsLikedState) {
-      setState(() =>
-          {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
-      await likeStoryService.videoLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      setState(() => {
+            isLikedState = false,
+            widget.likeCount = widget.likeCount! - 1,
+          });
+      // await likeStoryService.videoLike(widget.videoId).then(
+      //   (value) {
+      //     if (value["success"] == true) {
+      //       LoaderX.hide();
+      //     } else {
+      //       LoaderX.hide();
+      //       SnackbarUtils.showErrorSnackbar(value["message"], "");
+      //     }
+      //   },
+      // );
     } else {
-      setState(() =>
-          {isLikedState = true, widget.likeCount = (widget.likeCount! + 1)});
-      await likeStoryService.videoLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      setState(() => {
+            isdisLikedState = false,
+            isLikedState = true,
+            widget.likeCount = (widget.likeCount! + 1),
+          });
+
+      // await likeStoryService.videoLike(widget.videoId).then(
+      //   (value) {
+      //     if (value["success"] == true) {
+      //       LoaderX.hide();
+      //     } else {
+      //       LoaderX.hide();
+      //       SnackbarUtils.showErrorSnackbar(value["message"], "");
+      //     }
+      //   },
+      // );
     }
   }
 
@@ -77,31 +81,32 @@ class _LikeWidgetState extends State<LikeWidget> {
             isdisLikedState = false,
             widget.dislikeCount = widget.dislikeCount! - 1
           });
-      await likeStoryService.videoDisLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      // await likeStoryService.videoDisLike(widget.videoId).then(
+      //   (value) {
+      //     if (value["success"] == true) {
+      //       LoaderX.hide();
+      //     } else {
+      //       LoaderX.hide();
+      //       SnackbarUtils.showErrorSnackbar(value["message"], "");
+      //     }
+      //   },
+      // );
     } else {
       setState(() => {
+            isLikedState = false,
             isdisLikedState = true,
-            widget.dislikeCount = (widget.dislikeCount! + 1)
+            widget.dislikeCount = (widget.dislikeCount! + 1),
           });
-      await likeStoryService.videoDisLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      // await likeStoryService.videoDisLike(widget.videoId).then(
+      //   (value) {
+      //     if (value["success"] == true) {
+      //       LoaderX.hide();
+      //     } else {
+      //       LoaderX.hide();
+      //       SnackbarUtils.showErrorSnackbar(value["message"], "");
+      //     }
+      //   },
+      // );
     }
   }
 

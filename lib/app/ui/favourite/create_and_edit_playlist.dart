@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../services/playlist_service.dart';
 import '../widgets/custom_textfield.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/constant/font_constant.dart';
@@ -17,7 +18,10 @@ class CreateAndEditPlaylistPage extends StatefulWidget {
 class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
   int selectValue = 0;
   String topHeaderName = "";
+  bool isFormSubmitted = false;
+  final _playlistFormKey = GlobalKey<FormState>();
   TextEditingController playlistNameController = TextEditingController();
+  PlaylistService playlistService = PlaylistService();
   @override
   void initState() {
     super.initState();
@@ -48,87 +52,122 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
           padding: const EdgeInsets.symmetric(
             horizontal: 20.0,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "PLAYLIST NAME",
-                    style: TextStyle(
-                        color: kTextsecondarytopColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Lorem Ipsum is simply dummy text of the printing",
-                    style: TextStyle(
-                      color: kTextsecondarybottomColor,
-                      fontSize: 11,
+          child: Form(
+            key: _playlistFormKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "PLAYLIST NAME",
+                      style: TextStyle(
+                          color: kTextsecondarytopColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              CustomTextFormField(
-                hintText: 'Enter Playlist Name',
-                maxLines: 1,
-                ctrl: playlistNameController,
-                name: "playlistname",
-                // formSubmitted: isFormSubmitted,
-                // validationMsg: 'Please enter email',
-              ),
-              const SizedBox(height: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "SHARE WITH",
-                    style: TextStyle(
-                        color: kTextsecondarytopColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Lorem Ipsum is simply dummy text of the printing",
-                    style: TextStyle(
-                      color: kTextsecondarybottomColor,
-                      fontSize: 11,
+                    SizedBox(height: 5),
+                    Text(
+                      "Lorem Ipsum is simply dummy text of the printing",
+                      style: TextStyle(
+                        color: kTextsecondarybottomColor,
+                        fontSize: 11,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  buildSelectFunction("PUBLIC", 0),
-                  buildSelectFunction("FRIENDS", 1),
-                  buildSelectFunction("ONLY ME", 2),
-                ],
-              ),
-              const SizedBox(height: 290),
-              SizedBox(
-                width: Get.width,
-                child: CupertinoButton(
-                  color: kButtonColor,
-                  borderRadius: BorderRadius.circular(25),
-                  onPressed: () {},
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(
-                        color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                CustomTextFormField(
+                  hintText: 'Enter Playlist Name',
+                  maxLines: 1,
+                  ctrl: playlistNameController,
+                  name: "playlistname",
+                  formSubmitted: isFormSubmitted,
+                  validationMsg: 'Please enter Playlist Name',
+                ),
+                const SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "SHARE WITH",
+                      style: TextStyle(
+                          color: kTextsecondarytopColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "Lorem Ipsum is simply dummy text of the printing",
+                      style: TextStyle(
+                        color: kTextsecondarybottomColor,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    buildSelectFunction("PUBLIC", 0),
+                    buildSelectFunction("FRIENDS", 1),
+                    buildSelectFunction("ONLY ME", 2),
+                  ],
+                ),
+                const SizedBox(height: 290),
+                SizedBox(
+                  width: Get.width,
+                  child: CupertinoButton(
+                    color: kButtonColor,
+                    borderRadius: BorderRadius.circular(25),
+                    onPressed: createPlaylist,
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                          color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  createPlaylist() {
+    setState(() {
+      isFormSubmitted = true;
+    });
+    FocusScope.of(context).requestFocus(FocusNode());
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      if (_playlistFormKey.currentState!.validate()) {
+        // LoaderX.show(context, 70.0);
+        // await playlistService
+        //     .createPlaylist(
+        //   userId,
+        //   playlistNameController.text,
+
+        // )
+        //     .then(
+        //   (value) async {
+        //     if (value['success'] == true) {
+        //       LoaderX.hide();
+        //       // Get.offAll(() => const TabPage());
+        //     } else {
+        //       LoaderX.hide();
+        //       SnackbarUtils.showErrorSnackbar(
+        //           "Failed to SignUp", value.message.toString());
+        //     }
+        //     return null;
+        //   },
+        // );
+      }
+    });
   }
 
   Widget buildSelectFunction(

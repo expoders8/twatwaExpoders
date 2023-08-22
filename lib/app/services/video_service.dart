@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../models/video_model.dart';
@@ -143,5 +144,49 @@ class VideoService {
       SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
       throw e.toString();
     }
+  }
+
+  Future uploadVideo(String userId, String title, String description,
+      videoHashTagId, File? photo, File? video) async {
+    // try {
+    //   var token = box.read('authToken');
+    //   http.Response response;
+    //   var request = http.MultipartRequest(
+    //       "POST", Uri.parse("$baseUrl/api/Video/UploadVideo"))
+    //     ..fields['Title'] = title
+    //     ..fields['Description'] = description
+    //     ..fields['UserId'] = userId
+    //     ..fields['VideoHashTagId'] = videoHashTagId;
+    //   if (photo != null) {
+    //     request.files
+    //         .add(await http.MultipartFile.fromPath('ImageFile', photo.path));
+    //   }
+    //   if (video != null) {
+    //     request.files
+    //         .add(await http.MultipartFile.fromPath('VideoFile', video.path));
+    //   }
+    //   request.headers.addAll({"Authorization": "Bearer $token"});
+    //   response = await http.Response.fromStream(await request.send());
+
+    //   if (response.statusCode == 200) {
+    //     final responseData = json.decode(response.body);
+    //     if (responseData["success"] == true) {
+    //       var userObj = responseData["data"];
+    //       if (userObj != null) {
+    //         box.write('user', jsonEncode(responseData["data"]));
+    //       }
+    //     }
+    //     return responseData;
+    //   } else {
+    //     LoaderX.hide();
+    //     SnackbarUtils.showErrorSnackbar("Server Error",
+    //         "Error while update profile, Please try after some time.");
+    //     return Future.error("Server Error");
+    //   }
+    // } catch (error) {
+    //   LoaderX.hide();
+    //   SnackbarUtils.showErrorSnackbar("Failed to update", error.toString());
+    //   return Future.error(error);
+    // }
   }
 }

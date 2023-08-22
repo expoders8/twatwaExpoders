@@ -2,13 +2,12 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../video_details/video_details.dart';
 import '../widgets/appbar.dart';
-import '../../routes/app_pages.dart';
+import '../video_details/video_details.dart';
 import '../../controller/video_controller.dart';
 import '../../../config/constant/font_constant.dart';
-import '../../../config/provider/loader_provider.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 import '../../../config/animation/translate_up_animation.dart';
 
 // ignore: camel_case_types
@@ -114,7 +113,7 @@ class _TrendingPageState extends State<TrendingPage> {
                                           padding: const EdgeInsets.all(4),
                                           child: Text(
                                             "$minutes : $seconds",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: kWhiteColor,
                                                 fontSize: 12),
                                           ),
