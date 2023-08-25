@@ -62,8 +62,8 @@ class _HasTageViewState extends State<HasTageView> {
             chipDisplay: MultiSelectChipDisplay(
               shape: RoundedRectangleBorder(
                 side: const BorderSide(
-                    color: Colors.red,
-                    width: 0.8), // Set your desired border color here
+                    color: kButtonColor,
+                    width: 0.6), // Set your desired border color here
                 borderRadius: BorderRadius.circular(20.0), // Adjust as needed
               ),
               chipColor: kBackGroundColor,

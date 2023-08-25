@@ -71,9 +71,9 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#121330"
-  image: "assets/Opentrend_light_applogo.jpeg"
+  image: "assets/splash.png"
   android_12:
-    image: assets/Opentrend_light_applogo.jpeg
+    image: "assets/splash.png"
   fullscreen: true
   android: true
   ios: true

@@ -37,7 +37,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
       isFormSubmitted = false;
   String videostatus = "", fileSize = '', userId = '';
   final _uploadVideoFormKey = GlobalKey<FormState>();
-  TextEditingController descriptionController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   TextEditingController aboutController = TextEditingController();
   VideoService videoService = VideoService();
   late VideoPlayerController _controller;
@@ -366,7 +366,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                   CustomTextFormField(
                     hintText: 'Add a title that describe your video',
                     maxLines: 1,
-                    ctrl: descriptionController,
+                    ctrl: titleController,
                     name: "describe",
                     formSubmitted: isFormSubmitted,
                     validationMsg: 'Please enter title',
@@ -472,101 +472,35 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  // data.isEmpty
-                  //     ? GestureDetector(
-                  //         onTap: () {
-                  //           getAllHasTageController.fetchAllHastag();
-                  //         },
-                  //         child: Container(
-                  //           height: 50,
-                  //           width: Get.width,
-                  //           decoration: BoxDecoration(
-                  //             borderRadius:
-                  //                 const BorderRadius.all(Radius.circular(7)),
-                  //             border: Border.all(
-                  //               color: kButtonSecondaryColor,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : MultiSelectDialogField(
-                  //         // initialValue: selectedCategory,
-                  //         items: data
-                  //             .map(
-                  //               (category) => MultiSelectItem(
-                  //                   category.id, category.name.toString()),
-                  //             )
-                  //             .toList(),
-                  //         searchable: true,
-                  //         chipDisplay: MultiSelectChipDisplay(
-                  //           shape: RoundedRectangleBorder(
-                  //             side: const BorderSide(
-                  //                 color: Colors.red,
-                  //                 width:
-                  //                     0.8), // Set your desired border color here
-                  //             borderRadius: BorderRadius.circular(
-                  //                 20.0), // Adjust as needed
-                  //           ),
-                  //           chipColor: kBackGroundColor,
-                  //           height: 60,
-                  //           textStyle:
-                  //               const TextStyle(color: kButtonSecondaryColor),
-                  //         ),
-                  //         onConfirm: (values) {
-                  //           setState(() {
-                  //             hastage = values;
-                  //             tagsError = false;
-                  //           });
-                  //         },
-                  //         title: const Text("Hashtags"),
-                  //         listType: MultiSelectListType.CHIP,
-
-                  //         decoration: BoxDecoration(
-                  //           borderRadius:
-                  //               const BorderRadius.all(Radius.circular(7)),
-                  //           border: Border.all(
-                  //             color: tagsError
-                  //                 ? Colors.red
-                  //                 : kButtonSecondaryColor,
-                  //           ),
-                  //         ),
-                  //         buttonIcon: const Icon(
-                  //           Icons.arrow_drop_down_rounded,
-                  //           color: kBlack45Color,
-                  //         ),
-                  //         buttonText: const Text(
-                  //           "Select Hashtags",
-                  //           style: TextStyle(fontSize: 14, color: kWhiteColor),
-                  //         ),
-                  //       ),
-                  // tagsError == true
-                  //     ? const Padding(
-                  //         padding: EdgeInsets.only(left: 15, top: 5),
-                  //         child: Text("HashTags is required",
-                  //             style: TextStyle(
-                  //                 color: kErrorColor,
-                  //                 fontSize: 13,
-                  //                 fontFamily: kFuturaPTBook)),
-                  //       )
-                  //     : Container(),
-                  HasTageView(),
+                  const HasTageView(),
                   const SizedBox(height: 60),
-                  SizedBox(
-                    width: Get.width,
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, top: 12, bottom: 12),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: kButtonColor, width: 0.5),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Draft",
-                          style: TextStyle(
-                              color: kWhiteColor,
-                              letterSpacing: 2,
-                              fontSize: 15),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        videoFile = null;
+                        imageFile = null;
+                        processingValue = false;
+                        titleController.clear();
+                        aboutController.clear();
+                      });
+                    },
+                    child: SizedBox(
+                      width: Get.width,
+                      child: Container(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, top: 12, bottom: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: kButtonColor, width: 0.8),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Draft",
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                letterSpacing: 2,
+                                fontSize: 15),
+                          ),
                         ),
                       ),
                     ),
@@ -599,12 +533,13 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
   }
 
   createVideo() {
-    var test = getAllHasTageController.selectTagList();
+    // var test = getAllHasTageController.selectTagList();
     setState(() {
       isFormSubmitted = true;
     });
     FocusScope.of(context).requestFocus(FocusNode());
     var imageValidation = false;
+    var videoValidation = false;
     Future.delayed(const Duration(milliseconds: 100), () async {
       if (imageFile == null) {
         setState(() {
@@ -612,10 +547,18 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
           imageValidation = true;
         });
       }
-      if (_uploadVideoFormKey.currentState!.validate()) {
+      if (videoFile == null) {
+        setState(() {
+          videoError = true;
+          videoValidation = true;
+        });
+      }
+      if (_uploadVideoFormKey.currentState!.validate() &&
+          !imageValidation &&
+          !videoValidation) {
         // LoaderX.show(context, 70.0);
         // await videoService
-        //     .uploadVideo(userId, descriptionController.text,
+        //     .uploadVideo(userId, titleController.text,
         //         aboutController.text, test, imageFile, videoFile)
         //     .then(
         //   (value) async {
@@ -637,7 +580,6 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
   }
 
   checkValidation() {
-    _uploadVideoFormKey.currentState!.validate();
     if (imageFile == null) {
       setState(() {
         imageError = true;

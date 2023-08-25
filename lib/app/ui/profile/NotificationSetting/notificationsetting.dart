@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/constant/constant.dart';
+import '../../../../config/provider/loader_provider.dart';
 import '../../../services/notification_service.dart';
 
 class NotificationSettingPage extends StatefulWidget {
@@ -18,18 +19,20 @@ class NotificationSettingPage extends StatefulWidget {
 class _NotificationSettingPageState extends State<NotificationSettingPage> {
   bool _switchValue = false,
       _switchValue1 = false,
-      _switchValue2 = true,
+      _switchValue2 = false,
       _switchValue3 = false,
       _switchValue4 = false,
-      _switchValue5 = true,
-      _switchValue6 = true;
+      _switchValue5 = false,
+      _switchValue6 = false;
 
   String userId = "", id = "";
   NotificationService notificationService = NotificationService();
   @override
   void initState() {
-    getUser();
-    callapi();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getUser();
+      callapi();
+    });
     super.initState();
   }
 
@@ -44,11 +47,13 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
   }
 
   callapi() async {
+    LoaderX.show(context, 70.0);
     Future.delayed(const Duration(milliseconds: 100), () async {
       await notificationService.getNotificationSetting(userId).then(
             (value) => {
               if (value['success'])
                 {
+                  LoaderX.hide(),
                   setState(() {
                     id = value['data']['id'];
                     _switchValue = value['data']['subscriptionAlert'];
@@ -446,6 +451,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
   }
 
   updateNotificationSetting() async {
+    LoaderX.show(context, 70.0);
     Future.delayed(const Duration(milliseconds: 100), () async {
       await notificationService
           .updateNotificationSetting(
@@ -460,7 +466,10 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
             _switchValue6,
           )
           .then((value) => {
-                if (value['success']) {callapi()}
+                if (value['success'])
+                  {
+                    callapi(),
+                  }
               });
     });
   }

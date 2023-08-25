@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/getall_video_landing_controller.dart';
 import '../controller/video_controller.dart';
+import '../controller/video_detail_controller.dart';
+import '../routes/app_pages.dart';
 import '../ui/video_details/video_details.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
@@ -15,8 +18,18 @@ class TrandingHomeView extends StatefulWidget {
 }
 
 class _TrandingHomeViewState extends State<TrandingHomeView> {
-  final TrendingVideoController videoController =
-      Get.put(TrendingVideoController());
+  final GetAllVideoLandingController videoController =
+      Get.put(GetAllVideoLandingController());
+  final VideoDetailController videoDetailController =
+      Get.put(VideoDetailController());
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      videoController.fetchAllLandingVideos();
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +38,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
         return LoaderUtils.showLoader();
       } else {
         if (videoController.videoList.isNotEmpty) {
-          if (videoController.videoList[0].data!.isEmpty) {
+          if (videoController.videoList[0].data!.trendingVideo!.isEmpty) {
             return Center(
               child: SizedBox(
                 width: Get.width - 80,
@@ -41,11 +54,13 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
             );
           } else {
             return ListView.builder(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 15, right: 5),
               scrollDirection: Axis.horizontal,
-              itemCount: videoController.videoList[0].data?.length,
+              itemCount:
+                  videoController.videoList[0].data!.trendingVideo!.length,
               itemBuilder: (context, index) {
-                var discoverData = videoController.videoList[0].data!;
+                var discoverData =
+                    videoController.videoList[0].data!.trendingVideo!;
 
                 if (discoverData.isNotEmpty) {
                   var data = discoverData[index];
@@ -53,12 +68,8 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                   int seconds = data.videoDurationInSeconds! % 60;
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              VideoDetailsPage(videoId: data.id.toString()),
-                        ),
-                      );
+                      Get.toNamed(Routes.videoDetailsPage);
+                      videoDetailController.videoId(data.id.toString());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

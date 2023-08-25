@@ -17,8 +17,12 @@ import '../../../config/provider/dotted_line_provider.dart';
 class TabPage extends StatefulWidget {
   final String? tabIndexSubscription;
   final int? selectedTabIndex;
+  final String? selectedVideoType;
   const TabPage(
-      {super.key, this.tabIndexSubscription, this.selectedTabIndex = 0});
+      {super.key,
+      this.tabIndexSubscription,
+      this.selectedTabIndex = 0,
+      this.selectedVideoType});
   @override
   State<TabPage> createState() => _TabPageState();
 }
@@ -35,11 +39,26 @@ class _TabPageState extends State<TabPage> {
   @override
   void initState() {
     callApi();
+
     super.initState();
   }
 
   callApi() async {
-    categoryService.getAllCategory();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      categoryService.getAllCategory();
+      if (widget.selectedTabIndex == 3) {
+        setState(() {
+          currentScreen = const FavouritePage();
+          currentTab = 3;
+        });
+      }
+      if (widget.selectedTabIndex == 1) {
+        setState(() {
+          currentScreen = TrendingPage(type: widget.selectedVideoType);
+          currentTab = 1;
+        });
+      }
+    });
   }
 
   @override
@@ -149,7 +168,7 @@ class _TabPageState extends State<TabPage> {
                     onPressed: () {
                       setState(() {
                         currentScreen = const NotificationPage();
-                        currentTab = 3;
+                        currentTab = 2;
                       });
                     },
                     child: Column(
@@ -158,7 +177,7 @@ class _TabPageState extends State<TabPage> {
                         Image.asset(
                           "assets/icons/notification.png",
                           scale: 22,
-                          color: currentTab == 3
+                          color: currentTab == 2
                               ? kWhiteColor
                               : const Color(0xFF797A8E),
                         ),
@@ -167,7 +186,7 @@ class _TabPageState extends State<TabPage> {
                           'Notification',
                           style: TextStyle(
                             fontSize: 12,
-                            color: currentTab == 3
+                            color: currentTab == 2
                                 ? kWhiteColor
                                 : const Color(0xFF797A8E),
                           ),
@@ -180,7 +199,7 @@ class _TabPageState extends State<TabPage> {
                     onPressed: () {
                       setState(() {
                         currentScreen = const FavouritePage();
-                        currentTab = 4;
+                        currentTab = 3;
                       });
                     },
                     child: Column(
@@ -189,7 +208,7 @@ class _TabPageState extends State<TabPage> {
                         Image.asset(
                           "assets/icons/favourite.png",
                           scale: 22,
-                          color: currentTab == 4
+                          color: currentTab == 3
                               ? kWhiteColor
                               : const Color(0xFF797A8E),
                         ),
@@ -198,7 +217,7 @@ class _TabPageState extends State<TabPage> {
                           'Favourite',
                           style: TextStyle(
                             fontSize: 12,
-                            color: currentTab == 4
+                            color: currentTab == 3
                                 ? kWhiteColor
                                 : const Color(0xFF797A8E),
                           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/constant/color_constant.dart';
 import '../../routes/app_pages.dart';
+import '../home/tab_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -51,7 +52,14 @@ class _MenuPageState extends State<MenuPage> {
                   setState(() {
                     selectIndex = 1;
                   });
-                  Get.toNamed(Routes.menuVideoListPage);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TabPage(
+                        selectedTabIndex: 1,
+                        selectedVideoType: "Discover",
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [
@@ -91,7 +99,14 @@ class _MenuPageState extends State<MenuPage> {
                   setState(() {
                     selectIndex = 2;
                   });
-                  Get.toNamed(Routes.menuVideoListPage);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TabPage(
+                        selectedTabIndex: 1,
+                        selectedVideoType: "Premium Shows",
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [
@@ -134,7 +149,14 @@ class _MenuPageState extends State<MenuPage> {
                   setState(() {
                     selectIndex = 3;
                   });
-                  Get.toNamed(Routes.menuVideoListPage);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TabPage(
+                        selectedTabIndex: 1,
+                        selectedVideoType: "Education Videos",
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [
@@ -177,7 +199,14 @@ class _MenuPageState extends State<MenuPage> {
                   setState(() {
                     selectIndex = 4;
                   });
-                  Get.toNamed(Routes.menuVideoListPage);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TabPage(
+                        selectedTabIndex: 1,
+                        selectedVideoType: "Talent Videos",
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [
@@ -218,7 +247,14 @@ class _MenuPageState extends State<MenuPage> {
                   setState(() {
                     selectIndex = 5;
                   });
-                  Get.toNamed(Routes.menuVideoListPage);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TabPage(
+                        selectedTabIndex: 1,
+                        selectedVideoType: "Jobs Videos",
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [

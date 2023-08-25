@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/video_model.dart';
+import '../models/getall_video_landing.dart';
 import '../../config/constant/constant.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
@@ -100,52 +101,6 @@ class VideoService {
     }
   }
 
-  Future<GetVideoByIdModel> videoLike(String id) async {
-    var token = box.read('authToken');
-    try {
-      final response = await http.post(
-          Uri.parse('$videobBaseUrl/api/Video/GetDetails'),
-          body: json.encode({
-            "videoId": id,
-            "userId": null,
-            "userName": "",
-            "videoType": "",
-            "currentUserId": null,
-            "categoryId": null,
-            "thumbnailId": null,
-            "categoryName": "",
-            "playlistId": null,
-            "videoReferenceId": "",
-            "videoEncoderReference": "",
-            "visibleStatus": "",
-            "videoUploadStatus": "",
-            "requestType": "",
-            "hashTag": "",
-            "pageSize": 0,
-            "pageNumber": 0,
-            "searchText": "",
-            "sortBy": ""
-          }),
-          headers: {
-            'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
-          });
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        return GetVideoByIdModel.fromJson(data);
-      } else {
-        LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while fetch video, Please try after some time.");
-        return Future.error("Server Error");
-      }
-    } catch (e) {
-      LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
-      throw e.toString();
-    }
-  }
-
   Future uploadVideo(String userId, String title, String description,
       videoHashTagId, File? photo, File? video) async {
     // try {
@@ -188,5 +143,52 @@ class VideoService {
     //   SnackbarUtils.showErrorSnackbar("Failed to update", error.toString());
     //   return Future.error(error);
     // }
+  }
+  videoView(String videoId) async {
+    var token = box.read('authToken');
+    try {
+      final response = await http
+          .get(Uri.parse('$videobBaseUrl/api/Video/View/$videoId'), headers: {
+        'Content-type': 'application/json',
+        "Authorization": "Bearer $token"
+      });
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        return data;
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while Video View, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar("Failed to Video View", e.toString());
+      throw e.toString();
+    }
+  }
+
+  Future<GetAllVideoLanding> getAllVideoLanding() async {
+    var token = box.read('authToken');
+    try {
+      final response = await http
+          .get(Uri.parse('$videobBaseUrl/api/Video/GetVideoLanding'), headers: {
+        'Content-type': 'application/json',
+        "Authorization": "Bearer $token"
+      });
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        return GetAllVideoLanding.fromJson(data);
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while Video View, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar("Failed to Video View", e.toString());
+      throw e.toString();
+    }
   }
 }

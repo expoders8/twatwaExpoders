@@ -1,23 +1,24 @@
 import 'dart:io';
-import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../config/provider/dotted_line_provider.dart';
-import '../../../config/provider/loader_provider.dart';
-import '../../models/video_model.dart';
+import '../../controller/video_detail_controller.dart';
 import '../../routes/app_pages.dart';
-import '../../services/video_service.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
+import '../../services/video_service.dart';
 import '../video_details/about/about.dart';
 import '../video_details/upNext/upnext.dart';
 import '../video_details/comments/comments.dart';
+import '../../controller/playlist_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
+import '../../../config/provider/dotted_line_provider.dart';
 
 class VideoDetailsPage extends StatefulWidget {
   final String? videoId;
@@ -30,9 +31,13 @@ class VideoDetailsPage extends StatefulWidget {
 class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
   int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
-  String qualityname = "";
+  String qualityname = "", followtext = "FOLLOW";
+
   VideoService videoService = VideoService();
-  late Future<GetVideoByIdModel> _futureDetail;
+
+  final PlaylistController playlistController = Get.put(PlaylistController());
+  final VideoDetailController videoDetailController =
+      Get.put(VideoDetailController());
   bool isChecked = false,
       showOverlay = true,
       _isPlaying = false,
@@ -40,188 +45,176 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       _isFullScreen = false;
   double _sliderValue = 0.0;
   late VideoPlayerController _controller;
-  final List<ListItem> _items = [
-    ListItem('Save for later', false),
-    ListItem('My Favourite video', false),
-    ListItem('Songs', false),
-    ListItem('Comedy', false),
-  ];
   @override
   void initState() {
     super.initState();
-    var getURL = Get.parameters['value'];
-    callApi();
-    if (getURL == "false") {
-      _exitFullScreen();
-    }
-    Future.delayed(const Duration(milliseconds: 180), () async {
-      showOverlay = false;
-      _isPlaying = true;
-    });
-
-    // ignore: deprecated_member_use
-    _controller = VideoPlayerController.network(
-        "https://lp-playback.com/hls/4fc8czsen4agp3yz/index.m3u8")
-      ..initialize().then((_) {
-        setState(() {});
-      });
-    _controller.addListener(() {
-      if (_controller.value.isPlaying) {
-        setState(() {
-          _sliderValue = _controller.value.position.inMilliseconds.toDouble();
-        });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var videoId = videoDetailController.videoId();
+      videoService.videoView(videoId);
+      videoDetailController.fetchStoryDetail();
+      var getURL = Get.parameters['value'];
+      if (getURL == "false") {
+        _exitFullScreen();
       }
-    });
-    _controller.play();
-  }
+      Future.delayed(const Duration(milliseconds: 180), () async {
+        showOverlay = false;
+        _isPlaying = true;
+      });
 
-  callApi() async {
-    _futureDetail = videoService.getByIdVideo(widget.videoId!);
+      // ignore: deprecated_member_use
+      _controller = VideoPlayerController.network(
+          "https://lp-playback.com/hls/4fc8czsen4agp3yz/index.m3u8")
+        ..initialize().then((_) {
+          setState(() {});
+        });
+      _controller.addListener(() {
+        if (_controller.value.isPlaying) {
+          setState(() {
+            _sliderValue = _controller.value.position.inMilliseconds.toDouble();
+          });
+        }
+      });
+      _controller.play();
+    });
   }
 
   @override
   void dispose() {
+    videoDetailController.videoId("");
     _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackGroundColor,
-      body: FutureBuilder(
-          future: _futureDetail,
-          builder: (context, AsyncSnapshot<GetVideoByIdModel> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                var data = snapshot.data!.data;
-                String formattedDate = DateFormat('yyyy-MMMM-dd')
-                    .format(DateTime.parse(data!.createdOn.toString()));
-                final splittedDate = formattedDate.split("-");
-                final splityear = splittedDate[0];
-                final splitmonth = splittedDate[1];
-                final splitday = splittedDate[2];
-                return WillPopScope(
-                  onWillPop: () {
-                    _exitFullScreen();
-                    Get.back();
-                    return Future.value(false);
-                  },
-                  child: GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    child: Column(
+    return WillPopScope(
+      onWillPop: () {
+        videoDetailController.videoId("");
+        Navigator.of(context).pop();
+        return Future.value(false);
+      },
+      child: Obx(() {
+        if (videoDetailController.isLoading.value) {
+          return Scaffold(body: LoaderUtils.showLoader());
+        } else {
+          var data = videoDetailController.detailModel;
+
+          var detailData = data!.data;
+          String formattedDate = DateFormat('yyyy-MMMM-dd')
+              .format(DateTime.parse(detailData!.createdOn.toString()));
+          final splittedDate = formattedDate.split("-");
+          final splityear = splittedDate[0];
+          final splitmonth = splittedDate[1];
+          final splitday = splittedDate[2];
+          return Scaffold(
+            backgroundColor: kBackGroundColor,
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: Column(
+                children: [
+                  // SizedBox(
+                  //   height: 250,
+                  //   width: Get.width,
+                  //   child: VideoPlayerPage(
+                  //       videoUrl:
+                  //           'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+                  // ),
+                  SizedBox(height: _isFullScreen ? 0 : 30),
+                  SizedBox(
+                    width: Get.width,
+                    height: _isFullScreen ? Get.height : 240,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
                       children: [
-                        // SizedBox(
-                        //   height: 250,
-                        //   width: Get.width,
-                        //   child: VideoPlayerPage(
-                        //       videoUrl:
-                        //           'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-                        // ),
-                        SizedBox(height: _isFullScreen ? 0 : 30),
-                        SizedBox(
-                          width: Get.width,
-                          height: _isFullScreen ? Get.height : 240,
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              _controller.value.isInitialized
-                                  ? VideoPlayer(_controller)
-                                  : const Center(
-                                      child: Padding(
-                                      padding: EdgeInsets.only(bottom: 15.0),
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white60,
-                                        backgroundColor: kButtonSecondaryColor,
-                                        strokeWidth: 2,
-                                      ),
-                                    )),
-                              _buildControls()
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            height: Get.height,
-                            child: NestedScrollView(
-                              headerSliverBuilder: (BuildContext context,
-                                  bool innerBoxScrolled) {
-                                return <Widget>[
-                                  createSilverAppBar1(
-                                      data.title.toString(),
-                                      data.userName,
-                                      data.numberOfViews,
-                                      data.numberOfLikes,
-                                      data.numberOfDislikes,
-                                      splitday,
-                                      splitmonth,
-                                      splityear,
-                                      data.id),
-                                ];
-                              },
-                              body: Container(
-                                color: kBackGroundColor,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        buildTabindex("UP NEXT VIDEOS", 0, 120),
-                                        buildTabindex("ABOUT", 1, 80),
-                                        buildTabindex("COMMENTS", 2, 100)
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Expanded(
-                                      child: SizedBox(
-                                          height: Get.height,
-                                          child: tabindex == 0
-                                              ? const UpNextPage()
-                                              : tabindex == 1
-                                                  ? const AboutPage()
-                                                  : const CommentsPage()),
-                                    ),
-                                  ],
+                        _controller.value.isInitialized
+                            ? VideoPlayer(_controller)
+                            : const Center(
+                                child: Padding(
+                                padding: EdgeInsets.only(bottom: 15.0),
+                                child: CircularProgressIndicator(
+                                  color: Colors.white60,
+                                  backgroundColor: kButtonSecondaryColor,
+                                  strokeWidth: 2,
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
+                              )),
+                        _buildControls()
                       ],
                     ),
                   ),
-                );
-              } else {
-                return const Center(
-                  child: Text(
-                    "video not found",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 17,
+                  Expanded(
+                    child: SizedBox(
+                      height: Get.height,
+                      child: NestedScrollView(
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxScrolled) {
+                          return <Widget>[
+                            createSilverAppBar1(
+                              detailData.title.toString(),
+                              detailData.userName,
+                              detailData.numberOfViews,
+                              detailData.numberOfLikes,
+                              detailData.numberOfDislikes,
+                              splitday,
+                              splitmonth,
+                              splityear,
+                              detailData.id,
+                              detailData.isLiked,
+                              detailData.isDisliked,
+                            ),
+                          ];
+                        },
+                        body: Container(
+                          color: kBackGroundColor,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  buildTabindex("UP NEXT VIDEOS", 0, 120),
+                                  buildTabindex("ABOUT", 1, 80),
+                                  buildTabindex("COMMENTS", 2, 100)
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: SizedBox(
+                                    height: Get.height,
+                                    child: tabindex == 0
+                                        ? const UpNextPage()
+                                        : tabindex == 1
+                                            ? const AboutPage()
+                                            : const CommentsPage()),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                );
-              }
-            } else {
-              return LoaderUtils.showLoader();
-            }
-          }),
+                ],
+              ),
+            ),
+          );
+        }
+      }),
     );
   }
 
   SliverAppBar createSilverAppBar1(String title, username, numberOfViews,
-      islike, isdislike, day, month, year, id) {
+      islikeValue, isdislikeValue, day, month, year, id, isLiked, isDisliked) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
       expandedHeight: Platform.isAndroid
-          ? _isFullScreen
-              ? 200
-              : 170
+          ?
+          // _isFullScreen
+          //     ? 200
+          //     :
+          170
           : 145,
       floating: false,
       flexibleSpace: LayoutBuilder(
@@ -294,16 +287,16 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                   children: [
                     LikeWidget(
                       videoId: id,
-                      isLiked: false,
-                      likeCount: islike,
-                      dislikeCount: isdislike,
-                      isdisLiked: false,
+                      isLiked: isLiked,
+                      likeCount: islikeValue,
+                      dislikeCount: isdislikeValue,
+                      isdisLiked: isDisliked,
                     ),
                     const SizedBox(width: 10),
                     const ShareWidget(title: "", imageUrl: "", text: ""),
                     const SizedBox(width: 10),
                     GestureDetector(
-                      onTap: playlistbottomsheet,
+                      onTap: () {},
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 11.0, vertical: 8),
@@ -432,21 +425,68 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                             ),
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              top: 10, bottom: 10, right: 6, left: 6),
-                          margin: const EdgeInsets.only(right: 24),
-                          decoration: BoxDecoration(
-                              color: kButtonColor,
-                              borderRadius: BorderRadius.circular(25)),
-                          child: const Text(
-                            '23K FOLLOW',
-                            style: TextStyle(
-                                color: kWhiteColor,
-                                letterSpacing: 1.5,
-                                fontSize: 10),
+                        GestureDetector(
+                          onTap: () {
+                            if (followtext == "FOLLOW") {
+                              setState(() {
+                                followtext = "UNFOLLOW";
+                              });
+                            } else {
+                              if (followtext == "UNFOLLOW") {
+                                setState(() {
+                                  followtext = "FOLLOW";
+                                });
+                              }
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                top: 10, bottom: 10, right: 6, left: 6),
+                            margin: const EdgeInsets.only(right: 24),
+                            decoration: BoxDecoration(
+                                color: followtext == "FOLLOW"
+                                    ? kButtonColor
+                                    : kBackGroundColor,
+                                border: Border.all(
+                                    width: 1,
+                                    color: followtext == "FOLLOW"
+                                        ? kButtonColor
+                                        : kButtonSecondaryColor),
+                                borderRadius: BorderRadius.circular(25)),
+                            child: Text(
+                              followtext,
+                              style: const TextStyle(
+                                  color: kWhiteColor,
+                                  letterSpacing: 1.5,
+                                  fontSize: 10),
+                            ),
                           ),
                         ),
+                        // Container(
+                        //     width: 85,
+                        //     padding: const EdgeInsets.all(10),
+                        //     decoration: BoxDecoration(
+                        //         color: videos[index].follow
+                        //             ? kButtonColor
+                        //             : kBackGroundColor,
+                        //         border: Border.all(
+                        //             width: 1,
+                        //             color: videos[index].follow
+                        //                 ? kButtonColor
+                        //                 : kButtonSecondaryColor),
+                        //         borderRadius: BorderRadius.circular(25)),
+                        //     child: Center(
+                        //       child: Text(
+                        //         videos[index].follow ? "FOLLOW" : "UNFOLLOW",
+                        //         style: TextStyle(
+                        //             color: videos[index].follow
+                        //                 ? kWhiteColor
+                        //                 : kButtonSecondaryColor,
+                        //             fontSize: 11,
+                        //             fontFamily: kFuturaPTDemi),
+                        //       ),
+                        //     ),
+                        //   ),
                       ],
                     ),
                   ],
@@ -537,50 +577,107 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                           letterSpacing: 4,
                           fontWeight: FontWeight.normal),
                     ),
-                    SizedBox(
-                      height: 190,
-                      child: ListView.builder(
-                        itemCount: _items.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: <Widget>[
-                              CheckboxListTile(
-                                controlAffinity:
-                                    ListTileControlAffinity.leading,
-                                dense: true,
-                                checkColor: kButtonColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0),
-                                ),
-                                side: MaterialStateBorderSide.resolveWith(
-                                  (states) => BorderSide(
-                                      width: 1.0,
-                                      color: isChecked
-                                          ? kButtonColor
-                                          : kButtonSecondaryColor),
-                                ),
-                                title: Text(
-                                  _items[index].title,
-                                  style: const TextStyle(
-                                      color: kTextsecondarytopColor,
-                                      fontSize: 16,
+                    Expanded(
+                      child: Obx(
+                        () {
+                          if (playlistController.isLoading.value) {
+                            return LoaderUtils.showLoader();
+                          } else {
+                            if (playlistController.playList.isNotEmpty) {
+                              if (playlistController
+                                  .playList[0].data!.isEmpty) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: Get.width - 80,
+                                    child: const Text(
+                                      "Playlist not Found",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: kWhiteColor,
+                                          fontSize: 15,
+                                          fontFamily: kFuturaPTDemi),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return ListView.builder(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: playlistController
+                                      .playList[0].data?.length,
+                                  itemBuilder: (context, index) {
+                                    var playlistData =
+                                        playlistController.playList[0].data!;
+
+                                    if (playlistData.isNotEmpty) {
+                                      var data = playlistData[index];
+                                      return Column(
+                                        children: <Widget>[
+                                          CheckboxListTile(
+                                            controlAffinity:
+                                                ListTileControlAffinity.leading,
+                                            dense: true,
+                                            checkColor: kButtonColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6.0),
+                                            ),
+                                            side: MaterialStateBorderSide
+                                                .resolveWith(
+                                              (states) => BorderSide(
+                                                  width: 1.0,
+                                                  color: isChecked
+                                                      ? kButtonColor
+                                                      : kButtonSecondaryColor),
+                                            ),
+                                            title: Text(
+                                              data.playlistName.toString(),
+                                              style: const TextStyle(
+                                                  color: kTextsecondarytopColor,
+                                                  fontSize: 16,
+                                                  fontFamily: kFuturaPTDemi),
+                                            ),
+                                            activeColor: kAppBottomSheetColor,
+                                            selected: isChecked,
+                                            value: true,
+                                            onChanged: (newValue) {
+                                              // setState(() {
+                                              //   _items[index].isSelected =
+                                              //       newValue!;
+                                              //   _items[index].isSelected == true
+                                              //       ? dishblevalue = 1
+                                              //       : dishblevalue = 0;
+                                              // });
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    } else {
+                                      return const Center(
+                                        child: Text(
+                                          "No Playlist found",
+                                          style: TextStyle(
+                                              color: kWhiteColor,
+                                              fontSize: 15,
+                                              fontFamily: kFuturaPTDemi),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
+                              }
+                            } else {
+                              return const Center(
+                                child: Text(
+                                  "No Playlist found",
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      fontSize: 15,
                                       fontFamily: kFuturaPTDemi),
                                 ),
-                                activeColor: kAppBottomSheetColor,
-                                selected: isChecked,
-                                value: _items[index].isSelected,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _items[index].isSelected = newValue!;
-                                    _items[index].isSelected == true
-                                        ? dishblevalue = 1
-                                        : dishblevalue = 0;
-                                  });
-                                },
-                              )
-                            ],
-                          );
+                              );
+                            }
+                          }
                         },
                       ),
                     ),

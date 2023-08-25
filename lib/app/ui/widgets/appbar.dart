@@ -49,7 +49,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
         children: [
           GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.menuPage);
+              widget.title == "Favourite"
+                  ? Container()
+                  : Get.toNamed(Routes.menuPage);
             },
             child: Row(
               children: [

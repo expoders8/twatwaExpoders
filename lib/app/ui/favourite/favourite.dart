@@ -1,16 +1,23 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:opentrend/app/ui/favourite/create_and_edit_playlist.dart';
 
+import '../../../config/constant/constant.dart';
 import '../../../config/provider/dotted_line_provider.dart';
-import '../widgets/appbar.dart';
+import '../../../config/provider/snackbar_provider.dart';
+import '../../controller/playlist_controller.dart';
+import '../../controller/video_detail_controller.dart';
 import '../../routes/app_pages.dart';
-import '../../view/my_all_time_favourite_view.dart';
-import '../../view/myfavourite_favourite_view.dart';
-import '../../view/best_english_favourite_view.dart';
+import '../../services/playlist_service.dart';
+import '../home/tab_page.dart';
+import '../widgets/appbar.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 
+// ignore: camel_case_types
 class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});
 
@@ -20,9 +27,35 @@ class FavouritePage extends StatefulWidget {
 
 // ignore: camel_case_types
 class _FavouritePageState extends State<FavouritePage> {
+  final PlaylistController playlistController = Get.put(PlaylistController());
+  final VideoDetailController videoDetailController =
+      Get.put(VideoDetailController());
+  PlaylistService playlistService = PlaylistService();
+  String userId = "";
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      playlistController.fetchAllPlaylist();
+      getUser();
+    });
+
+    super.initState();
+  }
+
+  Future getUser() async {
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    if (getUserData != null) {
+      setState(() {
+        userId = getUserData['id'] ?? "";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(Platform.isAndroid ? 60 : 95),
         child: const Padding(
@@ -32,191 +65,288 @@ class _FavouritePageState extends State<FavouritePage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 19),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: Image.asset(
-                              "assets/icons/following.png",
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          const Text(
-                            "Best English songs",
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(
+              () {
+                if (playlistController.isLoading.value) {
+                  return LoaderUtils.showLoader();
+                } else {
+                  if (playlistController.playList.isNotEmpty) {
+                    if (playlistController.playList[0].data!.isEmpty) {
+                      return Center(
+                        child: SizedBox(
+                          width: Get.width - 80,
+                          child: const Text(
+                            "Playlist not Found",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: kTextsecondarytopColor,
-                                fontSize: 14,
+                                color: kWhiteColor,
+                                fontSize: 15,
                                 fontFamily: kFuturaPTDemi),
                           ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showTypeBottomSheet();
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 25, top: 3),
-                          width: 15,
-                          height: 15,
-                          child: Image.asset(
-                            "assets/icons/dots.png",
-                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const SizedBox(
-                  height: 180,
-                  child: BestEnglishSongFavouiteView(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 19),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: Image.asset(
-                              "assets/icons/following.png",
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          const Text(
-                            "My favourite",
-                            style: TextStyle(
-                                color: kTextsecondarytopColor,
-                                fontSize: 14,
-                                fontFamily: kFuturaPTDemi),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showTypeBottomSheet();
+                      );
+                    } else {
+                      return ListView.builder(
+                        padding: const EdgeInsets.only(left: 15),
+                        itemCount: playlistController.playList[0].data?.length,
+                        itemBuilder: (context, index) {
+                          var playlistData =
+                              playlistController.playList[0].data!;
+
+                          if (playlistData.isNotEmpty) {
+                            var data = playlistData[index];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: Image.asset(
+                                              "assets/icons/following.png",
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            data.playlistName.toString(),
+                                            style: const TextStyle(
+                                                color: kTextsecondarytopColor,
+                                                fontSize: 14,
+                                                fontFamily: kFuturaPTDemi),
+                                          ),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          showTypeBottomSheet(
+                                              data.id.toString(),
+                                              data.playlistName.toString(),
+                                              data.privacyType.toString(),
+                                              data.id.toString());
+                                        },
+                                        icon: Container(
+                                          margin: const EdgeInsets.only(
+                                              right: 25, top: 3),
+                                          width: 18,
+                                          height: 18,
+                                          child: Image.asset(
+                                            "assets/icons/dots.png",
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 170,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: data.videos!.length,
+                                    itemBuilder: (context, index) {
+                                      var discoverData = data.videos;
+
+                                      if (data.videos == []) {
+                                        return const Center(
+                                          child: Text(
+                                            "No Video found",
+                                            style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 15,
+                                                fontFamily: kFuturaPTDemi),
+                                          ),
+                                        );
+                                      } else {
+                                        var data = discoverData![index];
+                                        int minutes =
+                                            data.videoDurationInSeconds! ~/ 60;
+                                        int seconds =
+                                            data.videoDurationInSeconds! % 60;
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(
+                                                Routes.videoDetailsPage);
+                                            videoDetailController
+                                                .videoId(data.id.toString());
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Stack(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 150,
+                                                      height: 100,
+                                                      child: Image.network(
+                                                        data.videoThumbnailImagePath
+                                                            .toString(),
+                                                        errorBuilder: (context,
+                                                                error,
+                                                                stackTrace) =>
+                                                            Image.asset(
+                                                          "assets/images/tranding1.png",
+                                                          fit: BoxFit.fill,
+                                                        ),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      right: 10,
+                                                      top: 7,
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                135, 0, 0, 0),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4)),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4),
+                                                        child: Text(
+                                                          "$minutes : $seconds",
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  kWhiteColor,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const SizedBox(height: 10),
+                                                    SizedBox(
+                                                      width: 130,
+                                                      child: Text(
+                                                        data.title.toString(),
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color:
+                                                                kTextsecondarytopColor,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Text(
+                                                      "${data.numberOfViews.toString()} views",
+                                                      style: const TextStyle(
+                                                          color:
+                                                              kTextsecondarybottomColor,
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                )
+                              ],
+                            );
+                          } else {
+                            return const Center(
+                              child: Text(
+                                "No Video found",
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontSize: 15,
+                                    fontFamily: kFuturaPTDemi),
+                              ),
+                            );
+                          }
                         },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 25, top: 3),
-                          width: 15,
-                          height: 15,
-                          child: Image.asset(
-                            "assets/icons/dots.png",
-                          ),
-                        ),
+                      );
+                    }
+                  } else {
+                    return const Center(
+                      child: Text(
+                        "No Playlist found",
+                        style: TextStyle(
+                            color: kWhiteColor,
+                            fontSize: 15,
+                            fontFamily: kFuturaPTDemi),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const SizedBox(
-                  height: 180,
-                  child: MyFavouriteView(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 19),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: Image.asset(
-                              "assets/icons/following.png",
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          const Text(
-                            "My all time best",
-                            style: TextStyle(
-                                color: kTextsecondarytopColor,
-                                fontSize: 14,
-                                fontFamily: kFuturaPTDemi),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showTypeBottomSheet();
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 25, top: 3),
-                          width: 15,
-                          height: 15,
-                          child: Image.asset(
-                            "assets/icons/dots.png",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const SizedBox(
-                  height: 180,
-                  child: MyAllTimeFavouriteView(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            GestureDetector(
-              onTap: () {
-                var paymentLink = {
-                  "headerName": "Create",
-                };
-                Get.toNamed(Routes.createPlaylistPage, parameters: paymentLink);
+                    );
+                  }
+                }
               },
-              child: Container(
-                width: 200,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(width: 0.7, color: kButtonColor)),
-                child: const Center(
-                  child: Text(
-                    "Create playlist",
-                    style: TextStyle(
-                        color: kTextsecondarytopColor,
-                        fontSize: 16,
-                        fontFamily: kFuturaPTDemi),
+            ),
+          ),
+          const SizedBox(height: 30),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const CreateAndEditPlaylistPage(
+                    hadertitle: "Create",
                   ),
+                ),
+              );
+            },
+            child: Container(
+              width: 200,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(width: 0.9, color: kButtonColor)),
+              child: const Center(
+                child: Text(
+                  "Create playlist",
+                  style: TextStyle(
+                      color: kTextsecondarytopColor,
+                      fontSize: 16,
+                      fontFamily: kFuturaPTDemi),
                 ),
               ),
             ),
-            const SizedBox(height: 30),
-          ],
-        ),
+          ),
+          const SizedBox(height: 30),
+        ],
       ),
     );
   }
 
-  showTypeBottomSheet() {
+  showTypeBottomSheet(
+      String id, String name, String privacy, String playlistId) {
+    int selectvalue = privacy == "Public"
+        ? 0
+        : privacy == "Friends"
+            ? 1
+            : privacy == "Only me"
+                ? 2
+                : 0;
+
     FocusScope.of(context).requestFocus(FocusNode());
     return showModalBottomSheet<dynamic>(
       shape: const RoundedRectangleBorder(
@@ -245,11 +375,21 @@ class _FavouritePageState extends State<FavouritePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          var paymentLink = {
-                            "headerName": "Edit",
-                          };
-                          Get.toNamed(Routes.createPlaylistPage,
-                              parameters: paymentLink);
+                          // var paymentLink = {
+                          //   "headerName": "Edit",
+                          // };
+                          // Get.toNamed(Routes.createPlaylistPage,
+                          //     parameters: paymentLink);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CreateAndEditPlaylistPage(
+                                  hadertitle: "Edit",
+                                  playlistid: id,
+                                  playlistName: name,
+                                  playlistPrivacy: selectvalue),
+                            ),
+                          );
                         },
                         child: const Padding(
                           padding: EdgeInsets.only(top: 18.0, bottom: 9),
@@ -270,12 +410,18 @@ class _FavouritePageState extends State<FavouritePage> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 12.0, bottom: 12),
-                        child: Text(
-                          "Delete",
-                          style: TextStyle(
-                              color: kTextsecondarytopColor, fontSize: 16),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          removeConfirmationDialog(playlistId);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 12.0, bottom: 12),
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                                color: kTextsecondarytopColor, fontSize: 16),
+                          ),
                         ),
                       ),
                     ],
@@ -286,6 +432,57 @@ class _FavouritePageState extends State<FavouritePage> {
           ],
         );
       },
+    );
+  }
+
+  removeConfirmationDialog(String playlistId) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Alert !"),
+        elevation: 5,
+        titleTextStyle: const TextStyle(fontSize: 18, color: kRedColor),
+        content: const Text("Delete Playlist?"),
+        contentPadding: const EdgeInsets.only(left: 25, top: 10),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              LoaderX.show(context, 70.0);
+              await playlistService.removePlaylist(playlistId, userId).then(
+                (value) async {
+                  if (value['success'] == true) {
+                    LoaderX.hide();
+                    Get.offAll(() => const TabPage(
+                          selectedTabIndex: 3,
+                        ));
+                    SnackbarUtils.showSnackbar(
+                        "playlist successfully deleted", "");
+                  } else {
+                    LoaderX.hide();
+                    SnackbarUtils.showErrorSnackbar(
+                        "Failed to SignUp", value.message.toString());
+                  }
+                  return null;
+                },
+              );
+            },
+            child: const Text(
+              'Delete',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
