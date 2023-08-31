@@ -43,7 +43,7 @@ dependencies:
   image_cropper: ^4.0.1
   http: ^0.13.6
   percent_indicator: ^4.2.3
-  video_player: ^2.5.0
+  video_player: ^2.7.0
   avatar_glow: ^2.0.2
   fl_chart: ^0.40.0
   speech_to_text: ^6.1.1

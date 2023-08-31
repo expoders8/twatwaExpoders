@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:opentrend/config/constant/font_constant.dart';
 
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/snackbar_provider.dart';
@@ -16,7 +19,8 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 );
 
 class SocialLoginPage extends StatefulWidget {
-  const SocialLoginPage({super.key});
+  final String checkRowOrColumn;
+  const SocialLoginPage({super.key, required this.checkRowOrColumn});
 
   @override
   State<SocialLoginPage> createState() => _SocialLoginPageState();
@@ -81,45 +85,71 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        GestureDetector(
-          onTap: handleGoogleSignIn,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              border: Border.all(color: kWhiteColor, width: 0.3),
-            ),
-            height: 50,
-            width: 50,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Image.asset(
-                "assets/icons/google.png",
+    return widget.checkRowOrColumn == "row"
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: handleGoogleSignIn,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    border: Border.all(color: kWhiteColor, width: 0.3),
+                  ),
+                  height: 50,
+                  width: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Image.asset(
+                      "assets/icons/google.png",
+                    ),
+                  ),
+                ),
+              ),
+              // GestureDetector(
+              //   onTap: () {},
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(30.0),
+              //       border: Border.all(color: kWhiteColor, width: 0.3),
+              //     ),
+              //     height: 50,
+              //     width: 50,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(15),
+              //       child: Image.asset(
+              //         "assets/icons/facebook.png",
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          )
+        : GestureDetector(
+            onTap: handleGoogleSignIn,
+            child: Container(
+              width: Get.width > 500 ? 600 : Get.width - 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.circular(8.0),
+                border: Border.all(color: kWhiteColor, width: 0.3),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Center(
+                  child: Text(
+                    "Continue with Google",
+                    style: TextStyle(
+                        color: kBackGroundColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: kFuturaPTBook),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        // GestureDetector(
-        //   onTap: () {},
-        //   child: Container(
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(30.0),
-        //       border: Border.all(color: kWhiteColor, width: 0.3),
-        //     ),
-        //     height: 50,
-        //     width: 50,
-        //     child: Padding(
-        //       padding: const EdgeInsets.all(15),
-        //       child: Image.asset(
-        //         "assets/icons/facebook.png",
-        //       ),
-        //     ),
-        //   ),
-        // ),
-      ],
-    );
+          );
   }
 }

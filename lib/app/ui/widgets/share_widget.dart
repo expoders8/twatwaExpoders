@@ -20,7 +20,7 @@ class ShareWidget extends StatelessWidget {
     return GestureDetector(
       onTap: share,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 8),
         decoration: BoxDecoration(
             border: Border.all(color: kButtonSecondaryColor, width: 1),
             borderRadius: BorderRadius.circular(50),
@@ -35,23 +35,19 @@ class ShareWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                  height: 17,
-                  child: Image.asset(
-                    "assets/icons/Share.png",
-                    scale: 1.5,
-                  ),
-                ),
-                const SizedBox(width: 5),
-                const Text(
-                  "625",
-                  style: TextStyle(fontSize: 14, color: kButtonSecondaryColor),
-                )
-              ],
-            )
+            SizedBox(
+              width: 18,
+              height: 17,
+              child: Image.asset(
+                "assets/icons/Share.png",
+                scale: 1.5,
+              ),
+            ),
+            // const SizedBox(width: 5),
+            // const Text(
+            //   "625",
+            //   style: TextStyle(fontSize: 14, color: kButtonSecondaryColor),
+            // )
           ],
         ),
       ),

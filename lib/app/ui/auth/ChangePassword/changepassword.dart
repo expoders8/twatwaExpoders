@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:opentrend/app/ui/profile/profile.dart';
 
-import '../../../../config/constant/constant.dart';
 import '../../../services/auth_service.dart';
+import '../../../../config/constant/constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
 import '../../../../config/provider/snackbar_provider.dart';

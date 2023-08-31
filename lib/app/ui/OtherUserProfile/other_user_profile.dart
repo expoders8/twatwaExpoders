@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/video_service.dart';
 import '../profile/Followers/followers.dart';
 import '../profile/Following/following.dart';
 import '../profile/MyPlaylist/myplaylist.dart';
@@ -10,15 +11,47 @@ import '../OtherUserProfile/OtherUserHome/other_user_home.dart';
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';
 
 class OtherUserProfilePage extends StatefulWidget {
-  const OtherUserProfilePage({super.key});
+  final String? userId;
+  const OtherUserProfilePage({super.key, this.userId});
 
   @override
   State<OtherUserProfilePage> createState() => _OtherUserProfilePageState();
 }
 
 class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
-  int tabindex = 0;
-  String followButton = "follow";
+  int tabindex = 0,
+      usertotalViews = 0,
+      usertotalVideos = 0,
+      usertotalFollowings = 0,
+      usertotalFollowers = 0;
+  String followButton = "follow", userImage = "", userName = "";
+  VideoService videoService = VideoService();
+  @override
+  void initState() {
+    callApi();
+    super.initState();
+  }
+
+  callApi() async {
+    await videoService.getMyAnalytics(widget.userId.toString()).then(
+          (value) => {
+            if (value['success'])
+              {
+                setState(() {
+                  userImage = value['data']['userProfileImage'];
+                  userName = value['data']['userName'];
+                  usertotalViews = value['data']['totalViews'];
+                  usertotalVideos = value['data']['totalVideos'];
+                  usertotalFollowers = value['data']['totalFollowers'];
+                  usertotalFollowings = value['data']['totalFollowings'];
+                })
+              }
+            else
+              {}
+          },
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +136,9 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                               child: tabindex == 0
                                   ? const OtherUserHomePage()
                                   : tabindex == 1
-                                      ? const OtherUserVideoPage()
+                                      ? OtherUserVideoPage(
+                                          userId: widget.userId,
+                                        )
                                       : tabindex == 2
                                           ? const MyPlaylistPage()
                                           : tabindex == 3
@@ -226,15 +261,45 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                             width: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5.0),
-                              child: Image.asset(
-                                "assets/images/vincen.png",
+                              child: Image.network(
+                                userImage.toString(),
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                  "assets/images/blank_profile.png",
+                                  fit: BoxFit.cover,
+                                ),
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: kWhiteColor,
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            "CH Vincent",
-                            style: TextStyle(
+                          Text(
+                            userName,
+                            style: const TextStyle(
                               color: kWhiteColor,
                               fontSize: 25,
                             ),
@@ -252,14 +317,14 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "45",
-                                  style: TextStyle(
+                                  usertotalVideos.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Videos",
                                   style: TextStyle(
                                       fontSize: 14,
@@ -278,14 +343,14 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "75m",
-                                  style: TextStyle(
+                                  usertotalViews.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Views",
                                   style: TextStyle(
                                       fontSize: 14,
@@ -304,14 +369,14 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "23k",
-                                  style: TextStyle(
+                                  usertotalFollowers.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Followers",
                                   style: TextStyle(
                                       fontSize: 14,
@@ -330,14 +395,14 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "10k",
-                                  style: TextStyle(
+                                  usertotalFollowings.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Following",
                                   style: TextStyle(
                                       fontSize: 14,

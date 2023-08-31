@@ -161,7 +161,9 @@ class _LoginPageState extends State<LoginPage> {
                                       fontWeight: FontWeight.w300),
                                 ),
                                 const SizedBox(height: 15),
-                                const SocialLoginPage(),
+                                const SocialLoginPage(
+                                  checkRowOrColumn: 'row',
+                                ),
                                 const SizedBox(height: 30),
                                 Padding(
                                   padding:

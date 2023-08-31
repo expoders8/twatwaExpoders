@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../config/constant/color_constant.dart';
-import '../../routes/app_pages.dart';
 import '../home/tab_page.dart';
+import '../../../config/constant/color_constant.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});

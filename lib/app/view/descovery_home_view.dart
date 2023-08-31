@@ -1,14 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../controller/getall_video_landing_controller.dart';
-import '../controller/video_controller.dart';
-import '../controller/video_detail_controller.dart';
 import '../routes/app_pages.dart';
-import '../ui/video_details/video_details.dart';
+import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
+import '../controller/getall_video_landing_controller.dart';
 
 class DescoverHomeView extends StatefulWidget {
   const DescoverHomeView({super.key});
@@ -63,8 +61,8 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                     videoController.videoList[0].data!.disocverVideo!;
                 if (discoverData.isNotEmpty) {
                   var data = discoverData[index];
-                  int minutes = data.videoDurationInSeconds! ~/ 60;
-                  int seconds = data.videoDurationInSeconds! % 60;
+                  int minutes = (data.videoDurationInSeconds! / 60).floor();
+                  int seconds = (data.videoDurationInSeconds! % 60).toInt();
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
@@ -136,7 +134,14 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                   );
                 } else {
                   return const Center(
-                    child: Text("No category found"),
+                    child: Text(
+                      "Video not Found",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: kWhiteColor,
+                          fontSize: 15,
+                          fontFamily: kFuturaPTDemi),
+                    ),
                   );
                 }
               },
@@ -144,7 +149,12 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
           }
         } else {
           return const Center(
-            child: Text("No category found"),
+            child: Text(
+              "Video not Found",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: kWhiteColor, fontSize: 15, fontFamily: kFuturaPTDemi),
+            ),
           );
         }
       }

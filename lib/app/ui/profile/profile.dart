@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:opentrend/app/ui/home/tab_page.dart';
 
+import '../../controller/video_controller.dart';
+import '../../services/video_service.dart';
 import '../profile/updateprofile.dart';
 import '../profile/MyVideo/myvideo.dart';
 import '../profile/Analytics/analytics.dart';
@@ -24,15 +26,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int tabindex = 0;
+  final MyVideoController myVideoController = Get.put(MyVideoController());
+  int tabindex = 0,
+      usertotalViews = 0,
+      usertotalVideos = 0,
+      usertotalFollowings = 0,
+      usertotalFollowers = 0;
   String profileScreen = "profile";
-  String userName = "", userEmail = "", userImage = "";
+  String userName = "", userEmail = "", userImage = "", userId = '';
   final _googleSignIn = GoogleSignIn();
+  VideoService videoService = VideoService();
 
   @override
   void initState() {
     super.initState();
     getUser();
+    callApi();
   }
 
   Future getUser() async {
@@ -43,8 +52,27 @@ class _ProfilePageState extends State<ProfilePage> {
         userName = getUserData['userName'] ?? "";
         userEmail = getUserData['email'] ?? "";
         userImage = getUserData['profilePhoto'] ?? "";
+        userId = getUserData['id'] ?? "";
       });
     }
+  }
+
+  callApi() async {
+    await videoService.getMyAnalytics(userId).then(
+          (value) => {
+            if (value['success'])
+              {
+                setState(() {
+                  usertotalViews = value['data']['totalViews'];
+                  usertotalVideos = value['data']['totalVideos'];
+                  usertotalFollowers = value['data']['totalFollowers'];
+                  usertotalFollowings = value['data']['totalFollowings'];
+                })
+              }
+            else
+              {}
+          },
+        );
   }
 
   @override
@@ -257,7 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
           TextButton(
             onPressed: () async {
               _googleSignIn.disconnect();
-              Get.back();
+              Navigator.of(context).pop();
               box.remove('user');
               box.remove('authToken');
               Get.offAll(() => const TabPage());
@@ -269,7 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           TextButton(
             onPressed: () {
-              Get.back();
+              Navigator.of(context).pop();
             },
             child: const Text(
               'No',
@@ -441,14 +469,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "45",
-                                  style: TextStyle(
+                                  usertotalVideos.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Videos",
                                   style: TextStyle(
                                       fontSize: 14,
@@ -467,14 +495,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "75m",
-                                  style: TextStyle(
+                                  usertotalViews.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Views",
                                   style: TextStyle(
                                       fontSize: 14,
@@ -493,14 +521,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "23k",
-                                  style: TextStyle(
+                                  usertotalFollowers.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Followers",
                                   style: TextStyle(
                                       fontSize: 14,
@@ -519,14 +547,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
-                                  "10k",
-                                  style: TextStyle(
+                                  usertotalFollowings.toString(),
+                                  style: const TextStyle(
                                       fontSize: 17, color: kWhiteColor),
                                 ),
-                                SizedBox(height: 3),
-                                Text(
+                                const SizedBox(height: 3),
+                                const Text(
                                   "Following",
                                   style: TextStyle(
                                       fontSize: 14,

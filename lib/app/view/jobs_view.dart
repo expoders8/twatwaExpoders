@@ -1,14 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../routes/app_pages.dart';
+import '../controller/video_controller.dart';
+import '../controller/video_detail_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/loader_provider.dart';
-import '../../../config/animation/translate_up_animation.dart';
-import '../controller/video_controller.dart';
-import '../controller/video_detail_controller.dart';
-import '../routes/app_pages.dart';
-import '../ui/video_details/video_details.dart';
 
 // ignore: camel_case_types
 class JobsViewPage extends StatefulWidget {
@@ -58,8 +56,13 @@ class _JobsViewPageState extends State<JobsViewPage> {
 
                       if (discoverData.isNotEmpty) {
                         var data = discoverData[index];
-                        int minutes = data.videoDurationInSeconds! ~/ 60;
-                        int seconds = data.videoDurationInSeconds! % 60;
+                        int minutes =
+                            (data.videoDurationInSeconds! / 60).floor();
+                        int seconds =
+                            (data.videoDurationInSeconds! % 60).toInt();
+                        var followcheck = data.numberOfFollowers == 0
+                            ? "Follwer"
+                            : "Follwers";
                         return GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.videoDetailsPage);
@@ -168,9 +171,9 @@ class _JobsViewPageState extends State<JobsViewPage> {
                                                 ),
                                               ),
                                               const SizedBox(height: 5),
-                                              const Text(
-                                                "7 Followers",
-                                                style: TextStyle(
+                                              Text(
+                                                "${data.numberOfFollowers} $followcheck",
+                                                style: const TextStyle(
                                                   color:
                                                       kTextsecondarybottomColor,
                                                   fontSize: 11,
@@ -186,8 +189,42 @@ class _JobsViewPageState extends State<JobsViewPage> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            child: Image.asset(
-                                              "assets/images/authBackground.png",
+                                            child: Image.network(
+                                              data.userProfileImage.toString(),
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  Image.asset(
+                                                "assets/images/blank_profile.png",
+                                                fit: BoxFit.fill,
+                                              ),
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return SizedBox(
+                                                  width: 17,
+                                                  height: 17,
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color: kWhiteColor,
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
@@ -203,7 +240,14 @@ class _JobsViewPageState extends State<JobsViewPage> {
                         );
                       } else {
                         return const Center(
-                          child: Text("No Video found"),
+                          child: Text(
+                            "Video not Found",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 15,
+                                fontFamily: kFuturaPTDemi),
+                          ),
                         );
                       }
                     },
@@ -211,7 +255,14 @@ class _JobsViewPageState extends State<JobsViewPage> {
                 }
               } else {
                 return const Center(
-                  child: Text("No Video found"),
+                  child: Text(
+                    "Video not Found",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 15,
+                        fontFamily: kFuturaPTDemi),
+                  ),
                 );
               }
             }

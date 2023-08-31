@@ -57,8 +57,13 @@ class _TalentViewPageState extends State<TalentViewPage> {
 
                       if (discoverData.isNotEmpty) {
                         var data = discoverData[index];
-                        int minutes = data.videoDurationInSeconds! ~/ 60;
-                        int seconds = data.videoDurationInSeconds! % 60;
+                        int minutes =
+                            (data.videoDurationInSeconds! / 60).floor();
+                        int seconds =
+                            (data.videoDurationInSeconds! % 60).toInt();
+                        var followcheck = data.numberOfFollowers == 0
+                            ? "Follwer"
+                            : "Follwers";
                         return GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.videoDetailsPage);
@@ -167,9 +172,9 @@ class _TalentViewPageState extends State<TalentViewPage> {
                                                 ),
                                               ),
                                               const SizedBox(height: 5),
-                                              const Text(
-                                                "7 Followers",
-                                                style: TextStyle(
+                                              Text(
+                                                "${data.numberOfFollowers} $followcheck",
+                                                style: const TextStyle(
                                                   color:
                                                       kTextsecondarybottomColor,
                                                   fontSize: 11,
@@ -185,8 +190,42 @@ class _TalentViewPageState extends State<TalentViewPage> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            child: Image.asset(
-                                              "assets/images/authBackground.png",
+                                            child: Image.network(
+                                              data.userProfileImage.toString(),
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  Image.asset(
+                                                "assets/images/blank_profile.png",
+                                                fit: BoxFit.fill,
+                                              ),
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return SizedBox(
+                                                  width: 17,
+                                                  height: 17,
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color: kWhiteColor,
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),

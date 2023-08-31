@@ -60,12 +60,14 @@ class GetAllVideoDataModel {
   String? description;
   String? userId;
   String? userName;
+  String? userProfileImage;
   String? categoryId;
   String? categoryName;
   int? numberOfLikes;
   int? numberOfDislikes;
   int? numberOfShares;
   int? numberOfViews;
+  int? numberOfFollowers;
   String? videoQualityId;
   String? videoStreamingUrl;
   String? createdOn;
@@ -76,8 +78,12 @@ class GetAllVideoDataModel {
   String? videoType;
   String? videoThumbnailId;
   String? videoHashTagId;
-  int? videoDurationInSeconds;
+  double? videoDurationInSeconds;
   String? videoThumbnailImagePath;
+  String? videoUploadStatus;
+  bool? isLiked;
+  bool? isDisliked;
+  List? hashTags;
 
   GetAllVideoDataModel(
       {this.id,
@@ -87,12 +93,14 @@ class GetAllVideoDataModel {
       this.description,
       this.userId,
       this.userName,
+      this.userProfileImage,
       this.categoryId,
       this.categoryName,
       this.numberOfLikes,
       this.numberOfDislikes,
       this.numberOfShares,
       this.numberOfViews,
+      this.numberOfFollowers,
       this.videoQualityId,
       this.videoStreamingUrl,
       this.createdOn,
@@ -104,7 +112,11 @@ class GetAllVideoDataModel {
       this.videoThumbnailId,
       this.videoHashTagId,
       this.videoDurationInSeconds,
-      this.videoThumbnailImagePath});
+      this.videoThumbnailImagePath,
+      this.videoUploadStatus,
+      this.isLiked,
+      this.isDisliked,
+      this.hashTags});
 
   GetAllVideoDataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -114,12 +126,14 @@ class GetAllVideoDataModel {
     description = json['description'];
     userId = json['userId'];
     userName = json['userName'];
+    userProfileImage = json['userProfileImage'];
     categoryId = json['categoryId'];
     categoryName = json['categoryName'];
     numberOfLikes = json['numberOfLikes'];
     numberOfDislikes = json['numberOfDislikes'];
     numberOfShares = json['numberOfShares'];
     numberOfViews = json['numberOfViews'];
+    numberOfFollowers = json['numberOfFollowers'];
     videoQualityId = json['videoQualityId'];
     videoStreamingUrl = json['videoStreamingUrl'];
     createdOn = json['createdOn'];
@@ -130,8 +144,14 @@ class GetAllVideoDataModel {
     videoType = json['videoType'];
     videoThumbnailId = json['videoThumbnailId'];
     videoHashTagId = json['videoHashTagId'];
-    videoDurationInSeconds = json['videoDurationInSeconds'];
+    videoDurationInSeconds = json['videoDurationInSeconds'] == 0
+        ? 0.00
+        : json['videoDurationInSeconds'];
     videoThumbnailImagePath = json['videoThumbnailImagePath'];
+    videoUploadStatus = json['videoUploadStatus'];
+    isLiked = json['isLiked'];
+    isDisliked = json['isDisliked'];
+    hashTags = json['hashTags'];
   }
 
   Map<String, dynamic> toJson() {
@@ -143,12 +163,14 @@ class GetAllVideoDataModel {
     data['description'] = description;
     data['userId'] = userId;
     data['userName'] = userName;
+    data['userProfileImage'] = userProfileImage;
     data['categoryId'] = categoryId;
     data['categoryName'] = categoryName;
     data['numberOfLikes'] = numberOfLikes;
     data['numberOfDislikes'] = numberOfDislikes;
     data['numberOfShares'] = numberOfShares;
     data['numberOfViews'] = numberOfViews;
+    data['numberOfFollowers'] = numberOfFollowers;
     data['videoQualityId'] = videoQualityId;
     data['videoStreamingUrl'] = videoStreamingUrl;
     data['createdOn'] = createdOn;
@@ -161,6 +183,10 @@ class GetAllVideoDataModel {
     data['videoHashTagId'] = videoHashTagId;
     data['videoDurationInSeconds'] = videoDurationInSeconds;
     data['videoThumbnailImagePath'] = videoThumbnailImagePath;
+    data['videoUploadStatus'] = videoUploadStatus;
+    data['isLiked'] = isLiked;
+    data['isDisliked'] = isDisliked;
+    data['hashTags'] = hashTags;
     return data;
   }
 }
@@ -202,12 +228,14 @@ class GetVideoByIdDataModel {
   String? description;
   String? userId;
   String? userName;
+  String? userProfileImage;
   String? categoryId;
   String? categoryName;
   int? numberOfLikes;
   int? numberOfDislikes;
   int? numberOfShares;
   int? numberOfViews;
+  int? numberOfFollowers;
   String? videoQualityId;
   String? videoStreamingUrl;
   String? createdOn;
@@ -218,7 +246,7 @@ class GetVideoByIdDataModel {
   String? videoType;
   String? videoThumbnailId;
   String? videoHashTagId;
-  int? videoDurationInSeconds;
+  double? videoDurationInSeconds;
   String? videoThumbnailImagePath;
   String? videoUploadStatus;
   bool? isLiked;
@@ -233,12 +261,14 @@ class GetVideoByIdDataModel {
       this.description,
       this.userId,
       this.userName,
+      this.userProfileImage,
       this.categoryId,
       this.categoryName,
       this.numberOfLikes,
       this.numberOfDislikes,
       this.numberOfShares,
       this.numberOfViews,
+      this.numberOfFollowers,
       this.videoQualityId,
       this.videoStreamingUrl,
       this.createdOn,
@@ -264,12 +294,14 @@ class GetVideoByIdDataModel {
     description = json['description'];
     userId = json['userId'];
     userName = json['userName'];
+    userProfileImage = json['userProfileImage'];
     categoryId = json['categoryId'];
     categoryName = json['categoryName'];
     numberOfLikes = json['numberOfLikes'];
     numberOfDislikes = json['numberOfDislikes'];
     numberOfShares = json['numberOfShares'];
     numberOfViews = json['numberOfViews'];
+    numberOfFollowers = json['numberOfFollowers'];
     videoQualityId = json['videoQualityId'];
     videoStreamingUrl = json['videoStreamingUrl'];
     createdOn = json['createdOn'];
@@ -280,15 +312,17 @@ class GetVideoByIdDataModel {
     videoType = json['videoType'];
     videoThumbnailId = json['videoThumbnailId'];
     videoHashTagId = json['videoHashTagId'];
-    videoDurationInSeconds = json['videoDurationInSeconds'];
+    videoDurationInSeconds = json['videoDurationInSeconds'] == 0
+        ? 0.00
+        : json['videoDurationInSeconds'];
     videoThumbnailImagePath = json['videoThumbnailImagePath'];
     videoUploadStatus = json['videoUploadStatus'];
     isLiked = json['isLiked'];
     isDisliked = json['isDisliked'];
     if (json['hashTags'] != null) {
-      hashTags = [];
+      hashTags = <Null>[];
       json['hashTags'].forEach((v) {
-        hashTags!.add((v));
+        hashTags!.add(v);
       });
     }
   }
@@ -302,12 +336,14 @@ class GetVideoByIdDataModel {
     data['description'] = description;
     data['userId'] = userId;
     data['userName'] = userName;
+    data['userProfileImage'] = userProfileImage;
     data['categoryId'] = categoryId;
     data['categoryName'] = categoryName;
     data['numberOfLikes'] = numberOfLikes;
     data['numberOfDislikes'] = numberOfDislikes;
     data['numberOfShares'] = numberOfShares;
     data['numberOfViews'] = numberOfViews;
+    data['numberOfFollowers'] = numberOfFollowers;
     data['videoQualityId'] = videoQualityId;
     data['videoStreamingUrl'] = videoStreamingUrl;
     data['createdOn'] = createdOn;
@@ -329,3 +365,383 @@ class GetVideoByIdDataModel {
     return data;
   }
 }
+
+class GetVideoOfTheDay {
+  bool? success;
+  String? message;
+  GetVideoOfTheDayData? data;
+  int? code;
+
+  GetVideoOfTheDay({this.success, this.message, this.data, this.code});
+
+  GetVideoOfTheDay.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null
+        ? GetVideoOfTheDayData.fromJson(json['data'])
+        : null;
+    code = json['code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    data['code'] = code;
+    return data;
+  }
+}
+
+class GetVideoOfTheDayData {
+  String? id;
+  String? videoReferenceId;
+  String? videoEncoderReference;
+  String? title;
+  String? description;
+  String? userId;
+  String? userName;
+  String? userProfileImage;
+  String? categoryId;
+  String? categoryName;
+  int? numberOfLikes;
+  int? numberOfDislikes;
+  int? numberOfShares;
+  int? numberOfViews;
+  String? videoQualityId;
+  String? videoStreamingUrl;
+  int? numberOfComments;
+  int? numberOfPlaylists;
+  int? numberOfFollowers;
+  String? createdOn;
+  String? createdById;
+  String? updatedOn;
+  String? updatedById;
+  bool? isActive;
+  String? videoStreamingUrls;
+  String? videoThumbnailImagePath;
+  String? visibleStatusName;
+  String? visibleStatusId;
+  String? videoUploadStatus;
+  String? thumbnailId;
+  double? videoDurationInSeconds;
+  String? videoDuration;
+  bool? isLiked;
+  bool? isDisliked;
+  bool? isSaved;
+  bool? isDonateEnabled;
+  List? hashTags;
+
+  GetVideoOfTheDayData(
+      {this.id,
+      this.videoReferenceId,
+      this.videoEncoderReference,
+      this.title,
+      this.description,
+      this.userId,
+      this.userName,
+      this.userProfileImage,
+      this.categoryId,
+      this.categoryName,
+      this.numberOfLikes,
+      this.numberOfDislikes,
+      this.numberOfShares,
+      this.numberOfViews,
+      this.videoQualityId,
+      this.videoStreamingUrl,
+      this.numberOfComments,
+      this.numberOfPlaylists,
+      this.numberOfFollowers,
+      this.createdOn,
+      this.createdById,
+      this.updatedOn,
+      this.updatedById,
+      this.isActive,
+      this.videoStreamingUrls,
+      this.videoThumbnailImagePath,
+      this.visibleStatusName,
+      this.visibleStatusId,
+      this.videoUploadStatus,
+      this.thumbnailId,
+      this.videoDurationInSeconds,
+      this.videoDuration,
+      this.isLiked,
+      this.isDisliked,
+      this.isSaved,
+      this.isDonateEnabled,
+      this.hashTags});
+
+  GetVideoOfTheDayData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    videoReferenceId = json['videoReferenceId'];
+    videoEncoderReference = json['videoEncoderReference'];
+    title = json['title'];
+    description = json['description'];
+    userId = json['userId'];
+    userName = json['userName'];
+    userProfileImage = json['userProfileImage'];
+    categoryId = json['categoryId'];
+    categoryName = json['categoryName'];
+    numberOfLikes = json['numberOfLikes'];
+    numberOfDislikes = json['numberOfDislikes'];
+    numberOfShares = json['numberOfShares'];
+    numberOfViews = json['numberOfViews'];
+    videoQualityId = json['videoQualityId'];
+    videoStreamingUrl = json['videoStreamingUrl'];
+    numberOfComments = json['numberOfComments'];
+    numberOfPlaylists = json['numberOfPlaylists'];
+    numberOfFollowers = json['numberOfFollowers'];
+    createdOn = json['createdOn'];
+    createdById = json['createdById'];
+    updatedOn = json['updatedOn'];
+    updatedById = json['updatedById'];
+    isActive = json['isActive'];
+    videoStreamingUrls = json['videoStreamingUrls'];
+    videoThumbnailImagePath = json['videoThumbnailImagePath'];
+    visibleStatusName = json['visibleStatusName'];
+    visibleStatusId = json['visibleStatusId'];
+    videoUploadStatus = json['videoUploadStatus'];
+    thumbnailId = json['thumbnailId'];
+    videoDurationInSeconds = json['videoDurationInSeconds'];
+    videoDuration = json['videoDuration'];
+    isLiked = json['isLiked'];
+    isDisliked = json['isDisliked'];
+    isSaved = json['isSaved'];
+    isDonateEnabled = json['isDonateEnabled'];
+    hashTags = json['hashTags'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['videoReferenceId'] = videoReferenceId;
+    data['videoEncoderReference'] = videoEncoderReference;
+    data['title'] = title;
+    data['description'] = description;
+    data['userId'] = userId;
+    data['userName'] = userName;
+    data['userProfileImage'] = userProfileImage;
+    data['categoryId'] = categoryId;
+    data['categoryName'] = categoryName;
+    data['numberOfLikes'] = numberOfLikes;
+    data['numberOfDislikes'] = numberOfDislikes;
+    data['numberOfShares'] = numberOfShares;
+    data['numberOfViews'] = numberOfViews;
+    data['videoQualityId'] = videoQualityId;
+    data['videoStreamingUrl'] = videoStreamingUrl;
+    data['numberOfComments'] = numberOfComments;
+    data['numberOfPlaylists'] = numberOfPlaylists;
+    data['numberOfFollowers'] = numberOfFollowers;
+    data['createdOn'] = createdOn;
+    data['createdById'] = createdById;
+    data['updatedOn'] = updatedOn;
+    data['updatedById'] = updatedById;
+    data['isActive'] = isActive;
+    data['videoStreamingUrls'] = videoStreamingUrls;
+    data['videoThumbnailImagePath'] = videoThumbnailImagePath;
+    data['visibleStatusName'] = visibleStatusName;
+    data['visibleStatusId'] = visibleStatusId;
+    data['videoUploadStatus'] = videoUploadStatus;
+    data['thumbnailId'] = thumbnailId;
+    data['videoDurationInSeconds'] = videoDurationInSeconds;
+    data['videoDuration'] = videoDuration;
+    data['isLiked'] = isLiked;
+    data['isDisliked'] = isDisliked;
+    data['isSaved'] = isSaved;
+    data['isDonateEnabled'] = isDonateEnabled;
+    data['hashTags'] = hashTags;
+    return data;
+  }
+}
+
+// class GetVideoOfTheDay {
+//   bool? success;
+//   String? message;
+//   GetVideoOfTheDayData? data;
+//   int? code;
+
+//   GetVideoOfTheDay({this.success, this.message, this.data, this.code});
+
+//   GetVideoOfTheDay.fromJson(Map<String, dynamic> json) {
+//     success = json['success'];
+//     message = json['message'];
+//     data = json['data'] != null
+//         ? GetVideoOfTheDayData.fromJson(json['data'])
+//         : null;
+//     code = json['code'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['success'] = success;
+//     data['message'] = message;
+//     if (this.data != null) {
+//       data['data'] = this.data!.toJson();
+//     }
+//     data['code'] = code;
+//     return data;
+//   }
+// }
+
+// class GetVideoOfTheDayData {
+//   String? id;
+//   String? videoReferenceId;
+//   String? videoEncoderReference;
+//   String? title;
+//   String? description;
+//   String? userId;
+//   String? userName;
+//   String? userProfileImage;
+//   String? categoryId;
+//   String? categoryName;
+//   int? numberOfLikes;
+//   int? numberOfDislikes;
+//   int? numberOfShares;
+//   int? numberOfViews;
+//   String? videoQualityId;
+//   String? videoStreamingUrl;
+//   int? numberOfComments;
+//   int? numberOfPlaylists;
+//   int? numberOfFollowers;
+//   String? createdOn;
+//   String? createdById;
+//   String? updatedOn;
+//   String? updatedById;
+//   bool? isActive;
+//   String? videoStreamingUrls;
+//   String? videoThumbnailImagePath;
+//   String? visibleStatusName;
+//   String? visibleStatusId;
+//   String? videoUploadStatus;
+//   String? thumbnailId;
+//   double? videoDurationInSeconds;
+//   String? videoDuration;
+//   bool? isLiked;
+//   bool? isDisliked;
+//   bool? isSaved;
+//   bool? isDonateEnabled;
+//   List? hashTags;
+
+//   GetVideoOfTheDayData(
+//       {this.id,
+//       this.videoReferenceId,
+//       this.videoEncoderReference,
+//       this.title,
+//       this.description,
+//       this.userId,
+//       this.userName,
+//       this.userProfileImage,
+//       this.categoryId,
+//       this.categoryName,
+//       this.numberOfLikes,
+//       this.numberOfDislikes,
+//       this.numberOfShares,
+//       this.numberOfViews,
+//       this.videoQualityId,
+//       this.videoStreamingUrl,
+//       this.numberOfComments,
+//       this.numberOfPlaylists,
+//       this.numberOfFollowers,
+//       this.createdOn,
+//       this.createdById,
+//       this.updatedOn,
+//       this.updatedById,
+//       this.isActive,
+//       this.videoStreamingUrls,
+//       this.videoThumbnailImagePath,
+//       this.visibleStatusName,
+//       this.visibleStatusId,
+//       this.videoUploadStatus,
+//       this.thumbnailId,
+//       this.videoDurationInSeconds,
+//       this.videoDuration,
+//       this.isLiked,
+//       this.isDisliked,
+//       this.isSaved,
+//       this.isDonateEnabled,
+//       this.hashTags});
+
+//   GetVideoOfTheDayData.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     videoReferenceId = json['videoReferenceId'] ?? "";
+//     videoEncoderReference = json['videoEncoderReference'];
+//     title = json['title'];
+//     description = json['description'];
+//     userId = json['userId'];
+//     userName = json['userName'];
+//     userProfileImage = json['userProfileImage'];
+//     categoryId = json['categoryId'] ?? "";
+//     categoryName = json['categoryName'];
+//     numberOfLikes = json['numberOfLikes'];
+//     numberOfDislikes = json['numberOfDislikes'];
+//     numberOfShares = json['numberOfShares'];
+//     numberOfViews = json['numberOfViews'];
+//     videoQualityId = json['videoQualityId'];
+//     videoStreamingUrl = json['videoStreamingUrl'] ?? "";
+//     numberOfComments = json['numberOfComments'];
+//     numberOfPlaylists = json['numberOfPlaylists'];
+//     numberOfFollowers = json['numberOfFollowers'];
+//     createdOn = json['createdOn'];
+//     createdById = json['createdById'];
+//     updatedOn = json['updatedOn'];
+//     updatedById = json['updatedById'];
+//     isActive = json['isActive'];
+//     videoStreamingUrls = json['videoStreamingUrls'] ?? "";
+//     videoThumbnailImagePath = json['videoThumbnailImagePath'];
+//     visibleStatusName = json['visibleStatusName'] ?? "";
+//     visibleStatusId = json['visibleStatusId'] ?? "";
+//     videoUploadStatus = json['videoUploadStatus'] ?? "";
+//     thumbnailId = json['thumbnailId'] ?? "";
+//     videoDurationInSeconds = json['videoDurationInSeconds'];
+//     videoDuration = json['videoDuration'];
+//     isLiked = json['isLiked'];
+//     isDisliked = json['isDisliked'];
+//     isSaved = json['isSaved'];
+//     isDonateEnabled = json['isDonateEnabled'];
+//     hashTags = json['hashTags'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['id'] = id;
+//     data['videoReferenceId'] = videoReferenceId;
+//     data['videoEncoderReference'] = videoEncoderReference;
+//     data['title'] = title;
+//     data['description'] = description;
+//     data['userId'] = userId;
+//     data['userName'] = userName;
+//     data['userProfileImage'] = userProfileImage;
+//     data['categoryId'] = categoryId;
+//     data['categoryName'] = categoryName;
+//     data['numberOfLikes'] = numberOfLikes;
+//     data['numberOfDislikes'] = numberOfDislikes;
+//     data['numberOfShares'] = numberOfShares;
+//     data['numberOfViews'] = numberOfViews;
+//     data['videoQualityId'] = videoQualityId;
+//     data['videoStreamingUrl'] = videoStreamingUrl;
+//     data['numberOfComments'] = numberOfComments;
+//     data['numberOfPlaylists'] = numberOfPlaylists;
+//     data['numberOfFollowers'] = numberOfFollowers;
+//     data['createdOn'] = createdOn;
+//     data['createdById'] = createdById;
+//     data['updatedOn'] = updatedOn;
+//     data['updatedById'] = updatedById;
+//     data['isActive'] = isActive;
+//     data['videoStreamingUrls'] = videoStreamingUrls;
+//     data['videoThumbnailImagePath'] = videoThumbnailImagePath;
+//     data['visibleStatusName'] = visibleStatusName;
+//     data['visibleStatusId'] = visibleStatusId;
+//     data['videoUploadStatus'] = videoUploadStatus;
+//     data['thumbnailId'] = thumbnailId;
+//     data['videoDurationInSeconds'] = videoDurationInSeconds;
+//     data['videoDuration'] = videoDuration;
+//     data['isLiked'] = isLiked;
+//     data['isDisliked'] = isDisliked;
+//     data['isSaved'] = isSaved;
+//     data['isDonateEnabled'] = isDonateEnabled;
+//     data['hashTags'] = hashTags;
+//     return data;
+//   }
+// }

@@ -1,12 +1,12 @@
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
 
+import '../../routes/app_pages.dart';
+import '../../models/tranding_list_model.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/dotted_line_provider.dart';
-import '../../models/tranding_list_model.dart';
-import '../../routes/app_pages.dart';
 
 class MenuVideoListPage extends StatefulWidget {
   const MenuVideoListPage({super.key});

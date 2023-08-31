@@ -8,12 +8,15 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../view/hastage.dart';
+import '../../routes/app_pages.dart';
 import '../widgets/custom_textfield.dart';
 import '../../services/video_service.dart';
 import '../../../config/constant/constant.dart';
 import '../../controller/hastage_controller.dart';
 import '../../../config/constant/font_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/snackbar_provider.dart';
 import '../../../config/provider/imagepicker_provider.dart';
 
 class UploadVideoPage extends StatefulWidget {
@@ -533,7 +536,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
   }
 
   createVideo() {
-    // var test = getAllHasTageController.selectTagList();
+    var categoryId = getAllHasTageController.categoryId;
     setState(() {
       isFormSubmitted = true;
     });
@@ -556,23 +559,23 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
       if (_uploadVideoFormKey.currentState!.validate() &&
           !imageValidation &&
           !videoValidation) {
-        // LoaderX.show(context, 70.0);
-        // await videoService
-        //     .uploadVideo(userId, titleController.text,
-        //         aboutController.text, test, imageFile, videoFile)
-        //     .then(
-        //   (value) async {
-        //     if (value.success == true) {
-        //       LoaderX.hide();
-        //       Get.offAll(() => const VideoUploadedPage());
-        //     } else {
-        //       LoaderX.hide();
-        //       SnackbarUtils.showErrorSnackbar(
-        //           "Failed to Upload video", value.message.toString());
-        //     }
-        //     return null;
-        //   },
-        // );
+        LoaderX.show(context, 70.0);
+        await videoService
+            .uploadVideo(userId, titleController.text, aboutController.text,
+                imageFile, videoFile, categoryId.toString())
+            .then(
+          (value) async {
+            if (value['success']) {
+              LoaderX.hide();
+              Get.toNamed(Routes.profilePage);
+            } else {
+              LoaderX.hide();
+              SnackbarUtils.showErrorSnackbar(
+                  "Failed to Upload video", value.message.toString());
+            }
+            return null;
+          },
+        );
       } else {
         checkValidation();
       }

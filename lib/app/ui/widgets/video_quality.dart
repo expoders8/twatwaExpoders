@@ -1,6 +1,6 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:opentrend/app/routes/app_pages.dart';
 
 import '../../../config/constant/color_constant.dart';

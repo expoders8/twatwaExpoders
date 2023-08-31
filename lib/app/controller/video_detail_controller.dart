@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../../config/constant/constant.dart';
 import '../models/video_model.dart';
 import '../services/video_service.dart';
+import '../../config/constant/constant.dart';
 
 class VideoDetailController extends GetxController {
   var isLoading = true.obs;

@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 
-import '../../../../config/provider/loader_provider.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/auth_service.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/social_login_widget.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
+import '../../../../config/provider/loader_provider.dart';
 import '../../../../config/provider/snackbar_provider.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -277,7 +277,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                       fontWeight: FontWeight.w300),
                                 ),
                                 const SizedBox(height: 15),
-                                const SocialLoginPage(),
+                                const SocialLoginPage(
+                                  checkRowOrColumn: 'row',
+                                ),
                                 const SizedBox(height: 20),
                                 Padding(
                                   padding:

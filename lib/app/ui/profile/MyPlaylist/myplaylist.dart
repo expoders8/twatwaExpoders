@@ -128,9 +128,11 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                       } else {
                                         var data = discoverData![index];
                                         int minutes =
-                                            data.videoDurationInSeconds! ~/ 60;
+                                            (data.videoDurationInSeconds! / 60)
+                                                .floor();
                                         int seconds =
-                                            data.videoDurationInSeconds! % 60;
+                                            (data.videoDurationInSeconds! % 60)
+                                                .toInt();
                                         return GestureDetector(
                                           onTap: () {
                                             Get.toNamed(

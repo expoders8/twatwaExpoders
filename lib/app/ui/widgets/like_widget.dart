@@ -1,14 +1,16 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:flutter/material.dart';
 
+import '../../../config/constant/constant.dart';
 import '../../services/like_service.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/snackbar_provider.dart';
 
+typedef StringCallback = void Function(String val);
+
 // ignore: must_be_immutable
 class LikeWidget extends StatefulWidget {
+  final StringCallback callbackDate;
   final bool isLiked;
   final bool isdisLiked;
   final String? videoId;
@@ -20,7 +22,8 @@ class LikeWidget extends StatefulWidget {
       this.videoId,
       this.likeCount,
       this.dislikeCount,
-      required this.isdisLiked})
+      required this.isdisLiked,
+      required this.callbackDate})
       : super(key: key);
 
   @override
@@ -33,23 +36,35 @@ class _LikeWidgetState extends State<LikeWidget> {
   get getIsLikedState => isLikedState == true;
   get getIsdisLikedState => isdisLikedState == true;
   LikeStoryService likeStoryService = LikeStoryService();
+  String likeeddata = "", dislikedData = "", authToken = "";
 
   @override
   void initState() {
+    getToken();
     isLikedState = widget.isLiked;
     isdisLikedState = widget.isdisLiked;
     super.initState();
+  }
+
+  getToken() {
+    var authTokenValue = box.read('authToken');
+    setState(() {
+      authToken = authTokenValue ?? "";
+    });
   }
 
   Future _toggleIsLikedState() async {
     if (getIsLikedState) {
       setState(() => {
             isLikedState = false,
-            widget.likeCount = widget.likeCount! - 1,
           });
       await likeStoryService.videoLike(widget.videoId).then(
         (value) {
           if (value["success"] == true) {
+            setState(() {
+              likeeddata = value['data'].toString();
+            });
+            widget.callbackDate(value["data"].toString());
             LoaderX.hide();
           } else {
             LoaderX.hide();
@@ -61,12 +76,28 @@ class _LikeWidgetState extends State<LikeWidget> {
       setState(() => {
             isdisLikedState = false,
             isLikedState = true,
-            widget.likeCount = (widget.likeCount! + 1),
           });
-
+      if (!isdisLikedState) {
+        await likeStoryService.videoDisLike(widget.videoId).then(
+          (value) {
+            if (value["success"] == true) {
+              setState(() {
+                dislikedData = value['data'].toString();
+              });
+              LoaderX.hide();
+            } else {
+              LoaderX.hide();
+              SnackbarUtils.showErrorSnackbar(value["message"], "");
+            }
+          },
+        );
+      }
       await likeStoryService.videoLike(widget.videoId).then(
         (value) {
           if (value["success"] == true) {
+            setState(() {
+              likeeddata = value['data'].toString();
+            });
             LoaderX.hide();
           } else {
             LoaderX.hide();
@@ -81,11 +112,13 @@ class _LikeWidgetState extends State<LikeWidget> {
     if (getIsdisLikedState) {
       setState(() => {
             isdisLikedState = false,
-            widget.dislikeCount = widget.dislikeCount! - 1
           });
       await likeStoryService.videoDisLike(widget.videoId).then(
         (value) {
           if (value["success"] == true) {
+            setState(() {
+              dislikedData = value['data'].toString();
+            });
             LoaderX.hide();
           } else {
             LoaderX.hide();
@@ -97,11 +130,28 @@ class _LikeWidgetState extends State<LikeWidget> {
       setState(() => {
             isLikedState = false,
             isdisLikedState = true,
-            widget.dislikeCount = (widget.dislikeCount! + 1),
           });
+      if (!isLikedState) {
+        await likeStoryService.videoLike(widget.videoId).then(
+          (value) {
+            if (value["success"] == true) {
+              setState(() {
+                likeeddata = value['data'].toString();
+              });
+              LoaderX.hide();
+            } else {
+              LoaderX.hide();
+              SnackbarUtils.showErrorSnackbar(value["message"], "");
+            }
+          },
+        );
+      }
       await likeStoryService.videoDisLike(widget.videoId).then(
         (value) {
           if (value["success"] == true) {
+            setState(() {
+              dislikedData = value['data'].toString();
+            });
             LoaderX.hide();
           } else {
             LoaderX.hide();
@@ -117,7 +167,9 @@ class _LikeWidgetState extends State<LikeWidget> {
     return Row(
       children: [
         GestureDetector(
-          onTap: _toggleIsLikedState,
+          onTap: () {
+            authToken == "" ? Container() : _toggleIsLikedState();
+          },
           child: Container(
             height: 35,
             padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 8),
@@ -157,7 +209,9 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.likeCount != "0"
                     ? Text(
-                        widget.likeCount.toString(),
+                        likeeddata == ""
+                            ? widget.likeCount.toString()
+                            : likeeddata,
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )
@@ -168,7 +222,9 @@ class _LikeWidgetState extends State<LikeWidget> {
         ),
         const SizedBox(width: 10),
         GestureDetector(
-          onTap: _toggleIsDisLikedState,
+          onTap: () {
+            authToken == "" ? Container() : _toggleIsDisLikedState();
+          },
           child: Container(
             height: 35,
             padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 8),
@@ -208,7 +264,9 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.dislikeCount != "0"
                     ? Text(
-                        widget.dislikeCount.toString(),
+                        dislikedData == ""
+                            ? widget.dislikeCount.toString()
+                            : dislikedData,
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )

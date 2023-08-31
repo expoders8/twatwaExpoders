@@ -1,16 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../config/provider/loader_provider.dart';
-import '../../../../config/provider/snackbar_provider.dart';
-import '../../../services/auth_service.dart';
 import '../../home/tab_page.dart';
 import '../../widgets/numeric_pad.dart';
-import '../../../../config/constant/color_constant.dart';
+import '../../../services/auth_service.dart';
 import '../../../../config/constant/font_constant.dart';
+import '../../../../config/constant/color_constant.dart';
+import '../../../../config/provider/loader_provider.dart';
+import '../../../../config/provider/snackbar_provider.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({

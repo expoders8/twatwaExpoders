@@ -71,10 +71,6 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
       appBar: AppBar(
         backgroundColor: kBackGroundColor,
         centerTitle: true,
-        // leading: Image.asset(
-        //   "assets/icons/back.png",
-        //   scale: 7,
-        // ),
         title: Text(
           "$topHeaderName Playlist",
           style: const TextStyle(color: kWhiteColor, fontSize: 19),

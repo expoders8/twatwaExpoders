@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../routes/app_pages.dart';
+import '../controller/video_controller.dart';
+import '../controller/video_detail_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/loader_provider.dart';
-import '../controller/video_controller.dart';
-import '../controller/video_detail_controller.dart';
-import '../routes/app_pages.dart';
 
 // ignore: camel_case_types
 class DiscoverViewPage extends StatefulWidget {
@@ -57,8 +57,13 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
 
                       if (discoverData.isNotEmpty) {
                         var data = discoverData[index];
-                        int minutes = data.videoDurationInSeconds! ~/ 60;
-                        int seconds = data.videoDurationInSeconds! % 60;
+                        int minutes =
+                            (data.videoDurationInSeconds! / 60).floor();
+                        int seconds =
+                            (data.videoDurationInSeconds! % 60).toInt();
+                        var followcheck = data.numberOfFollowers == 0
+                            ? "Follwer"
+                            : "Follwers";
                         return GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.videoDetailsPage);
@@ -167,9 +172,9 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
                                                 ),
                                               ),
                                               const SizedBox(height: 5),
-                                              const Text(
-                                                "7 Followers",
-                                                style: TextStyle(
+                                              Text(
+                                                "${data.numberOfFollowers} $followcheck",
+                                                style: const TextStyle(
                                                   color:
                                                       kTextsecondarybottomColor,
                                                   fontSize: 11,
@@ -185,8 +190,42 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            child: Image.asset(
-                                              "assets/images/authBackground.png",
+                                            child: Image.network(
+                                              data.userProfileImage.toString(),
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  Image.asset(
+                                                "assets/images/blank_profile.png",
+                                                fit: BoxFit.fill,
+                                              ),
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return SizedBox(
+                                                  width: 17,
+                                                  height: 17,
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color: kWhiteColor,
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
@@ -202,7 +241,14 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
                         );
                       } else {
                         return const Center(
-                          child: Text("No Video found"),
+                          child: Text(
+                            "Video not Found",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 15,
+                                fontFamily: kFuturaPTDemi),
+                          ),
                         );
                       }
                     },
@@ -210,7 +256,14 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
                 }
               } else {
                 return const Center(
-                  child: Text("No Video found"),
+                  child: Text(
+                    "Video not Found",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 15,
+                        fontFamily: kFuturaPTDemi),
+                  ),
                 );
               }
             }
@@ -219,26 +272,4 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
       ),
     );
   }
-
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: PreferredSize(
-  //       preferredSize: Size.fromHeight(Platform.isAndroid ? 60 : 95),
-  //       child: const Padding(
-  //         padding: EdgeInsets.only(top: 40.0, left: 20, right: 5),
-  //         child: AppBarWidget(
-  //           title: 'Trending',
-  //         ),
-  //       ),
-  //     ),
-  //     body: ListView.builder(
-
-  //       scrollDirection: Axis.vertical,
-  //       itemCount: tranding.length,
-  //       itemBuilder: (context, index) {
-  //         return
-  //       },
-  //     ),
-  //   );
-  // }
 }

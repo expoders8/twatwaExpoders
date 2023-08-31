@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../../routes/app_pages.dart';
-import '../../../config/constant/color_constant.dart';
 import '../../../config/constant/constant.dart';
+import '../../../config/constant/color_constant.dart';
 
 typedef StringCallback = void Function(String val);
 
@@ -85,7 +85,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.profilePage);
+                  authToken == ""
+                      ? Get.toNamed(Routes.loginPage)
+                      : Get.toNamed(Routes.profilePage);
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 16),

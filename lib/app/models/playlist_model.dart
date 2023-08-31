@@ -122,7 +122,7 @@ class Videos {
   String? videoType;
   String? videoThumbnailId;
   String? videoHashTagId;
-  int? videoDurationInSeconds;
+  double? videoDurationInSeconds;
   String? videoThumbnailImagePath;
   String? videoUploadStatus;
   bool? isLiked;
@@ -184,7 +184,9 @@ class Videos {
     videoType = json['videoType'];
     videoThumbnailId = json['videoThumbnailId'];
     videoHashTagId = json['videoHashTagId'];
-    videoDurationInSeconds = json['videoDurationInSeconds'];
+    videoDurationInSeconds = json['videoDurationInSeconds'] == 0
+        ? 0.00
+        : json['videoDurationInSeconds'];
     videoThumbnailImagePath = json['videoThumbnailImagePath'];
     videoUploadStatus = json['videoUploadStatus'];
     isLiked = json['isLiked'];

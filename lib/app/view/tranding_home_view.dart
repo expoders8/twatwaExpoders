@@ -1,14 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../controller/getall_video_landing_controller.dart';
-import '../controller/video_controller.dart';
-import '../controller/video_detail_controller.dart';
 import '../routes/app_pages.dart';
-import '../ui/video_details/video_details.dart';
+import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
+import '../controller/getall_video_landing_controller.dart';
 
 class TrandingHomeView extends StatefulWidget {
   const TrandingHomeView({super.key});
@@ -27,7 +25,6 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       videoController.fetchAllLandingVideos();
     });
-
     super.initState();
   }
 
@@ -64,12 +61,12 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
 
                 if (discoverData.isNotEmpty) {
                   var data = discoverData[index];
-                  int minutes = data.videoDurationInSeconds! ~/ 60;
-                  int seconds = data.videoDurationInSeconds! % 60;
+                  int minutes = (data.videoDurationInSeconds! / 60).floor();
+                  int seconds = (data.videoDurationInSeconds! % 60).toInt();
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
-                      videoDetailController.videoId(data.id.toString());
+                      videoDetailController.videoId(data.id);
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +126,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                "${data.numberOfViews.toString()} views",
+                                "${data.numberOfViews} views",
                                 style: const TextStyle(
                                     color: kTextsecondarybottomColor,
                                     fontSize: 12),
@@ -142,7 +139,14 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                   );
                 } else {
                   return const Center(
-                    child: Text("No category found"),
+                    child: Text(
+                      "Video not Found",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: kWhiteColor,
+                          fontSize: 15,
+                          fontFamily: kFuturaPTDemi),
+                    ),
                   );
                 }
               },
@@ -150,7 +154,12 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
           }
         } else {
           return const Center(
-            child: Text("No category found"),
+            child: Text(
+              "Video not Found",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: kWhiteColor, fontSize: 15, fontFamily: kFuturaPTDemi),
+            ),
           );
         }
       }

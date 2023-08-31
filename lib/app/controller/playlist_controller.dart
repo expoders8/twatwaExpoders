@@ -7,7 +7,6 @@ class PlaylistController extends GetxController {
   var isLoading = true.obs;
   var playList = <PlaylistModel>[].obs;
   PlaylistService playlistService = PlaylistService();
-  RxString user = "".obs;
 
   void fetchAllPlaylist() async {
     try {
