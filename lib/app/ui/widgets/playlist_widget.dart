@@ -2,15 +2,15 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../../config/constant/constant.dart';
-import '../../../config/provider/snackbar_provider.dart';
+import '../home/tab_page.dart';
 import '../../routes/app_pages.dart';
+import '../../services/playlist_service.dart';
+import '../../../config/constant/constant.dart';
 import '../../controller/playlist_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/loader_provider.dart';
-import '../../services/playlist_service.dart';
-import '../home/tab_page.dart';
+import '../../../config/provider/snackbar_provider.dart';
 
 // ignore: must_be_immutable
 class PlaylistWidget extends StatefulWidget {

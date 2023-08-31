@@ -251,6 +251,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     setState(() {
       _sliderValue = value;
       _controller.seekTo(Duration(milliseconds: value.toInt()));
+      _isPlaying = true;
+      _controller.play();
     });
     Future.delayed(const Duration(milliseconds: 5000), () async {
       setState(() {

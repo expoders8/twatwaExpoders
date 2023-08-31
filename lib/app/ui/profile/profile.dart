@@ -63,10 +63,10 @@ class _ProfilePageState extends State<ProfilePage> {
             if (value['success'])
               {
                 setState(() {
-                  usertotalViews = value['data']['totalViews'];
-                  usertotalVideos = value['data']['totalVideos'];
-                  usertotalFollowers = value['data']['totalFollowers'];
-                  usertotalFollowings = value['data']['totalFollowings'];
+                  usertotalViews = value['data']['totalViews'] ?? 0;
+                  usertotalVideos = value['data']['totalVideos'] ?? 0;
+                  usertotalFollowers = value['data']['totalFollowers'] ?? 0;
+                  usertotalFollowings = value['data']['totalFollowings'] ?? 0;
                 })
               }
             else

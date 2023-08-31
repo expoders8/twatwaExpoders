@@ -52,7 +52,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
             );
           } else {
             return SizedBox(
-              height: Get.height,
+              height: Get.height + 50,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount:

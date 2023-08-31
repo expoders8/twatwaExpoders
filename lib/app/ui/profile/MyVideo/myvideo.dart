@@ -96,7 +96,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
                         var data = discoverData[index];
                         return GestureDetector(
                           onTap: () {
-                            if (data.videoUploadStatus == "Uploaded") {
+                            if (data.videoUploadStatus == "Success") {
                               Get.toNamed(Routes.videoDetailsPage);
                               videoDetailController.videoId(data.id.toString());
                             }

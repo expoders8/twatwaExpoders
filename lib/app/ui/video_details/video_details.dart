@@ -4,12 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:opentrend/app/ui/video_details/video_player.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../../config/constant/constant.dart';
 import '../../controller/video_controller.dart';
 import '../../routes/app_pages.dart';
-import '../OtherUserProfile/other_user_profile.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/playlist_widget.dart';
@@ -25,7 +22,8 @@ import '../../../config/provider/dotted_line_provider.dart';
 
 class VideoDetailsPage extends StatefulWidget {
   final String? videoId;
-  const VideoDetailsPage({super.key, this.videoId});
+  final String? checkUpnext;
+  const VideoDetailsPage({super.key, this.videoId, this.checkUpnext});
 
   @override
   State<VideoDetailsPage> createState() => _VideoDetailsPageState();
@@ -52,7 +50,8 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // var videoId = videoDetailController.videoId();
       // videoService.videoView(videoId);
-      videoDetailController.fetchStoryDetail();
+      videoDetailController.fetchStoryDetail(
+          widget.videoId.toString(), widget.checkUpnext);
 
       Future.delayed(const Duration(milliseconds: 180), () async {
         showOverlay = false;
@@ -66,6 +65,10 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       onWillPop: () {
         videoDetailController.videoId("");
         Navigator.of(context).pop();
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
         return Future.value(false);
       },
       child: Obx(() {
@@ -109,7 +112,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                 detailData.id,
                                 detailData.isLiked,
                                 detailData.isDisliked,
-                                detailData.userProfileImage,
+                                detailData.userProfileImage.toString() ?? "",
                                 detailData.numberOfFollowers,
                                 detailData.userId),
                           ];
@@ -133,7 +136,12 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                 child: SizedBox(
                                     height: Get.height,
                                     child: tabindex == 0
-                                        ? const UpNextPage()
+                                        ? UpNextPage(
+                                            categoryId: detailData.categoryId
+                                                .toString(),
+                                            userId:
+                                                detailData.userId.toString(),
+                                            videoId: detailData.id.toString())
                                         : tabindex == 1
                                             ? AboutPage(
                                                 description:

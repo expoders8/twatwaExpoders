@@ -55,9 +55,8 @@ class _LikeWidgetState extends State<LikeWidget> {
 
   Future _toggleIsLikedState() async {
     if (getIsLikedState) {
-      setState(() => {
-            isLikedState = false,
-          });
+      setState(() =>
+          {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
       await likeStoryService.videoLike(widget.videoId).then(
         (value) {
           if (value["success"] == true) {
@@ -76,6 +75,8 @@ class _LikeWidgetState extends State<LikeWidget> {
       setState(() => {
             isdisLikedState = false,
             isLikedState = true,
+            widget.likeCount = (widget.likeCount! + 1),
+            widget.dislikeCount = widget.dislikeCount! - 1
           });
       if (!isdisLikedState) {
         await likeStoryService.videoDisLike(widget.videoId).then(
@@ -112,6 +113,7 @@ class _LikeWidgetState extends State<LikeWidget> {
     if (getIsdisLikedState) {
       setState(() => {
             isdisLikedState = false,
+            widget.dislikeCount = widget.dislikeCount! - 1
           });
       await likeStoryService.videoDisLike(widget.videoId).then(
         (value) {
@@ -130,6 +132,8 @@ class _LikeWidgetState extends State<LikeWidget> {
       setState(() => {
             isLikedState = false,
             isdisLikedState = true,
+            widget.dislikeCount = (widget.dislikeCount! + 1),
+            widget.likeCount = widget.likeCount! - 1
           });
       if (!isLikedState) {
         await likeStoryService.videoLike(widget.videoId).then(
@@ -209,9 +213,7 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.likeCount != "0"
                     ? Text(
-                        likeeddata == ""
-                            ? widget.likeCount.toString()
-                            : likeeddata,
+                        widget.likeCount.toString(),
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )
@@ -264,9 +266,7 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.dislikeCount != "0"
                     ? Text(
-                        dislikedData == ""
-                            ? widget.dislikeCount.toString()
-                            : dislikedData,
+                        widget.dislikeCount.toString(),
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )

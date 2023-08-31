@@ -7,6 +7,7 @@ import '../profile/Followers/followers.dart';
 import '../profile/Following/following.dart';
 import '../profile/MyPlaylist/myplaylist.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/snackbar_provider.dart';
 import '../OtherUserProfile/OtherUserHome/other_user_home.dart';
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';
 
@@ -47,7 +48,10 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                 })
               }
             else
-              {}
+              {
+                SnackbarUtils.showErrorSnackbar(
+                    "Failed to Analytics", value['message'].toString())
+              }
           },
         );
   }

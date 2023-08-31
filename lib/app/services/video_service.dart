@@ -78,7 +78,7 @@ class VideoService {
                 "videoUploadStatus": "",
                 "requestType": "",
                 "hashTag": "",
-                "pageSize": 10,
+                "pageSize": 25,
                 "pageNumber": 1,
                 "searchText": "",
                 "sortBy": ""
@@ -98,6 +98,50 @@ class VideoService {
     } catch (e) {
       LoaderX.hide();
       SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
+      throw e.toString();
+    }
+  }
+
+  Future<GetAllVideoModel> getAllUpNextVideo(categoryId, userId) async {
+    try {
+      final response =
+          await http.post(Uri.parse('$videobBaseUrl/api/Video/GetVideos'),
+              body: json.encode({
+                "videoId": null,
+                "userId": userId,
+                "userName": "",
+                "videoType": "",
+                "currentUserId": null,
+                "categoryId": categoryId,
+                "thumbnailId": null,
+                "categoryName": "",
+                "playlistId": null,
+                "videoReferenceId": "",
+                "videoEncoderReference": "",
+                "visibleStatus": "",
+                "videoUploadStatus": "",
+                "requestType": "",
+                "hashTag": "",
+                "pageSize": 25,
+                "pageNumber": 1,
+                "searchText": "",
+                "sortBy": ""
+              }),
+              headers: {
+            'Content-type': 'application/json',
+          });
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        return GetAllVideoModel.fromJson(data);
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while UpNext Video, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar("Failed to UpNext Video", e.toString());
       throw e.toString();
     }
   }

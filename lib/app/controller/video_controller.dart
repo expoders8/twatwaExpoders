@@ -121,6 +121,24 @@ class MyVideoController extends GetxController {
   }
 }
 
+class UpNextVideoController extends GetxController {
+  var isLoading = true.obs;
+  VideoService videoService = VideoService();
+  var videoList = <GetAllVideoModel>[].obs;
+
+  void fetchUpNextVideo(String categoryId, userId) async {
+    try {
+      isLoading(true);
+      var stories = await videoService.getAllUpNextVideo(categoryId, userId);
+      if (stories.data != null) {
+        videoList.assign(stories);
+      }
+    } finally {
+      isLoading(false);
+    }
+  }
+}
+
 class EducationVideoController extends GetxController {
   var isLoading = true.obs;
   VideoService videoService = VideoService();
