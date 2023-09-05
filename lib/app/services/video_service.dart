@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/comments_model.dart';
 import '../models/video_model.dart';
 import '../models/getall_video_landing.dart';
 import '../../config/constant/constant.dart';

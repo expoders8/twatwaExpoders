@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/constant/constant.dart';
@@ -67,7 +68,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
         child: Obx(
           () {
             if (myVideoController.isLoading.value) {
-              return LoaderUtils.showLoader();
+              return buildLazyloading();
             } else {
               if (myVideoController.videoList.isNotEmpty) {
                 if (myVideoController.videoList[0].data!.isEmpty) {
@@ -276,7 +277,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
         width: Get.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          color: Colors.white.withOpacity(0.5),
+          color: Color.fromARGB(255, 87, 90, 176).withOpacity(0.3),
         ),
         child: Padding(
           padding: const EdgeInsets.only(top: 30, left: 245),
@@ -356,6 +357,75 @@ class _MyVideoPageState extends State<MyVideoPage> {
           ],
         );
       },
+    );
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Shimmer.fromColors(
+                baseColor: kButtonSecondaryColor,
+                highlightColor: kShimmerEffectSecondary,
+                enabled: true,
+                child: ListView.builder(
+                  itemCount: 6,
+                  itemBuilder: (_, __) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          color: Colors.white,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const SizedBox(height: 5),
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Container(
+                                width: 40.0,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

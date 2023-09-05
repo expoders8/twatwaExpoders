@@ -78,10 +78,10 @@ class _PremiumHomeViewState extends State<PremiumHomeView> {
                             itemBuilder: (context, index) {
                               // if (discoverData.isNotEmpty) {
                               var educationData = discoverData1[index];
-                              int minutes =
-                                  (data.videoDurationInSeconds! / 60).floor();
-                              int seconds =
-                                  (data.videoDurationInSeconds! % 60).toInt();
+                              int minutes = 0;
+                              // (data.videoDurationInSeconds! / 60).floor();
+                              int seconds = 0;
+                              // (data.videoDurationInSeconds! % 60).toInt();
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(Routes.videoDetailsPage);

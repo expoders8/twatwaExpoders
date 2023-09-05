@@ -330,7 +330,7 @@ class _TabPageState extends State<TabPage> {
                         },
                         child: Container(
                           height: 50,
-                          width: 100,
+                          width: 130,
                           margin: const EdgeInsets.only(left: 150, top: 0),
                           child: const Center(
                             child: Text(

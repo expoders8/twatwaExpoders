@@ -11,6 +11,7 @@ import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/snackbar_provider.dart';
+import 'no_user_login_dialog.dart';
 
 // ignore: must_be_immutable
 class PlaylistWidget extends StatefulWidget {
@@ -298,7 +299,7 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
       children: [
         GestureDetector(
           onTap: () {
-            authToken == "" ? Container() : playlistbottomsheet();
+            authToken == "" ? loginConfirmationDialog() : playlistbottomsheet();
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 8),
@@ -343,6 +344,15 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
           ),
         ),
       ],
+    );
+  }
+
+  loginConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const NoUserLoginDialog();
+      },
     );
   }
 }

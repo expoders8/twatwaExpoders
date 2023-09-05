@@ -223,7 +223,13 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
                         );
                       } else {
                         return const Center(
-                          child: Text("No Video found"),
+                          child: Text(
+                            "No Video found",
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 15,
+                                fontFamily: kFuturaPTDemi),
+                          ),
                         );
                       }
                     },
@@ -231,7 +237,13 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
                 }
               } else {
                 return const Center(
-                  child: Text("No Video found"),
+                  child: Text(
+                    "No Video found",
+                    style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 15,
+                        fontFamily: kFuturaPTDemi),
+                  ),
                 );
               }
             }

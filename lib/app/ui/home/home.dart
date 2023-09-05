@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';
 import '../OtherUserProfile/other_user_profile.dart';
@@ -159,8 +160,14 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: Get.height / 3.2),
-            LoaderUtils.showLoader()
+            SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  buildLazyloading(),
+                ],
+              ),
+            )
           ],
         );
       } else {
@@ -671,6 +678,177 @@ class _HomePageState extends State<HomePage> {
         );
       }
     }));
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SingleChildScrollView(
+              child: Shimmer.fromColors(
+                baseColor: kButtonSecondaryColor,
+                highlightColor: kShimmerEffectSecondary,
+                enabled: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: Get.width,
+                        height: 200,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 120,
+                                height: 12.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 120,
+                                height: 12.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 120,
+                                height: 12.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 120,
+                                height: 12.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.white,
+                            ),
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: Get.width,
+                        height: 12.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Row(
+                        children: [
+                          buildcardEffect(),
+                          buildcardEffect(),
+                          buildcardEffect(),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: Get.width,
+                        height: 12.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Row(
+                        children: [
+                          buildcardEffect(),
+                          buildcardEffect(),
+                          buildcardEffect(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildcardEffect() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 150,
+            height: 70,
+            color: Colors.white,
+          ),
+        ),
+        Row(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 150,
+                    height: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 150,
+                    height: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   buildcard(String text) {

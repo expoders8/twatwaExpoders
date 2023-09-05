@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -5,9 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:opentrend/app/ui/video_details/video_player.dart';
 
+import '../../../config/constant/constant.dart';
 import '../../controller/video_controller.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
+import '../widgets/no_user_login_dialog.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/playlist_widget.dart';
 import '../../services/video_service.dart';
@@ -39,6 +42,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       followtext = "FOLLOW",
       likeValue = "",
       url = "",
+      currntuserId = "",
       authToken = "";
 
   VideoService videoService = VideoService();
@@ -50,13 +54,26 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // var videoId = videoDetailController.videoId();
       // videoService.videoView(videoId);
+      getUser();
       videoDetailController.fetchStoryDetail(
-          widget.videoId.toString(), widget.checkUpnext);
+          widget.videoId.toString(), widget.checkUpnext, currntuserId);
 
       Future.delayed(const Duration(milliseconds: 180), () async {
         showOverlay = false;
       });
     });
+  }
+
+  Future getUser() async {
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    var authTokenValue = box.read('authToken');
+    if (data != null) {
+      setState(() {
+        currntuserId = getUserData['id'] ?? "";
+        authToken = authTokenValue ?? "";
+      });
+    }
   }
 
   @override
@@ -126,9 +143,9 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  buildTabindex("UP NEXT VIDEOS", 0, 120),
-                                  buildTabindex("ABOUT", 1, 80),
-                                  buildTabindex("COMMENTS", 2, 100)
+                                  buildTabindex("UP NEXT VIDEOS", 0, 110),
+                                  buildTabindex("ABOUT", 1, 90),
+                                  buildTabindex("COMMENTS", 2, 90)
                                 ],
                               ),
                               const SizedBox(height: 10),
@@ -146,7 +163,9 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                             ? AboutPage(
                                                 description:
                                                     detailData.description)
-                                            : const CommentsPage()),
+                                            : CommentsPage(
+                                                videoId:
+                                                    detailData.id.toString())),
                               ),
                             ],
                           ),
@@ -300,7 +319,11 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(Routes.otherUserProfilePage);
+                            authToken != ""
+                                ? currntuserId == userId
+                                    ? Container()
+                                    : Get.toNamed(Routes.otherUserProfilePage)
+                                : loginConfirmationDialog();
                           },
                           child: SizedBox(
                             height: 42,
@@ -376,7 +399,9 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(Routes.checkOutPaymentPage);
+                            authToken != ""
+                                ? Get.toNamed(Routes.checkOutPaymentPage)
+                                : loginConfirmationDialog();
                           },
                           child: Container(
                             padding: const EdgeInsets.only(
@@ -402,16 +427,20 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (followtext == "FOLLOW") {
-                              setState(() {
-                                followtext = "UNFOLLOW";
-                              });
-                            } else {
-                              if (followtext == "UNFOLLOW") {
+                            if (authToken != "") {
+                              if (followtext == "FOLLOW") {
                                 setState(() {
-                                  followtext = "FOLLOW";
+                                  followtext = "UNFOLLOW";
                                 });
+                              } else {
+                                if (followtext == "UNFOLLOW") {
+                                  setState(() {
+                                    followtext = "FOLLOW";
+                                  });
+                                }
                               }
+                            } else {
+                              loginConfirmationDialog();
                             }
                           },
                           child: Container(
@@ -459,12 +488,12 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       child: Container(
         width: size,
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        margin: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
           border: Border(
-              bottom: BorderSide(
-                  color: tabindex == index ? kButtonColor : kBackGroundColor,
-                  width: 1)),
+            bottom: BorderSide(
+                color: tabindex == index ? kButtonColor : kBackGroundColor,
+                width: 1),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
@@ -478,6 +507,15 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
           )),
         ),
       ),
+    );
+  }
+
+  loginConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const NoUserLoginDialog();
+      },
     );
   }
 }

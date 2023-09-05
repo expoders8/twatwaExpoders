@@ -15,11 +15,11 @@ class VideoDetailController extends GetxController {
 
   @override
   void onInit() {
-    fetchStoryDetail(videoId.toString(), "");
+    fetchStoryDetail(videoId.toString(), "", null);
     super.onInit();
   }
 
-  void fetchStoryDetail(String? videoIddata, String? check) async {
+  void fetchStoryDetail(String? videoIddata, String? check, userId) async {
     var token = box.read('authToken');
     try {
       isLoading(true);
@@ -27,7 +27,7 @@ class VideoDetailController extends GetxController {
           Uri.parse('$videobBaseUrl/api/Video/GetDetails'),
           body: json.encode({
             "videoId": check == "upnext" ? videoIddata : videoId.toString(),
-            "userId": null,
+            "userId": token == null ? null : userId,
             "userName": "",
             "videoType": "",
             "currentUserId": null,

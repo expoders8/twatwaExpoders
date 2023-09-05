@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../routes/app_pages.dart';
 import '../controller/video_detail_controller.dart';
@@ -32,7 +33,14 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (videoController.isLoading.value) {
-        return LoaderUtils.showLoader();
+        return SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              buildLazyloading(),
+            ],
+          ),
+        );
       } else {
         if (videoController.videoList.isNotEmpty) {
           if (videoController.videoList[0].data!.trendingVideo!.isEmpty) {
@@ -164,5 +172,76 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
         }
       }
     });
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: kButtonSecondaryColor,
+              highlightColor: kShimmerEffectSecondary,
+              enabled: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const NeverScrollableScrollPhysics(),
+                child: Row(
+                  children: [
+                    buildcard(),
+                    buildcard(),
+                    buildcard(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildcard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 150,
+            height: 100,
+            color: Colors.white,
+          ),
+        ),
+        Row(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 150,
+                    height: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 150,
+                    height: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

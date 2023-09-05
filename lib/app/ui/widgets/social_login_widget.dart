@@ -136,17 +136,14 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
                 borderRadius: BorderRadius.circular(8.0),
                 border: Border.all(color: kWhiteColor, width: 0.3),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Center(
-                  child: Text(
-                    "Continue with Google",
-                    style: TextStyle(
-                        color: kBackGroundColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: kFuturaPTBook),
-                  ),
+              child: const Center(
+                child: Text(
+                  "Continue with Google",
+                  style: TextStyle(
+                      color: kBackGroundColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: kFuturaPTBook),
                 ),
               ),
             ),

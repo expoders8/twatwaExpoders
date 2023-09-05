@@ -191,9 +191,15 @@ class VideoOfTheDayController extends GetxController {
   var isLoading = true.obs;
   VideoService videoService = VideoService();
   var videoList = <GetVideoOfTheDayData>[].obs;
+  RxString currentUserId = "".obs;
 
   @override
   void onInit() {
+    var data = box.read('user');
+    if (data != null) {
+      var getUserData = jsonDecode(data);
+      currentUserId(getUserData['id'] ?? "");
+    }
     fetchVideoOfTheDay();
     super.onInit();
   }
@@ -201,7 +207,8 @@ class VideoOfTheDayController extends GetxController {
   createRequest() {
     VideoRequestModel getRequest = VideoRequestModel();
     getRequest.videoId = null;
-    getRequest.userId = null;
+    getRequest.userId =
+        currentUserId.toString() == "" ? null : currentUserId.toString();
     getRequest.userName = "";
     getRequest.videoType = "";
     getRequest.currentUserId = null;

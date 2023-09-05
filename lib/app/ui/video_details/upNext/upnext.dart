@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:opentrend/app/ui/video_details/video_details.dart';
 
-import '../../../../config/constant/color_constant.dart';
-import '../../../../config/constant/font_constant.dart';
-import '../../../../config/provider/loader_provider.dart';
 import '../../../controller/video_controller.dart';
+import '../../../../config/constant/font_constant.dart';
+import '../../../../config/constant/color_constant.dart';
 import '../../../controller/video_detail_controller.dart';
 
 class UpNextPage extends StatefulWidget {
@@ -45,7 +45,7 @@ class _UpNextPageState extends State<UpNextPage> {
         child: Obx(
           () {
             if (upNextVideoController.isLoading.value) {
-              return LoaderUtils.showLoader();
+              return buildLazyloading();
             } else {
               if (upNextVideoController.videoList.isNotEmpty) {
                 if (upNextVideoController.videoList[0].data!.isEmpty) {
@@ -101,6 +101,8 @@ class _UpNextPageState extends State<UpNextPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 3, vertical: 3),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -149,85 +151,94 @@ class _UpNextPageState extends State<UpNextPage> {
                                                 },
                                               ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8.0, top: 7),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 135,
-                                                        child: Text(
-                                                          data.title.toString(),
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  kTextsecondarytopColor,
-                                                              fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      Text(
-                                                        "${data.numberOfViews} views",
-                                                        style: const TextStyle(
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0, top: 7),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 135,
+                                                    child: Text(
+                                                      data.title.toString(),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
                                                           color:
-                                                              kTextsecondarybottomColor,
-                                                          fontSize: 11,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                              kTextsecondarytopColor,
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                  const SizedBox(height: 10),
+                                                  Text(
+                                                    "${data.numberOfViews} views",
+                                                    style: const TextStyle(
+                                                      color:
+                                                          kTextsecondarybottomColor,
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              right: 10, top: 9),
-                                          child: Text(
-                                            "$minutes : $seconds",
-                                            style: const TextStyle(
-                                                color: kButtonSecondaryColor,
-                                                fontSize: 11,
-                                                fontFamily: kFuturaPTDemi),
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              border: Border.all(
-                                                  width: 0.7,
-                                                  color: widget.videoId ==
-                                                          data.id
-                                                      ? const Color.fromARGB(
-                                                          255, 244, 43, 29)
-                                                      : kWhiteColor)),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(12),
-                                            width: 40,
-                                            height: 40,
-                                            child: Image.asset(
-                                              widget.videoId == data.id
-                                                  ? "assets/icons/pause.png"
-                                                  : "assets/icons/Play.png",
-                                              color: widget.videoId == data.id
-                                                  ? Colors.red
-                                                  : kWhiteColor,
-                                              scale: 9,
-                                            ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Text(
+                                                  "$minutes : $seconds",
+                                                  style: const TextStyle(
+                                                      color:
+                                                          kButtonSecondaryColor,
+                                                      fontSize: 11,
+                                                      fontFamily:
+                                                          kFuturaPTDemi),
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                    border: Border.all(
+                                                        width: 0.7,
+                                                        color: widget.videoId ==
+                                                                data.id
+                                                            ? const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                244,
+                                                                43,
+                                                                29)
+                                                            : kWhiteColor)),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(12),
+                                                  width: 40,
+                                                  height: 40,
+                                                  child: Image.asset(
+                                                    widget.videoId == data.id
+                                                        ? "assets/icons/pause.png"
+                                                        : "assets/icons/Play.png",
+                                                    color: widget.videoId ==
+                                                            data.id
+                                                        ? Colors.red
+                                                        : kWhiteColor,
+                                                    scale: 9,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -236,18 +247,6 @@ class _UpNextPageState extends State<UpNextPage> {
                                 ),
                               ),
                             ),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     if (data.videoUploadStatus == "Success") {
-                            //       Get.toNamed(Routes.videoDetailsPage);
-                            //       Get.to(VideoDetailsPage());
-                            //       Get.offAll(() => const VideoDetailsPage());
-                            //       videoDetailController
-                            //           .videoId(data.id.toString());
-                            //     }
-                            //   },
-
-                            // ),
                           ],
                         );
                       } else {
@@ -265,6 +264,75 @@ class _UpNextPageState extends State<UpNextPage> {
               }
             }
           },
+        ),
+      ),
+    );
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Shimmer.fromColors(
+                baseColor: kButtonSecondaryColor,
+                highlightColor: kShimmerEffectSecondary,
+                enabled: true,
+                child: ListView.builder(
+                  itemCount: 6,
+                  itemBuilder: (_, __) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          color: Colors.white,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const SizedBox(height: 5),
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Container(
+                                width: 40.0,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

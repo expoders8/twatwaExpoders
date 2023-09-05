@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../routes/app_pages.dart';
 import '../controller/video_controller.dart';
@@ -30,7 +31,16 @@ class _EducationViewPageState extends State<EducationViewPage> {
         child: Obx(
           () {
             if (videoController.isLoading.value) {
-              return LoaderUtils.showLoader();
+              return SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    buildLazyloading(),
+                    buildLazyloading(),
+                    buildLazyloading(),
+                  ],
+                ),
+              );
             } else {
               if (videoController.videoList.isNotEmpty) {
                 if (videoController.videoList[0].data!.isEmpty) {
@@ -174,7 +184,7 @@ class _EducationViewPageState extends State<EducationViewPage> {
                                               const SizedBox(height: 5),
                                               Text(
                                                 "${data.numberOfFollowers} $followcheck",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   color:
                                                       kTextsecondarybottomColor,
                                                   fontSize: 11,
@@ -268,6 +278,94 @@ class _EducationViewPageState extends State<EducationViewPage> {
               }
             }
           },
+        ),
+      ),
+    );
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: kButtonSecondaryColor,
+              highlightColor: kShimmerEffectSecondary,
+              enabled: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: Get.width,
+                      height: 200,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 120,
+                              height: 12.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 120,
+                              height: 12.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 120,
+                              height: 12.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 120,
+                              height: 12.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.white,
+                          ),
+                          height: 40,
+                          width: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

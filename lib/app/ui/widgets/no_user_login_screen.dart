@@ -45,15 +45,11 @@ class _NoUserLoginScreenState extends State<NoUserLoginScreen> {
                   fontFamily: kFuturaPTDemi),
             ),
           ),
-          const SizedBox(
-            height: 40,
-          ),
+          const SizedBox(height: 40),
           const SocialLoginPage(
             checkRowOrColumn: 'column',
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           SizedBox(
             width: size.width > 500 ? 600 : size.width - 50,
             height: 50,
@@ -83,6 +79,7 @@ class _NoUserLoginScreenState extends State<NoUserLoginScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 50),
         ],
       ),
     );

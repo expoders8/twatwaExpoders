@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:opentrend/app/ui/favourite/create_and_edit_playlist.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../home/tab_page.dart';
 import '../widgets/appbar.dart';
 import '../../routes/app_pages.dart';
 import '../../services/playlist_service.dart';
+import '../widgets/no_user_login_screen.dart';
 import '../../../config/constant/constant.dart';
 import '../../controller/playlist_controller.dart';
 import '../../../config/constant/font_constant.dart';
@@ -16,7 +18,6 @@ import '../../controller/video_detail_controller.dart';
 import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../../../config/provider/dotted_line_provider.dart';
-import '../widgets/no_user_login_screen.dart';
 
 class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});
@@ -32,9 +33,23 @@ class _FavouritePageState extends State<FavouritePage> {
 
   PlaylistService playlistService = PlaylistService();
   String userId = "", authToken = "";
+  bool isLoading = true;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      var authTokenValue = box.read('authToken');
+      setState(() {
+        authToken = authTokenValue ?? "";
+        if (authToken == "") {
+          setState(() {
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = true;
+          });
+        }
+      });
       getUser();
       if (authToken != "") {
         playlistController.fetchAllPlaylist();
@@ -46,11 +61,9 @@ class _FavouritePageState extends State<FavouritePage> {
 
   Future getUser() async {
     var data = box.read('user');
-    var authTokenValue = box.read('authToken');
     var getUserData = jsonDecode(data);
     if (getUserData != null) {
       setState(() {
-        authToken = authTokenValue ?? "";
         userId = getUserData['id'] ?? "";
       });
     }
@@ -76,7 +89,13 @@ class _FavouritePageState extends State<FavouritePage> {
                   child: Obx(
                     () {
                       if (playlistController.isLoading.value) {
-                        return LoaderUtils.showLoader();
+                        return Column(
+                          children: [
+                            buildLazyloading(),
+                            const SizedBox(height: 5),
+                            buildLazyloading(),
+                          ],
+                        );
                       } else {
                         if (playlistController.playList.isNotEmpty) {
                           if (playlistController.playList[0].data!.isEmpty) {
@@ -390,7 +409,9 @@ class _FavouritePageState extends State<FavouritePage> {
                 const SizedBox(height: 30),
               ],
             )
-          : const NoUserLoginScreen(),
+          : isLoading
+              ? LoaderUtils.showLoader()
+              : const NoUserLoginScreen(),
     );
   }
 
@@ -518,7 +539,7 @@ class _FavouritePageState extends State<FavouritePage> {
                   } else {
                     LoaderX.hide();
                     SnackbarUtils.showErrorSnackbar(
-                        "Failed to SignUp", value.message.toString());
+                        "Failed to SignUp", value['message'].toString());
                   }
                   return null;
                 },
@@ -539,6 +560,75 @@ class _FavouritePageState extends State<FavouritePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: kButtonSecondaryColor,
+              highlightColor: kShimmerEffectSecondary,
+              enabled: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: Get.width - 150,
+                      height: 12.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 150.0,
+                          height: 100.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Container(
+                          width: 150.0,
+                          height: 100.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: Get.width - 100,
+                      height: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: Get.width - 130,
+                      height: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

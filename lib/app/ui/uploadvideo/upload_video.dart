@@ -18,6 +18,7 @@ import '../../../config/provider/loader_provider.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../../../config/provider/imagepicker_provider.dart';
+import '../widgets/no_user_login_screen.dart';
 
 class UploadVideoPage extends StatefulWidget {
   const UploadVideoPage({
@@ -38,7 +39,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
       imageError = false,
       videoError = false,
       isFormSubmitted = false;
-  String videostatus = "", fileSize = '', userId = '';
+  String videostatus = "", fileSize = '', userId = '', authToken = "";
   final _uploadVideoFormKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController aboutController = TextEditingController();
@@ -49,6 +50,10 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
 
   @override
   void initState() {
+    var authTokenValue = box.read('authToken');
+    setState(() {
+      authToken = authTokenValue ?? "";
+    });
     getUser();
     super.initState();
   }
@@ -88,450 +93,476 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
         ),
         elevation: 1,
       ),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-            ),
-            child: Form(
-              key: _uploadVideoFormKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      videoFile == null
-                          ? DottedBorder(
-                              strokeWidth: 1.3,
-                              borderType: BorderType.Rect,
-                              color: kButtonSecondaryColor,
-                              child: SizedBox(
-                                width: 150,
-                                height: 100,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/icons/upload.png",
-                                    ),
-                                    const SizedBox(height: 5),
-                                    const Text(
-                                      "Upload video",
-                                      style: TextStyle(
-                                          color: kTextsecondarytopColor,
-                                          fontSize: 15,
-                                          fontFamily: kFuturaPTBook),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : Stack(
-                              children: [
-                                Container(
-                                  color: kAuthBackGraundColor,
-                                  width: 150,
-                                  height: 100,
-                                  child: VideoPlayer(_controller),
-                                ),
-                                Positioned(
-                                  child: isUploading
-                                      ? Container(
-                                          color: kAuthBackGraundColor,
-                                          width: 150,
-                                          height: 100,
-                                          child: CircularPercentIndicator(
-                                            radius: 20.0,
-                                            percent: uploadProgress,
-                                            center: Text(
-                                                '${(uploadProgress * 100).toInt()}%',
-                                                style: const TextStyle(
-                                                    color:
-                                                        kTextsecondarytopColor,
-                                                    fontSize: 13,
-                                                    fontFamily: kFuturaPTBook)),
-                                            progressColor: kButtonColor,
-                                            backgroundColor: kWhiteColor,
-                                          ),
-                                        )
-                                      : videostatus == "cancel"
-                                          ? Container(
-                                              color: kAuthBackGraundColor,
-                                              width: 150,
-                                              height: 100,
-                                              child: const Icon(
-                                                Icons.check_circle_outline,
-                                                color: kButtonColor,
-                                                size: 45,
-                                              ),
-                                            )
-                                          : Container(),
-                                )
-                              ],
-                            ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: Column(
+      body: authToken != ""
+          ? SingleChildScrollView(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: Form(
+                    key: _uploadVideoFormKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: 150,
-                              child: processingValue
-                                  ? isUploading
-                                      ? const Text(
-                                          "Video Uploading…",
-                                          style: TextStyle(
-                                              color: kTextsecondarytopColor,
-                                              fontSize: 15,
-                                              fontFamily: kFuturaPTBook),
-                                        )
-                                      : const Text(
-                                          "UPLOADED",
-                                          style: TextStyle(
-                                              color: kTextsecondarytopColor,
-                                              fontSize: 15,
-                                              fontFamily: kFuturaPTBook),
-                                        )
-                                  : const Text(
-                                      "Upload video from your library",
-                                      style: TextStyle(
-                                          color: kTextsecondarytopColor,
-                                          fontSize: 15,
-                                          fontFamily: kFuturaPTBook),
-                                    ),
-                            ),
-                            const SizedBox(height: 5),
-                            processingValue
-                                ? isUploading
-                                    ? const Text(
-                                        "Lorem Ipsum is simply dummy",
-                                        style: TextStyle(
-                                          color: kTextsecondarybottomColor,
-                                          fontSize: 11,
-                                        ),
-                                      )
-                                    : Text(
-                                        fileSize,
-                                        style: const TextStyle(
-                                          color: kTextsecondarybottomColor,
-                                          fontSize: 11,
-                                        ),
-                                      )
-                                : const Text(
-                                    "Lorem Ipsum is simply dummy",
-                                    style: TextStyle(
-                                      color: kTextsecondarybottomColor,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                            const SizedBox(height: 5),
-                            processingValue
-                                ? isUploading
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            videoFile = null;
-                                            processingValue = false;
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Container(
-                                            padding: const EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 8,
-                                                bottom: 8),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: kButtonColor,
-                                                  width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                            child: const Center(
-                                                child: Text(
-                                              "CANCEL",
-                                              style: TextStyle(
-                                                  fontFamily: kFuturaPTBook,
-                                                  fontSize: 15,
-                                                  color: kWhiteColor),
-                                            )),
+                            videoFile == null
+                                ? DottedBorder(
+                                    strokeWidth: 1.3,
+                                    borderType: BorderType.Rect,
+                                    color: kButtonSecondaryColor,
+                                    child: SizedBox(
+                                      width: 150,
+                                      height: 100,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            "assets/icons/upload.png",
                                           ),
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            videoFile = null;
-                                            processingValue = false;
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Container(
-                                            padding: const EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 8,
-                                                bottom: 8),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: kButtonSecondaryColor,
-                                                  width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                            child: const Center(
-                                                child: Text(
-                                              "DELETE",
-                                              style: TextStyle(
-                                                  fontFamily: kFuturaPTBook,
-                                                  fontSize: 15,
-                                                  color: kButtonSecondaryColor),
-                                            )),
-                                          ),
-                                        ),
-                                      )
-                                : GestureDetector(
-                                    onTap: pickVideo,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                            top: 8,
-                                            bottom: 8),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: kButtonColor, width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            "Upload",
+                                          const SizedBox(height: 5),
+                                          const Text(
+                                            "Upload video",
                                             style: TextStyle(
-                                                fontFamily: kFuturaPTBook,
+                                                color: kTextsecondarytopColor,
                                                 fontSize: 15,
-                                                color: kWhiteColor),
+                                                fontFamily: kFuturaPTBook),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ),
                                   )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  videoError == true
-                      ? const Padding(
-                          padding: EdgeInsets.only(left: 15, top: 5),
-                          child: Text("Video is required",
-                              style: TextStyle(
-                                  color: kErrorColor,
-                                  fontSize: 13,
-                                  fontFamily: kFuturaPTBook)),
-                        )
-                      : Container(),
-                  const SizedBox(height: 40),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Details",
-                        style: TextStyle(
-                            color: kTextsecondarytopColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Lorem Ipsum is simply dummy text of the printing",
-                        style: TextStyle(
-                          color: kTextsecondarybottomColor,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  CustomTextFormField(
-                    hintText: 'Add a title that describe your video',
-                    maxLines: 1,
-                    ctrl: titleController,
-                    name: "describe",
-                    formSubmitted: isFormSubmitted,
-                    validationMsg: 'Please enter title',
-                  ),
-                  const SizedBox(height: 15),
-                  CustomTextFormField(
-                    hintText: 'Tell viewers about video',
-                    maxLines: 1,
-                    ctrl: aboutController,
-                    name: "viewersaboutvideo",
-                    formSubmitted: isFormSubmitted,
-                    validationMsg: 'Please enter about video',
-                  ),
-                  const SizedBox(height: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Thumbnail",
-                        style: TextStyle(
-                            color: kTextsecondarytopColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Select or upload a picture that shows what’s in your video.",
-                        style: TextStyle(
-                          color: kTextsecondarybottomColor,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: pickImage,
-                    child: imageFile == null
-                        ? DottedBorder(
-                            strokeWidth: 1.3,
-                            borderType: BorderType.Rect,
-                            color: kButtonSecondaryColor,
-                            child: SizedBox(
-                              width: 150,
-                              height: 100,
+                                : Stack(
+                                    children: [
+                                      Container(
+                                        color: kAuthBackGraundColor,
+                                        width: 150,
+                                        height: 100,
+                                        child: VideoPlayer(_controller),
+                                      ),
+                                      Positioned(
+                                        child: isUploading
+                                            ? Container(
+                                                color: kAuthBackGraundColor,
+                                                width: 150,
+                                                height: 100,
+                                                child: CircularPercentIndicator(
+                                                  radius: 20.0,
+                                                  percent: uploadProgress,
+                                                  center: Text(
+                                                      '${(uploadProgress * 100).toInt()}%',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              kTextsecondarytopColor,
+                                                          fontSize: 13,
+                                                          fontFamily:
+                                                              kFuturaPTBook)),
+                                                  progressColor: kButtonColor,
+                                                  backgroundColor: kWhiteColor,
+                                                ),
+                                              )
+                                            : videostatus == "cancel"
+                                                ? Container(
+                                                    color: kAuthBackGraundColor,
+                                                    width: 150,
+                                                    height: 100,
+                                                    child: const Icon(
+                                                      Icons
+                                                          .check_circle_outline,
+                                                      color: kButtonColor,
+                                                      size: 45,
+                                                    ),
+                                                  )
+                                                : Container(),
+                                      )
+                                    ],
+                                  ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12.0),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset(
-                                    "assets/icons/upload.png",
+                                  SizedBox(
+                                    width: 150,
+                                    child: processingValue
+                                        ? isUploading
+                                            ? const Text(
+                                                "Video Uploading…",
+                                                style: TextStyle(
+                                                    color:
+                                                        kTextsecondarytopColor,
+                                                    fontSize: 15,
+                                                    fontFamily: kFuturaPTBook),
+                                              )
+                                            : const Text(
+                                                "UPLOADED",
+                                                style: TextStyle(
+                                                    color:
+                                                        kTextsecondarytopColor,
+                                                    fontSize: 15,
+                                                    fontFamily: kFuturaPTBook),
+                                              )
+                                        : const Text(
+                                            "Upload video from your library",
+                                            style: TextStyle(
+                                                color: kTextsecondarytopColor,
+                                                fontSize: 15,
+                                                fontFamily: kFuturaPTBook),
+                                          ),
                                   ),
                                   const SizedBox(height: 5),
-                                  const Text(
-                                    "Upload image",
-                                    style: TextStyle(
-                                        color: kTextsecondarytopColor,
-                                        fontSize: 15,
-                                        fontFamily: kFuturaPTBook),
-                                  ),
+                                  processingValue
+                                      ? isUploading
+                                          ? const Text(
+                                              "Lorem Ipsum is simply dummy",
+                                              style: TextStyle(
+                                                color:
+                                                    kTextsecondarybottomColor,
+                                                fontSize: 11,
+                                              ),
+                                            )
+                                          : Text(
+                                              fileSize,
+                                              style: const TextStyle(
+                                                color:
+                                                    kTextsecondarybottomColor,
+                                                fontSize: 11,
+                                              ),
+                                            )
+                                      : const Text(
+                                          "Lorem Ipsum is simply dummy",
+                                          style: TextStyle(
+                                            color: kTextsecondarybottomColor,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                  const SizedBox(height: 5),
+                                  processingValue
+                                      ? isUploading
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  videoFile = null;
+                                                  processingValue = false;
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20,
+                                                          right: 20,
+                                                          top: 8,
+                                                          bottom: 8),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: kButtonColor,
+                                                        width: 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  ),
+                                                  child: const Center(
+                                                      child: Text(
+                                                    "CANCEL",
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            kFuturaPTBook,
+                                                        fontSize: 15,
+                                                        color: kWhiteColor),
+                                                  )),
+                                                ),
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  videoFile = null;
+                                                  processingValue = false;
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20,
+                                                          right: 20,
+                                                          top: 8,
+                                                          bottom: 8),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color:
+                                                            kButtonSecondaryColor,
+                                                        width: 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  ),
+                                                  child: const Center(
+                                                      child: Text(
+                                                    "DELETE",
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            kFuturaPTBook,
+                                                        fontSize: 15,
+                                                        color:
+                                                            kButtonSecondaryColor),
+                                                  )),
+                                                ),
+                                              ),
+                                            )
+                                      : GestureDetector(
+                                          onTap: pickVideo,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                  top: 8,
+                                                  bottom: 8),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: kButtonColor,
+                                                    width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                              ),
+                                              child: const Center(
+                                                child: Text(
+                                                  "Upload",
+                                                  style: TextStyle(
+                                                      fontFamily: kFuturaPTBook,
+                                                      fontSize: 15,
+                                                      color: kWhiteColor),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
                                 ],
                               ),
                             ),
-                          )
-                        : SizedBox(
-                            width: 150,
-                            height: 100,
-                            child: Image.file(
-                              imageFile!,
-                              fit: BoxFit.cover,
+                          ],
+                        ),
+                        videoError == true
+                            ? const Padding(
+                                padding: EdgeInsets.only(left: 15, top: 5),
+                                child: Text("Video is required",
+                                    style: TextStyle(
+                                        color: kErrorColor,
+                                        fontSize: 13,
+                                        fontFamily: kFuturaPTBook)),
+                              )
+                            : Container(),
+                        const SizedBox(height: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Details",
+                              style: TextStyle(
+                                  color: kTextsecondarytopColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Lorem Ipsum is simply dummy text of the printing",
+                              style: TextStyle(
+                                color: kTextsecondarybottomColor,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        CustomTextFormField(
+                          hintText: 'Add a title that describe your video',
+                          maxLines: 1,
+                          ctrl: titleController,
+                          name: "describe",
+                          formSubmitted: isFormSubmitted,
+                          validationMsg: 'Please enter title',
+                        ),
+                        const SizedBox(height: 15),
+                        CustomTextFormField(
+                          hintText: 'Tell viewers about video',
+                          maxLines: 1,
+                          ctrl: aboutController,
+                          name: "viewersaboutvideo",
+                          formSubmitted: isFormSubmitted,
+                          validationMsg: 'Please enter about video',
+                        ),
+                        const SizedBox(height: 30),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Thumbnail",
+                              style: TextStyle(
+                                  color: kTextsecondarytopColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Select or upload a picture that shows what’s in your video.",
+                              style: TextStyle(
+                                color: kTextsecondarybottomColor,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: pickImage,
+                          child: imageFile == null
+                              ? DottedBorder(
+                                  strokeWidth: 1.3,
+                                  borderType: BorderType.Rect,
+                                  color: kButtonSecondaryColor,
+                                  child: SizedBox(
+                                    width: 150,
+                                    height: 100,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/icons/upload.png",
+                                        ),
+                                        const SizedBox(height: 5),
+                                        const Text(
+                                          "Upload image",
+                                          style: TextStyle(
+                                              color: kTextsecondarytopColor,
+                                              fontSize: 15,
+                                              fontFamily: kFuturaPTBook),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: 150,
+                                  height: 100,
+                                  child: Image.file(
+                                    imageFile!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                        ),
+                        imageError == true
+                            ? const Padding(
+                                padding: EdgeInsets.only(left: 15, top: 5),
+                                child: Text("Image is required",
+                                    style: TextStyle(
+                                        color: kErrorColor,
+                                        fontSize: 13,
+                                        fontFamily: kFuturaPTBook)),
+                              )
+                            : Container(),
+                        const SizedBox(height: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Hashtags",
+                              style: TextStyle(
+                                  color: kTextsecondarytopColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Select or upload a picture that shows in your video",
+                              style: TextStyle(
+                                color: kTextsecondarybottomColor,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        const HasTageView(),
+                        const SizedBox(height: 60),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              videoFile = null;
+                              imageFile = null;
+                              processingValue = false;
+                              titleController.clear();
+                              aboutController.clear();
+                            });
+                          },
+                          child: SizedBox(
+                            width: Get.width,
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 12, bottom: 12),
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: kButtonColor, width: 0.8),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Draft",
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      letterSpacing: 2,
+                                      fontSize: 15),
+                                ),
+                              ),
                             ),
                           ),
-                  ),
-                  imageError == true
-                      ? const Padding(
-                          padding: EdgeInsets.only(left: 15, top: 5),
-                          child: Text("Image is required",
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: Get.width,
+                          child: CupertinoButton(
+                            color: kButtonColor,
+                            borderRadius: BorderRadius.circular(25),
+                            onPressed: () {
+                              createVideo();
+                              // Get.toNamed(Routes.videoUploadedPage);
+                            },
+                            child: const Text(
+                              'Save',
                               style: TextStyle(
-                                  color: kErrorColor,
-                                  fontSize: 13,
-                                  fontFamily: kFuturaPTBook)),
-                        )
-                      : Container(),
-                  const SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Hashtags",
-                        style: TextStyle(
-                            color: kTextsecondarytopColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Select or upload a picture that shows in your video",
-                        style: TextStyle(
-                          color: kTextsecondarybottomColor,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const HasTageView(),
-                  const SizedBox(height: 60),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        videoFile = null;
-                        imageFile = null;
-                        processingValue = false;
-                        titleController.clear();
-                        aboutController.clear();
-                      });
-                    },
-                    child: SizedBox(
-                      width: Get.width,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, top: 12, bottom: 12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: kButtonColor, width: 0.8),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Draft",
-                            style: TextStyle(
-                                color: kWhiteColor,
-                                letterSpacing: 2,
-                                fontSize: 15),
+                                  color: kWhiteColor,
+                                  letterSpacing: 2,
+                                  fontSize: 15),
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 30),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: Get.width,
-                    child: CupertinoButton(
-                      color: kButtonColor,
-                      borderRadius: BorderRadius.circular(25),
-                      onPressed: () {
-                        createVideo();
-                        // Get.toNamed(Routes.videoUploadedPage);
-                      },
-                      child: const Text(
-                        'Save',
-                        style: TextStyle(
-                            color: kWhiteColor, letterSpacing: 2, fontSize: 15),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
+            )
+          : const NoUserLoginScreen(),
     );
   }
 

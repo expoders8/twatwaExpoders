@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opentrend/app/ui/widgets/no_user_login_dialog.dart';
 
 import '../../../config/constant/constant.dart';
 import '../../services/like_service.dart';
@@ -76,7 +77,9 @@ class _LikeWidgetState extends State<LikeWidget> {
             isdisLikedState = false,
             isLikedState = true,
             widget.likeCount = (widget.likeCount! + 1),
-            widget.dislikeCount = widget.dislikeCount! - 1
+            widget.likeCount == 0
+                ? Container()
+                : widget.dislikeCount = widget.dislikeCount! - 1
           });
       if (!isdisLikedState) {
         await likeStoryService.videoDisLike(widget.videoId).then(
@@ -133,7 +136,9 @@ class _LikeWidgetState extends State<LikeWidget> {
             isLikedState = false,
             isdisLikedState = true,
             widget.dislikeCount = (widget.dislikeCount! + 1),
-            widget.likeCount = widget.likeCount! - 1
+            widget.dislikeCount == 0
+                ? Container()
+                : widget.likeCount = widget.likeCount! - 1
           });
       if (!isLikedState) {
         await likeStoryService.videoLike(widget.videoId).then(
@@ -172,7 +177,7 @@ class _LikeWidgetState extends State<LikeWidget> {
       children: [
         GestureDetector(
           onTap: () {
-            authToken == "" ? Container() : _toggleIsLikedState();
+            authToken == "" ? loginConfirmationDialog() : _toggleIsLikedState();
           },
           child: Container(
             height: 35,
@@ -225,7 +230,9 @@ class _LikeWidgetState extends State<LikeWidget> {
         const SizedBox(width: 10),
         GestureDetector(
           onTap: () {
-            authToken == "" ? Container() : _toggleIsDisLikedState();
+            authToken == ""
+                ? loginConfirmationDialog()
+                : _toggleIsDisLikedState();
           },
           child: Container(
             height: 35,
@@ -276,6 +283,15 @@ class _LikeWidgetState extends State<LikeWidget> {
           ),
         ),
       ],
+    );
+  }
+
+  loginConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const NoUserLoginDialog();
+      },
     );
   }
 }

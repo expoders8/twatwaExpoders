@@ -167,7 +167,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid ? 310 : 300,
+      expandedHeight: Platform.isAndroid ? 315 : 300,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         return FlexibleSpaceBar(

@@ -149,14 +149,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   SizedBox(width: _isFullScreen ? 60 : 33),
                   IconButton(
                     onPressed: () {
-                      setState(() {
-                        _isPlaying ? _controller.pause() : _controller.play();
-                        _isPlaying = !_isPlaying;
-                      });
-                      Future.delayed(const Duration(milliseconds: 2000),
-                          () async {
-                        showOverlay = !showOverlay;
-                      });
+                      if (showOverlay) {
+                        setState(() {
+                          _isPlaying ? _controller.pause() : _controller.play();
+                          _isPlaying = !_isPlaying;
+                        });
+                        Future.delayed(const Duration(milliseconds: 2000),
+                            () async {
+                          showOverlay = !showOverlay;
+                        });
+                      } else {
+                        setState(() {
+                          showOverlay = !showOverlay;
+                        });
+                      }
                     },
                     icon: SizedBox(
                       width: 40,
@@ -211,13 +217,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     SizedBox(width: _isFullScreen ? 25 : 5),
                     IconButton(
                       onPressed: () {
-                        _toggleFullScreen();
-                        Future.delayed(const Duration(milliseconds: 500),
-                            () async {
+                        if (showOverlay) {
+                          _toggleFullScreen();
+                          Future.delayed(const Duration(milliseconds: 500),
+                              () async {
+                            setState(() {
+                              showOverlay = !showOverlay;
+                            });
+                          });
+                        } else {
                           setState(() {
                             showOverlay = !showOverlay;
                           });
-                        });
+                        }
                       },
                       icon: SizedBox(
                         height: 20,
@@ -248,17 +260,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _onSliderChange(double value) {
-    setState(() {
-      _sliderValue = value;
-      _controller.seekTo(Duration(milliseconds: value.toInt()));
-      _isPlaying = true;
-      _controller.play();
-    });
-    Future.delayed(const Duration(milliseconds: 5000), () async {
+    if (showOverlay) {
+      setState(() {
+        _sliderValue = value;
+        _controller.seekTo(Duration(milliseconds: value.toInt()));
+        _isPlaying = true;
+        _controller.play();
+      });
+      Future.delayed(const Duration(milliseconds: 5000), () async {
+        setState(() {
+          showOverlay = !showOverlay;
+        });
+      });
+    } else {
       setState(() {
         showOverlay = !showOverlay;
       });
-    });
+    }
   }
 
   void _toggleFullScreen() {
