@@ -56,15 +56,13 @@ class _LikeWidgetState extends State<LikeWidget> {
 
   Future _toggleIsLikedState() async {
     if (getIsLikedState) {
-      setState(() =>
-          {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
+      setState(() => {isLikedState = false});
       await likeStoryService.videoLike(widget.videoId).then(
         (value) {
           if (value["success"] == true) {
             setState(() {
               likeeddata = value['data'].toString();
             });
-            widget.callbackDate(value["data"].toString());
             LoaderX.hide();
           } else {
             LoaderX.hide();
@@ -76,12 +74,8 @@ class _LikeWidgetState extends State<LikeWidget> {
       setState(() => {
             isdisLikedState = false,
             isLikedState = true,
-            widget.likeCount = (widget.likeCount! + 1),
-            widget.likeCount == 0
-                ? Container()
-                : widget.dislikeCount = widget.dislikeCount! - 1
           });
-      if (!isdisLikedState) {
+      if (!getIsdisLikedState) {
         await likeStoryService.videoDisLike(widget.videoId).then(
           (value) {
             if (value["success"] == true) {
@@ -116,7 +110,6 @@ class _LikeWidgetState extends State<LikeWidget> {
     if (getIsdisLikedState) {
       setState(() => {
             isdisLikedState = false,
-            widget.dislikeCount = widget.dislikeCount! - 1
           });
       await likeStoryService.videoDisLike(widget.videoId).then(
         (value) {
@@ -135,12 +128,11 @@ class _LikeWidgetState extends State<LikeWidget> {
       setState(() => {
             isLikedState = false,
             isdisLikedState = true,
-            widget.dislikeCount = (widget.dislikeCount! + 1),
-            widget.dislikeCount == 0
+            widget.likeCount == 0
                 ? Container()
                 : widget.likeCount = widget.likeCount! - 1
           });
-      if (!isLikedState) {
+      if (!getIsLikedState) {
         await likeStoryService.videoLike(widget.videoId).then(
           (value) {
             if (value["success"] == true) {
@@ -218,7 +210,9 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.likeCount != "0"
                     ? Text(
-                        widget.likeCount.toString(),
+                        likeeddata == ""
+                            ? widget.likeCount.toString()
+                            : likeeddata,
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )
@@ -273,7 +267,9 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.dislikeCount != "0"
                     ? Text(
-                        widget.dislikeCount.toString(),
+                        dislikedData == ""
+                            ? widget.dislikeCount.toString()
+                            : dislikedData,
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )

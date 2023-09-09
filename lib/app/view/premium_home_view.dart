@@ -7,6 +7,7 @@ import '../../config/provider/loader_provider.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../controller/getall_video_landing_controller.dart';
+import '../ui/video_details/video_details.dart';
 
 class PremiumHomeView extends StatefulWidget {
   const PremiumHomeView({super.key});
@@ -78,10 +79,12 @@ class _PremiumHomeViewState extends State<PremiumHomeView> {
                             itemBuilder: (context, index) {
                               // if (discoverData.isNotEmpty) {
                               var educationData = discoverData1[index];
-                              int minutes = 0;
-                              // (data.videoDurationInSeconds! / 60).floor();
-                              int seconds = 0;
-                              // (data.videoDurationInSeconds! % 60).toInt();
+                              int minutes =
+                                  (educationData.videoDurationInSeconds! / 60)
+                                      .floor();
+                              int seconds =
+                                  (educationData.videoDurationInSeconds! % 60)
+                                      .toInt();
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(Routes.videoDetailsPage);

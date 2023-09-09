@@ -39,7 +39,7 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
   void initState() {
     getToken();
     if (authToken != "") {
-      playlistController.fetchAllPlaylist();
+      playlistController.fetchAllPlaylist("", "");
     }
     super.initState();
   }

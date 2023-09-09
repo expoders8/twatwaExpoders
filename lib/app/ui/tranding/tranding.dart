@@ -23,8 +23,6 @@ class TrendingPage extends StatefulWidget {
 
 // ignore: camel_case_types
 class _TrendingPageState extends State<TrendingPage> {
-  final TrendingVideoController videoController =
-      Get.put(TrendingVideoController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

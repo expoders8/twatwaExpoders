@@ -22,14 +22,6 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      videoController.fetchAllLandingVideos();
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (videoController.isLoading.value) {

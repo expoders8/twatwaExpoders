@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/playlist_model.dart';
 import '../../config/constant/constant.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
+import '../ui/auth/login/login.dart';
 
 class PlaylistService {
   createPlaylist(
@@ -14,22 +16,26 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http.post(
-          Uri.parse('$videobBaseUrl/api/Video/AddPlaylist'),
-          body: json.encode({
-            "userId": userId,
-            "playlistName": playlistName,
-            "isActive": true,
-            "isChecked": true,
-            "privacyType": privacyType,
-          }),
-          headers: {
+      var response =
+          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/AddPlaylist'),
+              body: json.encode({
+                "userId": userId,
+                "playlistName": playlistName,
+                "isActive": true,
+                "isChecked": true,
+                "privacyType": privacyType,
+              }),
+              headers: {
             'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return decodedUser;
+      } else if (response.statusCode == 401) {
+        authError();
+        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
@@ -43,30 +49,37 @@ class PlaylistService {
     }
   }
 
-  Future<PlaylistModel> getMyPlayLists() async {
+  Future<PlaylistModel> getMyPlayLists(
+      String userId, checkotherplaylist) async {
     try {
       var data = box.read('user');
       var getUserData = jsonDecode(data);
       var token = box.read('authToken');
-      var response = await http.post(
-          Uri.parse('$videobBaseUrl/api/Video/GetMyPlayLists'),
-          body: json.encode({
-            "videoId": null,
-            "userId": getUserData['id'],
-            "userName": "",
-            "playlistId": null,
-            "pageSize": 0,
-            "pageNumber": 0,
-            "searchText": "",
-            "sortBy": "",
-          }),
-          headers: {
+      var response = await http
+          .post(Uri.parse('$baseUrl/videoapi/api/Video/GetMyPlayLists'),
+              body: json.encode({
+                "videoId": null,
+                "userId": checkotherplaylist == "otherPlaylist"
+                    ? userId
+                    : getUserData['id'],
+                "userName": "",
+                "playlistId": null,
+                "pageSize": 0,
+                "pageNumber": 0,
+                "searchText": "",
+                "sortBy": "",
+              }),
+              headers: {
             'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return PlaylistModel.fromJson(decodedUser);
+      } else if (response.statusCode == 401) {
+        authError();
+        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
@@ -88,21 +101,25 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http.post(
-          Uri.parse('$videobBaseUrl/api/Video/UpdatePlaylist'),
-          body: json.encode({
-            "playlistId": playlistId,
-            "userId": userId,
-            "playlistName": playlistName,
-            "privacyType": privacyType,
-          }),
-          headers: {
+      var response = await http
+          .post(Uri.parse('$baseUrl/videoapi/api/Video/UpdatePlaylist'),
+              body: json.encode({
+                "playlistId": playlistId,
+                "userId": userId,
+                "playlistName": playlistName,
+                "privacyType": privacyType,
+              }),
+              headers: {
             'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return decodedUser;
+      } else if (response.statusCode == 401) {
+        authError();
+        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
@@ -123,19 +140,23 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http.post(
-          Uri.parse('$videobBaseUrl/api/Video/RemovePlaylist'),
-          body: json.encode({
-            "playlistId": playlistId,
-            "userId": userId,
-          }),
-          headers: {
+      var response = await http
+          .post(Uri.parse('$baseUrl/videoapi/api/Video/RemovePlaylist'),
+              body: json.encode({
+                "playlistId": playlistId,
+                "userId": userId,
+              }),
+              headers: {
             'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return decodedUser;
+      } else if (response.statusCode == 401) {
+        authError();
+        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
@@ -155,18 +176,22 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http.post(
-          Uri.parse('$videobBaseUrl/api/Video/AddVideoToPlaylist'),
-          body: json.encode({
-            "data": playlistData,
-          }),
-          headers: {
+      var response = await http
+          .post(Uri.parse('$baseUrl/videoapi/api/Video/AddVideoToPlaylist'),
+              body: json.encode({
+                "data": playlistData,
+              }),
+              headers: {
             'Content-type': 'application/json',
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return decodedUser;
+      } else if (response.statusCode == 401) {
+        authError();
+        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
@@ -179,5 +204,16 @@ class PlaylistService {
           "Failed to Add Video To Playlist", e.toString());
       throw e.toString();
     }
+  }
+
+  authError() {
+    LoaderX.hide();
+    SnackbarUtils.showErrorSnackbar(
+        "Authentication Error", "Please login again.");
+    box.write('onBoard', 1);
+    box.remove('user');
+    box.remove('authToken');
+
+    Get.offAll(() => const LoginPage());
   }
 }

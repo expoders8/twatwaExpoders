@@ -1,10 +1,7 @@
 import 'package:get_storage/get_storage.dart';
 
-const String baseUrl = "https://opentrend-api.azurewebsites.net/";
-const String videobBaseUrl = "https://opentrend-video-api.azurewebsites.net/";
-const String lookupBaseUrl = "https://opentrend-lookup-api.azurewebsites.net/";
-const String notificationBaseUrl =
-    "https://opentrend-notification-api.azurewebsites.net/";
+const String baseUrl = "https://opentrendapimanagement.azure-api.net";
+const String ocpApimSubscriptionKey = "c5c0f404c1b243cbb7335bd9c550d0f4";
 const String androidAppId = "com.app.opentrend";
 const String iOsAppId = "";
 

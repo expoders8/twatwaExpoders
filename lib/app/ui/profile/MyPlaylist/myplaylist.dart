@@ -9,11 +9,13 @@ import '../../../../config/constant/constant.dart';
 import '../../../controller/playlist_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
-import '../../../../config/provider/loader_provider.dart';
 import '../../../controller/video_detail_controller.dart';
+import '../../video_details/video_details.dart';
 
 class MyPlaylistPage extends StatefulWidget {
-  const MyPlaylistPage({super.key});
+  final String? userId;
+  final String? checkText;
+  const MyPlaylistPage({super.key, this.userId, this.checkText});
 
   @override
   State<MyPlaylistPage> createState() => _MyPlaylistPageState();
@@ -28,7 +30,8 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      playlistController.fetchAllPlaylist();
+      playlistController.fetchAllPlaylist(widget.userId.toString(),
+          widget.checkText == "my" ? "" : "otherPlaylist");
       getUser();
     });
 

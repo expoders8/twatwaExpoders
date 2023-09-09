@@ -3,19 +3,19 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/comments_model.dart';
 import '../models/video_model.dart';
 import '../models/getall_video_landing.dart';
 import '../../config/constant/constant.dart';
 import '../controller/hastage_controller.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
+import '../ui/auth/login/login.dart';
 
 class VideoService {
   Future<GetAllVideoModel> getAllVideo(VideoRequestModel getRequest) async {
     try {
       final response =
-          await http.post(Uri.parse('$videobBaseUrl/api/Video/GetVideos'),
+          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetVideos'),
               body: json.encode({
                 "videoId": getRequest.videoId,
                 "userId": getRequest.userId,
@@ -39,6 +39,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -61,7 +62,7 @@ class VideoService {
     var getUserData = jsonDecode(data);
     try {
       final response =
-          await http.post(Uri.parse('$videobBaseUrl/api/Video/GetVideos'),
+          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetVideos'),
               body: json.encode({
                 "videoId": null,
                 "userId":
@@ -86,6 +87,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -103,55 +105,11 @@ class VideoService {
     }
   }
 
-  Future<GetAllVideoModel> getAllUpNextVideo(categoryId, userId) async {
-    try {
-      final response =
-          await http.post(Uri.parse('$videobBaseUrl/api/Video/GetVideos'),
-              body: json.encode({
-                "videoId": null,
-                "userId": userId,
-                "userName": "",
-                "videoType": "",
-                "currentUserId": null,
-                "categoryId": categoryId,
-                "thumbnailId": null,
-                "categoryName": "",
-                "playlistId": null,
-                "videoReferenceId": "",
-                "videoEncoderReference": "",
-                "visibleStatus": "",
-                "videoUploadStatus": "",
-                "requestType": "",
-                "hashTag": "",
-                "pageSize": 25,
-                "pageNumber": 1,
-                "searchText": "",
-                "sortBy": ""
-              }),
-              headers: {
-            'Content-type': 'application/json',
-          });
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        return GetAllVideoModel.fromJson(data);
-      } else {
-        LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while UpNext Video, Please try after some time.");
-        return Future.error("Server Error");
-      }
-    } catch (e) {
-      LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to UpNext Video", e.toString());
-      throw e.toString();
-    }
-  }
-
   Future<GetVideoOfTheDayData> getAllVideoOfTheDaY(
       VideoRequestModel getRequest) async {
     try {
       final response = await http
-          .post(Uri.parse('$videobBaseUrl/api/Video/GetVideoOfTheDay'),
+          .post(Uri.parse('$baseUrl/videoapi/api/Video/GetVideoOfTheDay'),
               body: json.encode({
                 "videoId": getRequest.videoId,
                 "userId": getRequest.userId,
@@ -175,6 +133,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -195,7 +154,7 @@ class VideoService {
   Future<GetVideoByIdModel> getByIdVideo(String id) async {
     try {
       final response =
-          await http.post(Uri.parse('$videobBaseUrl/api/Video/GetDetails'),
+          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetDetails'),
               body: json.encode({
                 "videoId": id,
                 "userId": null,
@@ -219,6 +178,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -239,9 +199,10 @@ class VideoService {
   getMyAnalytics(String userId) async {
     try {
       final response = await http.get(
-          Uri.parse('$videobBaseUrl/api/Video/GetMyAnalytics?userId=$userId'),
+          Uri.parse('$baseUrl/videoapi/api/Video/GetMyAnalytics/$userId'),
           headers: {
             'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -267,7 +228,7 @@ class VideoService {
       var token = box.read('authToken');
       http.Response response;
       var request = http.MultipartRequest(
-          "POST", Uri.parse("$videobBaseUrl/api/Video/UploadVideo"))
+          "POST", Uri.parse("$baseUrl/videoapi/api/Video/UploadVideo"))
         ..fields['Title'] = title
         ..fields['Description'] = description
         ..fields['UserId'] = userId
@@ -282,7 +243,10 @@ class VideoService {
         request.files
             .add(await http.MultipartFile.fromPath('VideoFile', video.path));
       }
-      request.headers.addAll({"Authorization": "Bearer $token"});
+      request.headers.addAll({
+        "Authorization": "Bearer $token",
+        'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       response = await http.Response.fromStream(await request.send());
 
       if (response.statusCode == 200) {
@@ -305,14 +269,19 @@ class VideoService {
   videoView(String videoId) async {
     var token = box.read('authToken');
     try {
-      final response = await http
-          .get(Uri.parse('$videobBaseUrl/api/Video/View/$videoId'), headers: {
-        'Content-type': 'application/json',
-        "Authorization": "Bearer $token"
-      });
+      final response = await http.get(
+          Uri.parse('$baseUrl/videoapi/api/Video/View/$videoId'),
+          headers: {
+            'Content-type': 'application/json',
+            "Authorization": "Bearer $token",
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;
+      } else if (response.statusCode == 401) {
+        authError();
+        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",
@@ -329,8 +298,11 @@ class VideoService {
   Future<GetAllVideoLanding> getAllVideoLanding() async {
     try {
       final response = await http.get(
-          Uri.parse('$videobBaseUrl/api/Video/GetVideoLanding'),
-          headers: {'Content-type': 'application/json'});
+          Uri.parse('$baseUrl/videoapi/api/Video/GetVideoLanding'),
+          headers: {
+            'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return GetAllVideoLanding.fromJson(data);
@@ -345,5 +317,16 @@ class VideoService {
       SnackbarUtils.showErrorSnackbar("Failed to Video View", e.toString());
       throw e.toString();
     }
+  }
+
+  authError() {
+    LoaderX.hide();
+    SnackbarUtils.showErrorSnackbar(
+        "Authentication Error", "Please login again.");
+    box.write('onBoard', 1);
+    box.remove('user');
+    box.remove('authToken');
+
+    Get.offAll(() => const LoginPage());
   }
 }

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:opentrend/app/ui/OtherUserProfile/other_user_profile.dart';
 import 'package:opentrend/app/ui/video_details/video_player.dart';
 
 import '../../../config/constant/constant.dart';
@@ -36,7 +37,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
-  final MyVideoController myVideoController = Get.put(MyVideoController());
   int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
   String qualityname = "",
       followtext = "FOLLOW",
@@ -56,11 +56,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       // videoService.videoView(videoId);
       getUser();
       videoDetailController.fetchStoryDetail(
-          widget.videoId.toString(), widget.checkUpnext, currntuserId);
-
-      Future.delayed(const Duration(milliseconds: 180), () async {
-        showOverlay = false;
-      });
+          widget.videoId.toString(), currntuserId);
     });
   }
 
@@ -201,13 +197,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid
-          ?
-          // _isFullScreen
-          //     ? 200
-          //     :
-          170
-          : 145,
+      expandedHeight: Platform.isAndroid ? 170 : 145,
       floating: false,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -322,7 +312,14 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                             authToken != ""
                                 ? currntuserId == userId
                                     ? Container()
-                                    : Get.toNamed(Routes.otherUserProfilePage)
+                                    : Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              OtherUserProfilePage(
+                                            userId: userId,
+                                          ),
+                                        ),
+                                      )
                                 : loginConfirmationDialog();
                           },
                           child: SizedBox(

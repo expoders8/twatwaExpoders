@@ -8,10 +8,11 @@ class PlaylistController extends GetxController {
   var playList = <PlaylistModel>[].obs;
   PlaylistService playlistService = PlaylistService();
 
-  void fetchAllPlaylist() async {
+  void fetchAllPlaylist(String userId, checkOtherplaylist) async {
     try {
       isLoading(true);
-      var data = await playlistService.getMyPlayLists();
+      var data =
+          await playlistService.getMyPlayLists(userId, checkOtherplaylist);
       playList.assign(data);
     } finally {
       isLoading(false);

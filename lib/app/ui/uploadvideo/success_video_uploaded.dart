@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:opentrend/app/routes/app_pages.dart';
 
 import '../../../config/constant/color_constant.dart';
 import '../home/tab_page.dart';
@@ -22,7 +23,7 @@ class _VideoUploadedPageState extends State<VideoUploadedPage> {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            Get.back();
+            Get.offAll(() => const TabPage());
           },
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -82,10 +83,10 @@ class _VideoUploadedPageState extends State<VideoUploadedPage> {
                   color: kButtonColor,
                   borderRadius: BorderRadius.circular(25),
                   onPressed: () {
-                    Get.offAll(() => const TabPage());
+                    Get.toNamed(Routes.profilePage);
                   },
                   child: const Text(
-                    'GO TO HOME',
+                    'Go To MyVideos',
                     style: TextStyle(
                         color: kWhiteColor, letterSpacing: 2, fontSize: 15),
                   ),

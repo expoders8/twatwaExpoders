@@ -106,9 +106,11 @@ class _CommnetsLikeWidgetState extends State<CommnetsLikeWidget> {
                           scale: 1.5,
                         ),
                       ),
+                // ignore: unrelated_type_equality_checks
                 widget.likeCount != "0"
                     ? const SizedBox(width: 5)
                     : Container(),
+                // ignore: unrelated_type_equality_checks
                 widget.likeCount != "0"
                     ? Text(
                         widget.likeCount.toString(),

@@ -538,7 +538,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
 
   commentSend() async {
     FocusScope.of(context).requestFocus(FocusNode());
-    LoaderX.show(context, 70.0);
+    // LoaderX.show(context, 70.0);
     await commnetsService
         .addComment(userId, widget.videoId, commentController.text,
             widget.commentId, "reply")

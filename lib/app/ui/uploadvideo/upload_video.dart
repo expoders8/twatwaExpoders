@@ -598,7 +598,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
           (value) async {
             if (value['success']) {
               LoaderX.hide();
-              Get.toNamed(Routes.profilePage);
+              Get.toNamed(Routes.videoUploadedPage);
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(

@@ -26,7 +26,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final MyVideoController myVideoController = Get.put(MyVideoController());
   int tabindex = 0,
       usertotalViews = 0,
       usertotalVideos = 0,
@@ -81,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: kBackGroundColor,
       body: WillPopScope(
         onWillPop: () {
-          Get.offAll(() => const TabPage());
+          Get.back();
           return Future.value(false);
         },
         child: GestureDetector(
@@ -235,7 +234,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: tabindex == 0
                                           ? const MyVideoPage()
                                           : tabindex == 1
-                                              ? const MyPlaylistPage()
+                                              ? const MyPlaylistPage(
+                                                  checkText: "my")
                                               : tabindex == 2
                                                   ? const AnalyticsPage()
                                                   : tabindex == 3
@@ -362,7 +362,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Container(
                       padding:
-                          const EdgeInsets.only(top: 42, left: 20, bottom: 10),
+                          const EdgeInsets.only(top: 20, left: 20, bottom: 0),
                       decoration: const BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
@@ -370,11 +370,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.offAll(() => const TabPage());
+                          IconButton(
+                            onPressed: () {
+                              Get.back();
                             },
-                            child: Padding(
+                            icon: Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Image.asset(
                                 "assets/icons/back.png",

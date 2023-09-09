@@ -20,14 +20,6 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
       Get.put(GetAllVideoLandingController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      videoController.fetchAllLandingVideos();
-    });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

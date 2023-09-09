@@ -23,9 +23,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
       Get.put(VideoDetailController());
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      videoController.fetchAllLandingVideos();
-    });
+    videoController.fetchAllLandingVideos();
 
     super.initState();
   }

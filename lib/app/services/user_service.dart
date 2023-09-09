@@ -19,7 +19,7 @@ class UserService {
       var token = box.read('authToken');
       http.Response response;
       var request = http.MultipartRequest(
-          "POST", Uri.parse("$baseUrl/api/User/UpdateProfile"))
+          "POST", Uri.parse("$baseUrl/userapi/api/User/UpdateProfile"))
         ..fields['userId'] = userId
         ..fields['firstName'] = firstName
         ..fields['lastName'] = lastName
@@ -30,7 +30,10 @@ class UserService {
         request.files.add(await http.MultipartFile.fromPath(
             'profilePhoto', profilePhoto.path));
       }
-      request.headers.addAll({"Authorization": "Bearer $token"});
+      request.headers.addAll({
+        "Authorization": "Bearer $token",
+        'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       response = await http.Response.fromStream(await request.send());
 
       if (response.statusCode == 200) {

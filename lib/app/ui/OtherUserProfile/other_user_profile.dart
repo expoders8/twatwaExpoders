@@ -125,11 +125,11 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              buildTabSelection("Home", 90.0, 0),
-                              buildTabSelection("Videos", 100.0, 1),
-                              buildTabSelection("Playlist", 100.0, 2),
-                              buildTabSelection("Followers", 100.0, 3),
-                              buildTabSelection("Following", 100.0, 4),
+                              // buildTabSelection("Home", 90.0, 0),
+                              buildTabSelection("Videos", 100.0, 0),
+                              buildTabSelection("Playlist", 100.0, 1),
+                              buildTabSelection("Followers", 100.0, 2),
+                              buildTabSelection("Following", 100.0, 3),
                             ],
                           ),
                         ),
@@ -138,18 +138,19 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                           child: SizedBox(
                               height: Get.height,
                               child: tabindex == 0
-                                  ? const OtherUserHomePage()
+                                  ? OtherUserVideoPage(
+                                      userId: widget.userId,
+                                    )
                                   : tabindex == 1
-                                      ? OtherUserVideoPage(
+                                      ? MyPlaylistPage(
                                           userId: widget.userId,
+                                          checkText: "other",
                                         )
                                       : tabindex == 2
-                                          ? const MyPlaylistPage()
+                                          ? const FollowersPage()
                                           : tabindex == 3
-                                              ? const FollowersPage()
-                                              : tabindex == 4
-                                                  ? const FollowingPage()
-                                                  : Container()),
+                                              ? const FollowingPage()
+                                              : Container()),
                         )
                       ],
                     ),
@@ -214,7 +215,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                   children: [
                     Container(
                       padding:
-                          const EdgeInsets.only(top: 42, left: 20, bottom: 10),
+                          const EdgeInsets.only(top: 20, left: 20, bottom: 0),
                       decoration: const BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
@@ -222,11 +223,11 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () {
+                          IconButton(
+                            onPressed: () {
                               Get.back();
                             },
-                            child: Padding(
+                            icon: Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Image.asset(
                                 "assets/icons/back.png",

@@ -121,72 +121,6 @@ class MyVideoController extends GetxController {
   }
 }
 
-class UpNextVideoController extends GetxController {
-  var isLoading = true.obs;
-  VideoService videoService = VideoService();
-  var videoList = <GetAllVideoModel>[].obs;
-
-  void fetchUpNextVideo(String categoryId, userId) async {
-    try {
-      isLoading(true);
-      var stories = await videoService.getAllUpNextVideo(categoryId, userId);
-      if (stories.data != null) {
-        videoList.assign(stories);
-      }
-    } finally {
-      isLoading(false);
-    }
-  }
-}
-
-class EducationVideoController extends GetxController {
-  var isLoading = true.obs;
-  VideoService videoService = VideoService();
-  var videoList = <GetAllVideoModel>[].obs;
-
-  @override
-  void onInit() {
-    fetchVideo();
-    super.onInit();
-  }
-
-  createRequest() {
-    VideoRequestModel getRequest = VideoRequestModel();
-    getRequest.videoId = null;
-    getRequest.userId = null;
-    getRequest.userName = "";
-    getRequest.videoType = "";
-    getRequest.currentUserId = null;
-    getRequest.categoryId = "e4a906a6-67c8-4ef4-bce3-975543ead8d3";
-    getRequest.thumbnailId = null;
-    getRequest.categoryName = "";
-    getRequest.playlistId = null;
-    getRequest.videoReferenceId = "";
-    getRequest.videoEncoderReference = "";
-    getRequest.visibleStatus = "";
-    getRequest.videoUploadStatus = "";
-    getRequest.requestType = "";
-    getRequest.hashTag = "";
-    getRequest.pageNumber = 1;
-    getRequest.pageSize = 10;
-    getRequest.searchText = "";
-    getRequest.sortBy = "";
-    return getRequest;
-  }
-
-  void fetchVideo() async {
-    try {
-      isLoading(true);
-      var stories = await videoService.getAllVideo(createRequest());
-      if (stories.data != null) {
-        videoList.assign(stories);
-      }
-    } finally {
-      isLoading(false);
-    }
-  }
-}
-
 class VideoOfTheDayController extends GetxController {
   var isLoading = true.obs;
   VideoService videoService = VideoService();
@@ -211,7 +145,8 @@ class VideoOfTheDayController extends GetxController {
         currentUserId.toString() == "" ? null : currentUserId.toString();
     getRequest.userName = "";
     getRequest.videoType = "";
-    getRequest.currentUserId = null;
+    getRequest.currentUserId =
+        currentUserId.toString() == "" ? null : currentUserId.toString();
     getRequest.categoryId = null;
     getRequest.thumbnailId = null;
     getRequest.categoryName = "";

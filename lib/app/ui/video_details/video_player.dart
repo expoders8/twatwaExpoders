@@ -20,8 +20,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       showOverlay = true,
       _isPlaying = false,
       click = false,
-      _isFullScreen = false,
-      _isLoaded = false;
+      _isFullScreen = false;
   int selectvideoQualityIndex = 6;
   String qualityname = "";
   @override
