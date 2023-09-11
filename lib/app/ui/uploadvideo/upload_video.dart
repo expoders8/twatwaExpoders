@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:opentrend/app/ui/uploadVideo/success_video_uploaded.dart';
 import 'package:video_player/video_player.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -544,7 +545,6 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                             borderRadius: BorderRadius.circular(25),
                             onPressed: () {
                               createVideo();
-                              // Get.toNamed(Routes.videoUploadedPage);
                             },
                             child: const Text(
                               'Save',
@@ -598,11 +598,11 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
           (value) async {
             if (value['success']) {
               LoaderX.hide();
-              Get.toNamed(Routes.videoUploadedPage);
+              Get.offAll(() => const VideoUploadedPage());
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(
-                  "Failed to Upload video", value.message.toString());
+                  "Failed to Upload video", value['message'].toString());
             }
             return null;
           },

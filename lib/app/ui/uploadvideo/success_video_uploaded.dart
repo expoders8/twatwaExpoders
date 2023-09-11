@@ -39,60 +39,66 @@ class _VideoUploadedPageState extends State<VideoUploadedPage> {
         ),
         elevation: 1,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-          ),
-          child: Column(
-            children: [
-              const SizedBox(height: 100),
-              Image.asset(
-                "assets/images/success.png",
-                scale: 1.8,
-              ),
-              const SizedBox(height: 40),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Text(
-                    "Congratulations you are live now.🤟",
-                    style: TextStyle(
-                        color: kTextsecondarytopColor,
-                        fontSize: 19,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: 5),
-                  SizedBox(
-                    width: 280,
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      body: WillPopScope(
+        onWillPop: () {
+          Get.offAll(() => const TabPage());
+          return Future.value(false);
+        },
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 100),
+                Image.asset(
+                  "assets/images/success.png",
+                  scale: 1.8,
+                ),
+                const SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Congratulations you are live now.🤟",
                       style: TextStyle(
-                        color: kTextsecondarybottomColor,
-                        fontSize: 12,
+                          color: kTextsecondarytopColor,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      width: 280,
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        style: TextStyle(
+                          color: kTextsecondarybottomColor,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 50),
-              SizedBox(
-                width: Get.width,
-                child: CupertinoButton(
-                  color: kButtonColor,
-                  borderRadius: BorderRadius.circular(25),
-                  onPressed: () {
-                    Get.toNamed(Routes.profilePage);
-                  },
-                  child: const Text(
-                    'Go To MyVideos',
-                    style: TextStyle(
-                        color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                  ],
+                ),
+                const SizedBox(height: 50),
+                SizedBox(
+                  width: Get.width,
+                  child: CupertinoButton(
+                    color: kButtonColor,
+                    borderRadius: BorderRadius.circular(25),
+                    onPressed: () {
+                      Get.toNamed(Routes.profilePage);
+                    },
+                    child: const Text(
+                      'Go To MyVideos',
+                      style: TextStyle(
+                          color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

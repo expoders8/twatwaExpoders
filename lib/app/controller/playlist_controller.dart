@@ -8,6 +8,12 @@ class PlaylistController extends GetxController {
   var playList = <PlaylistModel>[].obs;
   PlaylistService playlistService = PlaylistService();
 
+  @override
+  void onInit() {
+    fetchAllPlaylist("", "");
+    super.onInit();
+  }
+
   void fetchAllPlaylist(String userId, checkOtherplaylist) async {
     try {
       isLoading(true);

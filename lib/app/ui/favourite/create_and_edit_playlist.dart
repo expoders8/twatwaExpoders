@@ -207,7 +207,7 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(
-                  "Failed to SignUp", value.message.toString());
+                  "Failed to SignUp", value['message'].toString());
             }
             return null;
           },
@@ -246,7 +246,7 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(
-                  "Failed to SignUp", value.message.toString());
+                  "Failed to SignUp", value['message'].toString());
             }
             return null;
           },

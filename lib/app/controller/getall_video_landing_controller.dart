@@ -8,6 +8,12 @@ class GetAllVideoLandingController extends GetxController {
   var videoList = <GetAllVideoLanding>[].obs;
   VideoService videoService = VideoService();
 
+  @override
+  void onInit() {
+    fetchAllLandingVideos();
+    super.onInit();
+  }
+
   void fetchAllLandingVideos() async {
     try {
       isLoading(true);

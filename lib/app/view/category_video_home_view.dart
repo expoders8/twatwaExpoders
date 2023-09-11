@@ -21,12 +21,6 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
       Get.put(GetAllVideoLandingController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
-  @override
-  void initState() {
-    videoController.fetchAllLandingVideos();
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

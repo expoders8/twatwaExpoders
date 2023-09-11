@@ -2,18 +2,19 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/follower_service.dart';
 import '../../services/video_service.dart';
 import '../profile/Followers/followers.dart';
 import '../profile/Following/following.dart';
 import '../profile/MyPlaylist/myplaylist.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/snackbar_provider.dart';
-import '../OtherUserProfile/OtherUserHome/other_user_home.dart';
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';
 
 class OtherUserProfilePage extends StatefulWidget {
   final String? userId;
-  const OtherUserProfilePage({super.key, this.userId});
+  final String? followcheck;
+  const OtherUserProfilePage({super.key, this.userId, this.followcheck});
 
   @override
   State<OtherUserProfilePage> createState() => _OtherUserProfilePageState();
@@ -25,11 +26,24 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
       usertotalVideos = 0,
       usertotalFollowings = 0,
       usertotalFollowers = 0;
-  String followButton = "follow", userImage = "", userName = "";
+  String followButton = "follow",
+      userImage = "",
+      userName = "",
+      followtext = "FOLLOW";
+  bool firsttime = true;
   VideoService videoService = VideoService();
+  FollowerService followerService = FollowerService();
   @override
   void initState() {
     callApi();
+    setState(() {
+      if (firsttime) {
+        var xx = widget.followcheck.toString() == "UNFOLLOW"
+            ? "Following"
+            : "Follow";
+        followtext = xx;
+      }
+    });
     super.initState();
   }
 
@@ -83,34 +97,58 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                         Center(
                           child: GestureDetector(
                             onTap: () {
-                              if (followButton == "follow") {
-                                setState(() {
-                                  followButton = "following";
-                                });
-                              } else {
-                                if (followButton == "following") {
-                                  setState(() {
-                                    followButton = "follow";
-                                  });
-                                }
-                              }
+                              // if (followButton == "follow") {
+                              //   setState(() {
+                              //     followButton = "following";
+                              //   });
+                              // } else {
+                              //   if (followButton == "following") {
+                              //     setState(() {
+                              //       followButton = "follow";
+                              //     });
+                              //   }
+                              // }
+                              followerService
+                                  .followAndUnfollow(widget.userId.toString())
+                                  .then((value) => {
+                                        if (value['success'])
+                                          {
+                                            if (followtext == "Follow")
+                                              {
+                                                setState(() {
+                                                  firsttime = false;
+                                                  followtext = "Following";
+                                                })
+                                              }
+                                            else
+                                              {
+                                                if (followtext == "Following")
+                                                  {
+                                                    setState(() {
+                                                      firsttime = false;
+                                                      followtext = "Follow";
+                                                    })
+                                                  }
+                                              }
+                                          }
+                                      });
                             },
                             child: Container(
                               width: 120,
                               padding: const EdgeInsets.all(11),
                               decoration: BoxDecoration(
-                                color: followButton == "follow"
+                                color: followtext == "Follow"
                                     ? kButtonColor
-                                    : kButtonSecondaryColor,
+                                    : kBackGroundColor,
+                                border:
+                                    Border.all(width: 1, color: kButtonColor),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    followButton == "follow"
-                                        ? "24 k Follower"
-                                        : "Following",
+                                    followtext,
                                     style: const TextStyle(
                                         fontSize: 13, color: kWhiteColor),
                                   ),

@@ -61,8 +61,8 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
 
                 if (discoverData.isNotEmpty) {
                   var data = discoverData[index];
-                  int minutes = (data.videoDurationInSeconds! / 60).floor();
-                  int seconds = (data.videoDurationInSeconds! % 60).toInt();
+                  int minutes = (data['videoDurationInSeconds']! / 60).floor();
+                  int seconds = (data['videoDurationInSeconds']! % 60).toInt();
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
@@ -79,7 +79,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                                 width: 150,
                                 height: 100,
                                 child: Image.network(
-                                  data.videoThumbnailImagePath.toString(),
+                                  data['videoThumbnailImagePath'].toString(),
                                   errorBuilder: (context, error, stackTrace) =>
                                       Image.asset(
                                     "assets/images/tranding1.png",
@@ -115,7 +115,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                               SizedBox(
                                 width: 130,
                                 child: Text(
-                                  data.title.toString(),
+                                  data['title'].toString(),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -126,7 +126,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                "${data.numberOfViews} views",
+                                "${data['numberOfViews']} views",
                                 style: const TextStyle(
                                     color: kTextsecondarybottomColor,
                                     fontSize: 12),

@@ -273,7 +273,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(
-                  "Failed to Login", value.message.toString());
+                  "Failed to Update Profile", value.message.toString());
             }
             return null;
           },

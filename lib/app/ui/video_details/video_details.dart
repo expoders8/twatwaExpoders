@@ -4,24 +4,24 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:opentrend/app/ui/OtherUserProfile/other_user_profile.dart';
-import 'package:opentrend/app/ui/video_details/video_player.dart';
+import 'package:shimmer/shimmer.dart';
 
-import '../../../config/constant/constant.dart';
-import '../../controller/video_controller.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
-import '../widgets/no_user_login_dialog.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/playlist_widget.dart';
 import '../../services/video_service.dart';
 import '../video_details/about/about.dart';
+import '../video_details/video_player.dart';
 import '../video_details/upNext/upnext.dart';
+import '../../services/follower_service.dart';
+import '../widgets/no_user_login_dialog.dart';
+import '../../../config/constant/constant.dart';
 import '../video_details/comments/comments.dart';
+import '../OtherUserProfile/other_user_profile.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../controller/video_detail_controller.dart';
-import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/dotted_line_provider.dart';
 
 class VideoDetailsPage extends StatefulWidget {
@@ -37,6 +37,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  FollowerService followerService = FollowerService();
   int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
   String qualityname = "",
       followtext = "FOLLOW",
@@ -47,7 +48,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
 
   VideoService videoService = VideoService();
 
-  bool isChecked = false, showOverlay = true, click = false;
+  bool isChecked = false, showOverlay = true, click = false, onetime = true;
   @override
   void initState() {
     super.initState();
@@ -86,10 +87,21 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       },
       child: Obx(() {
         if (videoDetailController.isLoading.value) {
-          return Scaffold(body: LoaderUtils.showLoader());
+          return Scaffold(
+              body: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                buildLazyloading(),
+              ],
+            ),
+          ));
         } else {
           var data = videoDetailController.detailModel;
           var detailData = data!.data;
+          if (onetime) {
+            followtext = detailData!.hasFollowers! ? "UNFOLLOW" : "FOLLOW";
+          }
           String formattedDate = DateFormat('yyyy-MMMM-dd')
               .format(DateTime.parse(detailData!.createdOn.toString()));
           final splittedDate = formattedDate.split("-");
@@ -114,20 +126,21 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                             (BuildContext context, bool innerBoxScrolled) {
                           return <Widget>[
                             createSilverAppBar1(
-                                detailData.title.toString(),
-                                detailData.userName,
-                                detailData.numberOfViews,
-                                detailData.numberOfLikes,
-                                detailData.numberOfDislikes,
-                                splitday,
-                                splitmonth,
-                                splityear,
-                                detailData.id,
-                                detailData.isLiked,
-                                detailData.isDisliked,
-                                detailData.userProfileImage.toString() ?? "",
-                                detailData.numberOfFollowers,
-                                detailData.userId),
+                              detailData.title.toString(),
+                              detailData.userName,
+                              detailData.numberOfViews,
+                              detailData.numberOfLikes,
+                              detailData.numberOfDislikes,
+                              splitday,
+                              splitmonth,
+                              splityear,
+                              detailData.id,
+                              detailData.isLiked,
+                              detailData.isDisliked,
+                              detailData.userProfileImage.toString() ?? "",
+                              detailData.numberOfFollowers,
+                              detailData.userId,
+                            ),
                           ];
                         },
                         body: Container(
@@ -179,20 +192,21 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   }
 
   SliverAppBar createSilverAppBar1(
-      String title,
-      username,
-      numberOfViews,
-      islikeValue,
-      isdislikeValue,
-      day,
-      month,
-      year,
-      id,
-      isLiked,
-      isDisliked,
-      userImage,
-      numberOfFollwers,
-      userId) {
+    String title,
+    username,
+    numberOfViews,
+    islikeValue,
+    isdislikeValue,
+    day,
+    month,
+    year,
+    id,
+    isLiked,
+    isDisliked,
+    userImage,
+    numberOfFollwers,
+    userId,
+  ) {
     var followcheck = numberOfFollwers == 0 ? "Follwer" : "Follwers";
     return SliverAppBar(
       automaticallyImplyLeading: false,
@@ -316,8 +330,8 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               OtherUserProfilePage(
-                                            userId: userId,
-                                          ),
+                                                  userId: userId,
+                                                  followcheck: followtext),
                                         ),
                                       )
                                 : loginConfirmationDialog();
@@ -392,79 +406,97 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            authToken != ""
-                                ? Get.toNamed(Routes.checkOutPaymentPage)
-                                : loginConfirmationDialog();
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.only(
-                                top: 10, bottom: 10, right: 6, left: 6),
-                            margin: const EdgeInsets.only(right: 5),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xD212D2D9), width: 1),
-                                borderRadius: BorderRadius.circular(25)),
-                            // width: 150,
-                            child: Row(
-                              children: const [
-                                Text(
-                                  'DONATE',
-                                  style: TextStyle(
-                                      color: Color(0xD212D2D9),
-                                      letterSpacing: 1.5,
-                                      fontSize: 10),
+                    currntuserId == userId
+                        ? Container()
+                        : Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  authToken != ""
+                                      ? Get.toNamed(Routes.checkOutPaymentPage)
+                                      : loginConfirmationDialog();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, right: 6, left: 6),
+                                  margin: const EdgeInsets.only(right: 5),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xD212D2D9),
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(25)),
+                                  // width: 150,
+                                  child: Row(
+                                    children: const [
+                                      Text(
+                                        'DONATE',
+                                        style: TextStyle(
+                                            color: Color(0xD212D2D9),
+                                            letterSpacing: 1.5,
+                                            fontSize: 10),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (authToken != "") {
+                                    followerService
+                                        .followAndUnfollow(userId)
+                                        .then((value) => {
+                                              if (value['success'])
+                                                {
+                                                  if (followtext == "FOLLOW")
+                                                    {
+                                                      setState(() {
+                                                        onetime = false;
+                                                        followtext = "UNFOLLOW";
+                                                      })
+                                                    }
+                                                  else
+                                                    {
+                                                      if (followtext ==
+                                                          "UNFOLLOW")
+                                                        {
+                                                          setState(() {
+                                                            onetime = false;
+                                                            followtext =
+                                                                "FOLLOW";
+                                                          })
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                  } else {
+                                    loginConfirmationDialog();
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, right: 6, left: 6),
+                                  margin: const EdgeInsets.only(right: 24),
+                                  decoration: BoxDecoration(
+                                      color: followtext == "FOLLOW"
+                                          ? kButtonColor
+                                          : kBackGroundColor,
+                                      border: Border.all(
+                                          width: 1,
+                                          color: followtext == "FOLLOW"
+                                              ? kButtonColor
+                                              : kButtonSecondaryColor),
+                                      borderRadius: BorderRadius.circular(25)),
+                                  child: Text(
+                                    followtext,
+                                    style: const TextStyle(
+                                        color: kWhiteColor,
+                                        letterSpacing: 1.5,
+                                        fontSize: 10),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (authToken != "") {
-                              if (followtext == "FOLLOW") {
-                                setState(() {
-                                  followtext = "UNFOLLOW";
-                                });
-                              } else {
-                                if (followtext == "UNFOLLOW") {
-                                  setState(() {
-                                    followtext = "FOLLOW";
-                                  });
-                                }
-                              }
-                            } else {
-                              loginConfirmationDialog();
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.only(
-                                top: 10, bottom: 10, right: 6, left: 6),
-                            margin: const EdgeInsets.only(right: 24),
-                            decoration: BoxDecoration(
-                                color: followtext == "FOLLOW"
-                                    ? kButtonColor
-                                    : kBackGroundColor,
-                                border: Border.all(
-                                    width: 1,
-                                    color: followtext == "FOLLOW"
-                                        ? kButtonColor
-                                        : kButtonSecondaryColor),
-                                borderRadius: BorderRadius.circular(25)),
-                            child: Text(
-                              followtext,
-                              style: const TextStyle(
-                                  color: kWhiteColor,
-                                  letterSpacing: 1.5,
-                                  fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -517,9 +549,277 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   }
 }
 
-class ListItem {
-  final String title;
-  bool isSelected;
+buildLazyloading() {
+  return SizedBox(
+    width: Get.width,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Shimmer.fromColors(
+          baseColor: kButtonSecondaryColor,
+          highlightColor: kShimmerEffectSecondary,
+          enabled: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: Get.width,
+                  height: 200,
+                  color: Colors.white,
+                ),
+              ),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 155,
+                          height: 12.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 155,
+                          height: 12.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 155,
+                          height: 12.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 155,
+                          height: 12.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 70,
+                      height: 12.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 70,
+                      height: 12.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 70,
+                      height: 12.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 70,
+                      height: 12.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.white,
+                      ),
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 70,
+                          height: 10.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 70,
+                          height: 10.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      height: 40,
+                      width: 75,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      height: 40,
+                      width: 75,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 100,
+                      height: 10.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 100,
+                      height: 10.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 100,
+                      height: 10.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              buildLazyloadingbottom()
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
-  ListItem(this.title, this.isSelected);
+buildLazyloadingbottom() {
+  return SizedBox(
+    height: 400,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Shimmer.fromColors(
+                baseColor: kButtonSecondaryColor,
+                highlightColor: kShimmerEffectSecondary,
+                enabled: true,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(top: 10),
+                  itemCount: 6,
+                  itemBuilder: (_, __) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          color: Colors.white,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const SizedBox(height: 5),
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Container(
+                                width: 40.0,
+                                height: 8.0,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
