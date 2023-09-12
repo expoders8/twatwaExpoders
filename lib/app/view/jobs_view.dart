@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../config/constant/constant.dart';
 import '../models/video_model.dart';
 import '../routes/app_pages.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../services/video_service.dart';
+import '../ui/OtherUserProfile/other_user_profile.dart';
 
 // ignore: camel_case_types
 class JobsViewPage extends StatefulWidget {
@@ -27,6 +31,7 @@ class _JobsViewPageState extends State<JobsViewPage> {
   bool _isFirstLoadRunning = false;
   bool _isLoadMoreRunning = false;
   late Future<GetAllVideoModel> _future;
+  String userId = "";
   VideoService videoService = VideoService();
   ScrollController _scrollController = ScrollController();
   createRequest() {
@@ -61,6 +66,16 @@ class _JobsViewPageState extends State<JobsViewPage> {
       _future = videoService.getAllVideo(createRequest());
       setState(() {
         _isFirstLoadRunning = false;
+      });
+    }
+  }
+
+  Future getUser() async {
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    if (getUserData != null) {
+      setState(() {
+        userId = getUserData['id'] ?? "";
       });
     }
   }
@@ -106,6 +121,7 @@ class _JobsViewPageState extends State<JobsViewPage> {
 
   @override
   void initState() {
+    getUser();
     getitem();
     _scrollController = ScrollController()
       ..addListener(() {
@@ -187,16 +203,16 @@ class _JobsViewPageState extends State<JobsViewPage> {
                                         data.numberOfFollowers == 0
                                             ? "Follwer"
                                             : "Follwers";
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(Routes.videoDetailsPage);
-                                        // videoDetailController.videoId(data.id.toString());
-                                      },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(
+                                                Routes.videoDetailsPage);
+                                          },
+                                          child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Stack(
                                               children: [
@@ -240,98 +256,112 @@ class _JobsViewPageState extends State<JobsViewPage> {
                                               ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0, top: 8),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 2.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 170,
-                                                        child: Text(
-                                                          data.title.toString(),
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  kTextsecondarytopColor,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      Text(
-                                                        "${data.numberOfViews.toString()} views",
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, top: 8),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 2.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 170,
+                                                      child: Text(
+                                                        data.title.toString(),
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: const TextStyle(
                                                             color:
-                                                                kTextsecondarybottomColor,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 0.0,
-                                                              top: 2),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          SizedBox(
-                                                            width: 100,
-                                                            child: Text(
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              data.userName
-                                                                  .toString(),
-                                                              style: const TextStyle(
-                                                                  color:
-                                                                      kTextsecondarytopColor,
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 5),
-                                                          Text(
-                                                            "${data.numberOfFollowers} $followcheck",
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  kTextsecondarybottomColor,
-                                                              fontSize: 11,
-                                                            ),
-                                                          ),
-                                                        ],
+                                                                kTextsecondarytopColor,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 5),
-                                                    SizedBox(
+                                                    const SizedBox(height: 5),
+                                                    Text(
+                                                      "${data.numberOfViews.toString()} views",
+                                                      style: const TextStyle(
+                                                          color:
+                                                              kTextsecondarybottomColor,
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 0.0, top: 2),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 100,
+                                                          child: Text(
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            data.userName
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    kTextsecondarytopColor,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 5),
+                                                        Text(
+                                                          "${data.numberOfFollowers} $followcheck",
+                                                          style:
+                                                              const TextStyle(
+                                                            color:
+                                                                kTextsecondarybottomColor,
+                                                            fontSize: 11,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      userId == data.userId
+                                                          ? Container()
+                                                          : Navigator.of(
+                                                                  context)
+                                                              .push(
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    OtherUserProfilePage(
+                                                                        userId: data
+                                                                            .userId,
+                                                                        followcheck:
+                                                                            ""),
+                                                              ),
+                                                            );
+                                                    },
+                                                    child: SizedBox(
                                                       height: 37,
                                                       width: 37,
                                                       child: ClipRRect(
@@ -374,15 +404,15 @@ class _JobsViewPageState extends State<JobsViewPage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 12),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(height: 15),
-                                        ],
-                                      ),
+                                        ),
+                                        const SizedBox(height: 15),
+                                      ],
                                     );
                                   } else {
                                     return const Center(

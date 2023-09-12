@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:opentrend/app/routes/app_pages.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../../config/constant/color_constant.dart';
 import '../home/tab_page.dart';
+import '../profile/profile.dart';
+import '../../../config/constant/color_constant.dart';
 
 class VideoUploadedPage extends StatefulWidget {
   const VideoUploadedPage({super.key});
@@ -88,7 +88,7 @@ class _VideoUploadedPageState extends State<VideoUploadedPage> {
                     color: kButtonColor,
                     borderRadius: BorderRadius.circular(25),
                     onPressed: () {
-                      Get.toNamed(Routes.profilePage);
+                      Get.offAll(() => const ProfilePage());
                     },
                     child: const Text(
                       'Go To MyVideos',

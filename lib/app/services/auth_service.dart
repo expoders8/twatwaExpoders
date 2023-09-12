@@ -7,11 +7,12 @@ import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
 
 class AuthService {
-  Future<LoginModel> login(String email, String password) async {
+  Future<LoginModel> login(String email, String password, fcmtoken) async {
     try {
       var response = await http.post(
           Uri.parse('$baseUrl/userapi/api/Auth/Login'),
-          body: json.encode({"email": email, "password": password}),
+          body: json.encode(
+              {"email": email, "password": password, "fcmToken": fcmtoken}),
           headers: {
             'Content-type': 'application/json',
             'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
@@ -38,7 +39,7 @@ class AuthService {
   }
 
   Future<SignUpModel> signUp(String firstName, String lastName, String emailId,
-      String password, String userName, String phoneNumber) async {
+      String password, String userName, String phoneNumber, fcmtoken) async {
     try {
       var response =
           await http.post(Uri.parse('$baseUrl/userapi/api/Auth/Register'),
@@ -49,6 +50,7 @@ class AuthService {
                 "password": password,
                 "userName": userName,
                 "phoneNumber": phoneNumber,
+                "fcmToken": fcmtoken
               }),
               headers: {
             'Content-type': 'application/json',
@@ -78,8 +80,11 @@ class AuthService {
   verifyEmail(String token) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/userapi/api/User/VerifyEmail?token=$token'),
-      );
+          Uri.parse('$baseUrl/userapi/api/User/VerifyEmail?token=$token'),
+          headers: {
+            'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return decodedUser;

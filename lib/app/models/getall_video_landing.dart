@@ -31,16 +31,12 @@ class GetAllVideoLandingData {
   List<DisocverVideo>? disocverVideo;
   List? trendingVideo;
   List? followingVideo;
-  List? categoriesVideo;
-  VideoOfTheDay? videoOfTheDay;
   List<Categories>? categories;
 
   GetAllVideoLandingData(
       {this.disocverVideo,
       this.trendingVideo,
       this.followingVideo,
-      this.categoriesVideo,
-      this.videoOfTheDay,
       this.categories});
 
   GetAllVideoLandingData.fromJson(Map<String, dynamic> json) {
@@ -62,10 +58,7 @@ class GetAllVideoLandingData {
         followingVideo!.add(v);
       });
     }
-    categoriesVideo = json['categoriesVideo'];
-    videoOfTheDay = json['videoOfTheDay'] != null
-        ? VideoOfTheDay.fromJson(json['videoOfTheDay'])
-        : null;
+
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
@@ -85,10 +78,7 @@ class GetAllVideoLandingData {
     if (followingVideo != null) {
       data['followingVideo'] = followingVideo!.map((v) => v.toJson()).toList();
     }
-    data['categoriesVideo'] = categoriesVideo;
-    if (videoOfTheDay != null) {
-      data['videoOfTheDay'] = videoOfTheDay!.toJson();
-    }
+
     if (categories != null) {
       data['categories'] = categories!.map((v) => v.toJson()).toList();
     }

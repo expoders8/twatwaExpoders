@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../services/fcm_notification_service.dart';
 import '../../home/tab_page.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/auth_service.dart';
@@ -22,9 +23,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isFormSubmitted = false;
   final _loginFormKey = GlobalKey<FormState>();
+  String fcmToken = '';
   AuthService authService = AuthService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  FCMNotificationServices fCMNotificationServices = FCMNotificationServices();
+
+  @override
+  void initState() {
+    super.initState();
+    fCMNotificationServices.requestNotificationPermission();
+    // notificationServices.isTokenRefresh();
+    fCMNotificationServices.firebaseInit();
+    fCMNotificationServices.getDeviceToken().then((value) => fcmToken = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,10 +229,7 @@ class _LoginPageState extends State<LoginPage> {
       if (_loginFormKey.currentState!.validate()) {
         LoaderX.show(context, 70.0);
         await authService
-            .login(
-          emailController.text,
-          passwordController.text,
-        )
+            .login(emailController.text, passwordController.text, fcmToken)
             .then(
           (value) async {
             if (value.success == true) {

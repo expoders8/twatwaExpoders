@@ -80,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: kBackGroundColor,
       body: WillPopScope(
         onWillPop: () {
-          Navigator.of(context).pop();
+          Get.offAll(() => const TabPage());
           return Future.value(false);
         },
         child: GestureDetector(
@@ -372,7 +372,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Get.offAll(() => const TabPage());
                             },
                             icon: Padding(
                               padding: const EdgeInsets.only(left: 8.0),

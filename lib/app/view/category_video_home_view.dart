@@ -6,7 +6,6 @@ import '../routes/app_pages.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
-import '../../../../config/provider/loader_provider.dart';
 import '../controller/getall_video_landing_controller.dart';
 
 class CategoryVideoHomeView extends StatefulWidget {
@@ -35,8 +34,8 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
           ),
         );
       } else {
-        if (videoController.videoList.isNotEmpty) {
-          if (videoController.videoList[0].data!.categories!.isEmpty) {
+        if (videoController.videoList[0].data != null) {
+          if (videoController.videoList[0].data == null) {
             return Center(
               child: SizedBox(
                 width: Get.width - 80,

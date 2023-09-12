@@ -28,7 +28,7 @@ class NoUserLoginDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Get.back();
+            Navigator.of(context).pop();
           },
           child: const Text(
             'Cancel',

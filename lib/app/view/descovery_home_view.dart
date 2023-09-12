@@ -34,7 +34,7 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
           ),
         );
       } else {
-        if (videoController.videoList.isNotEmpty) {
+        if (videoController.videoList[0].data != null) {
           if (videoController.videoList[0].data!.disocverVideo!.isEmpty) {
             return Center(
               child: SizedBox(

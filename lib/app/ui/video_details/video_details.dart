@@ -408,95 +408,108 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                     ),
                     currntuserId == userId
                         ? Container()
-                        : Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  authToken != ""
-                                      ? Get.toNamed(Routes.checkOutPaymentPage)
-                                      : loginConfirmationDialog();
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, right: 6, left: 6),
-                                  margin: const EdgeInsets.only(right: 5),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color(0xD212D2D9),
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(25)),
-                                  // width: 150,
-                                  child: Row(
-                                    children: const [
-                                      Text(
-                                        'DONATE',
-                                        style: TextStyle(
-                                            color: Color(0xD212D2D9),
-                                            letterSpacing: 1.5,
-                                            fontSize: 10),
+                        : authToken != ""
+                            ? Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      authToken != ""
+                                          ? Get.toNamed(
+                                              Routes.checkOutPaymentPage)
+                                          : loginConfirmationDialog();
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          right: 6,
+                                          left: 6),
+                                      margin: const EdgeInsets.only(right: 5),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color(0xD212D2D9),
+                                              width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      // width: 150,
+                                      child: Row(
+                                        children: const [
+                                          Text(
+                                            'DONATE',
+                                            style: TextStyle(
+                                                color: Color(0xD212D2D9),
+                                                letterSpacing: 1.5,
+                                                fontSize: 10),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (authToken != "") {
-                                    followerService
-                                        .followAndUnfollow(userId)
-                                        .then((value) => {
-                                              if (value['success'])
-                                                {
-                                                  if (followtext == "FOLLOW")
-                                                    {
-                                                      setState(() {
-                                                        onetime = false;
-                                                        followtext = "UNFOLLOW";
-                                                      })
-                                                    }
-                                                  else
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (authToken != "") {
+                                        followerService
+                                            .followAndUnfollow(userId)
+                                            .then((value) => {
+                                                  if (value['success'])
                                                     {
                                                       if (followtext ==
-                                                          "UNFOLLOW")
+                                                          "FOLLOW")
                                                         {
                                                           setState(() {
                                                             onetime = false;
                                                             followtext =
-                                                                "FOLLOW";
+                                                                "UNFOLLOW";
                                                           })
                                                         }
+                                                      else
+                                                        {
+                                                          if (followtext ==
+                                                              "UNFOLLOW")
+                                                            {
+                                                              setState(() {
+                                                                onetime = false;
+                                                                followtext =
+                                                                    "FOLLOW";
+                                                              })
+                                                            }
+                                                        }
                                                     }
-                                                }
-                                            });
-                                  } else {
-                                    loginConfirmationDialog();
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, right: 6, left: 6),
-                                  margin: const EdgeInsets.only(right: 24),
-                                  decoration: BoxDecoration(
-                                      color: followtext == "FOLLOW"
-                                          ? kButtonColor
-                                          : kBackGroundColor,
-                                      border: Border.all(
-                                          width: 1,
+                                                });
+                                      } else {
+                                        loginConfirmationDialog();
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          right: 6,
+                                          left: 6),
+                                      margin: const EdgeInsets.only(right: 24),
+                                      decoration: BoxDecoration(
                                           color: followtext == "FOLLOW"
                                               ? kButtonColor
-                                              : kButtonSecondaryColor),
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: Text(
-                                    followtext,
-                                    style: const TextStyle(
-                                        color: kWhiteColor,
-                                        letterSpacing: 1.5,
-                                        fontSize: 10),
+                                              : kBackGroundColor,
+                                          border: Border.all(
+                                              width: 1,
+                                              color: followtext == "FOLLOW"
+                                                  ? kButtonColor
+                                                  : kButtonSecondaryColor),
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: Text(
+                                        followtext,
+                                        style: const TextStyle(
+                                            color: kWhiteColor,
+                                            letterSpacing: 1.5,
+                                            fontSize: 10),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
+                                ],
+                              )
+                            : Container()
                   ],
                 ),
               ),

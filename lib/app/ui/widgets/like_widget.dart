@@ -44,6 +44,7 @@ class _LikeWidgetState extends State<LikeWidget> {
     getToken();
     isLikedState = widget.isLiked;
     isdisLikedState = widget.isdisLiked;
+    dislikedData = widget.dislikeCount.toString();
     super.initState();
   }
 
@@ -56,53 +57,30 @@ class _LikeWidgetState extends State<LikeWidget> {
 
   Future _toggleIsLikedState() async {
     if (getIsLikedState) {
-      setState(() => {isLikedState = false});
-      await likeStoryService.videoLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            setState(() {
-              likeeddata = value['data'].toString();
-            });
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      setState(() =>
+          {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
+      await likeStoryService.videoLike(widget.videoId).then((value) {
+        if (value["success"] == true) {
+          LoaderX.hide();
+        } else {
+          LoaderX.hide();
+          SnackbarUtils.showErrorSnackbar(value["message"], "");
+        }
+      });
     } else {
       setState(() => {
             isdisLikedState = false,
             isLikedState = true,
+            widget.likeCount = (widget.likeCount! + 1)
           });
-      if (!getIsdisLikedState) {
-        await likeStoryService.videoDisLike(widget.videoId).then(
-          (value) {
-            if (value["success"] == true) {
-              setState(() {
-                dislikedData = value['data'].toString();
-              });
-              LoaderX.hide();
-            } else {
-              LoaderX.hide();
-              SnackbarUtils.showErrorSnackbar(value["message"], "");
-            }
-          },
-        );
-      }
-      await likeStoryService.videoLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            setState(() {
-              likeeddata = value['data'].toString();
-            });
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      await likeStoryService.videoLike(widget.videoId).then((value) {
+        if (value["success"] == true) {
+          LoaderX.hide();
+        } else {
+          LoaderX.hide();
+          SnackbarUtils.showErrorSnackbar(value["message"], "");
+        }
+      });
     }
   }
 
@@ -110,56 +88,30 @@ class _LikeWidgetState extends State<LikeWidget> {
     if (getIsdisLikedState) {
       setState(() => {
             isdisLikedState = false,
+            widget.dislikeCount = widget.dislikeCount! - 1
           });
-      await likeStoryService.videoDisLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            setState(() {
-              dislikedData = value['data'].toString();
-            });
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      await likeStoryService.videoDisLike(widget.videoId).then((value) {
+        if (value["success"] == true) {
+          LoaderX.hide();
+        } else {
+          LoaderX.hide();
+          SnackbarUtils.showErrorSnackbar(value["message"], "");
+        }
+      });
     } else {
       setState(() => {
             isLikedState = false,
             isdisLikedState = true,
-            widget.likeCount == 0
-                ? Container()
-                : widget.likeCount = widget.likeCount! - 1
+            widget.dislikeCount = (widget.dislikeCount! + 1)
           });
-      if (!getIsLikedState) {
-        await likeStoryService.videoLike(widget.videoId).then(
-          (value) {
-            if (value["success"] == true) {
-              setState(() {
-                likeeddata = value['data'].toString();
-              });
-              LoaderX.hide();
-            } else {
-              LoaderX.hide();
-              SnackbarUtils.showErrorSnackbar(value["message"], "");
-            }
-          },
-        );
-      }
-      await likeStoryService.videoDisLike(widget.videoId).then(
-        (value) {
-          if (value["success"] == true) {
-            setState(() {
-              dislikedData = value['data'].toString();
-            });
-            LoaderX.hide();
-          } else {
-            LoaderX.hide();
-            SnackbarUtils.showErrorSnackbar(value["message"], "");
-          }
-        },
-      );
+      await likeStoryService.videoDisLike(widget.videoId).then((value) {
+        if (value["success"] == true) {
+          LoaderX.hide();
+        } else {
+          LoaderX.hide();
+          SnackbarUtils.showErrorSnackbar(value["message"], "");
+        }
+      });
     }
   }
 
@@ -210,9 +162,7 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.likeCount != "0"
                     ? Text(
-                        likeeddata == ""
-                            ? widget.likeCount.toString()
-                            : likeeddata,
+                        widget.likeCount.toString(),
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )
@@ -267,9 +217,7 @@ class _LikeWidgetState extends State<LikeWidget> {
                     : Container(),
                 widget.dislikeCount != "0"
                     ? Text(
-                        dislikedData == ""
-                            ? widget.dislikeCount.toString()
-                            : dislikedData,
+                        widget.dislikeCount.toString(),
                         style: const TextStyle(
                             fontSize: 16, color: kButtonSecondaryColor),
                       )

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../view/following_home_view.dart';
 import '../OtherUserProfile/other_user_profile.dart';
 import '../widgets/like_widget.dart';
 import '../../routes/app_pages.dart';
@@ -676,6 +677,37 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(
                                     height: 180,
                                     child: TrandingHomeView(),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 19),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: Image.asset(
+                                            "assets/icons/following.png",
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        const Text(
+                                          "Following",
+                                          style: TextStyle(
+                                              color: kTextsecondarytopColor,
+                                              fontSize: 13,
+                                              fontFamily: kFuturaPTDemi),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const SizedBox(
+                                    height: 180,
+                                    child: FollowingHomeView(),
                                   ),
                                 ],
                               ),

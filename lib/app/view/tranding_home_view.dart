@@ -34,7 +34,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
           ),
         );
       } else {
-        if (videoController.videoList.isNotEmpty) {
+        if (videoController.videoList[0].data != null) {
           if (videoController.videoList[0].data!.trendingVideo!.isEmpty) {
             return Center(
               child: SizedBox(

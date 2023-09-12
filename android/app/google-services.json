@@ -37,6 +37,13 @@
             {
               "client_id": "781774163103-dtji7sub3oji4hk71eknkurqr8i162nd.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "781774163103-111og9vt8acupskcqc9227u2oame7e3v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.opentrend"
+              }
             }
           ]
         }

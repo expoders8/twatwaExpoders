@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../routes/app_pages.dart';
-import '../models/user_list_model.dart';
+import '../controller/video_detail_controller.dart';
+import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
+import '../controller/getall_video_landing_controller.dart';
 
 class FollowingHomeView extends StatefulWidget {
   const FollowingHomeView({super.key});
@@ -13,97 +16,218 @@ class FollowingHomeView extends StatefulWidget {
 }
 
 class _FollowingHomeViewState extends State<FollowingHomeView> {
+  final GetAllVideoLandingController videoController =
+      Get.put(GetAllVideoLandingController());
+  final VideoDetailController videoDetailController =
+      Get.put(VideoDetailController());
+
   @override
   Widget build(BuildContext context) {
-    List<Videos> videos = [
-      Videos(
-        image: "assets/images/following1.png",
-        title: "Ed Sheeran - Shape of You",
-        views: "681,298 views",
-      ),
-      Videos(
-        image: "assets/images/following2.png",
-        title: "Marshmello & Anne-Marie Friends",
-        views: "1,854,681,298 views",
-      ),
-      Videos(
-        image: "assets/images/following3.png",
-        title: "The Chainsmokers & Coldplay - Something",
-        views: "681,298 views",
-      )
-    ];
-    return ListView.builder(
-      padding: const EdgeInsets.only(left: 15),
-      scrollDirection: Axis.horizontal,
-      itemCount: videos.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.videoDetailsPage);
-          },
+    return Obx(() {
+      if (videoController.isLoading.value) {
+        return SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      height: 100,
-                      child: Image.asset(
-                        videos[index].image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 10,
-                      top: 7,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: const Color.fromARGB(135, 0, 0, 0),
-                            borderRadius: BorderRadius.circular(4)),
-                        padding: const EdgeInsets.all(4),
-                        child: const Text(
-                          "12:23",
-                          style: TextStyle(color: kWhiteColor, fontSize: 12),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: 130,
-                      child: Text(
-                        videos[index].title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: kTextsecondarytopColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      videos[index].views,
-                      style: const TextStyle(
-                          color: kTextsecondarybottomColor, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
+              buildLazyloading(),
             ],
           ),
         );
-      },
+      } else {
+        if (videoController.videoList[0].data != null) {
+          if (videoController.videoList[0].data!.followingVideo!.isEmpty) {
+            return Center(
+              child: SizedBox(
+                width: Get.width - 80,
+                child: const Text(
+                  "Video not Found",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: kWhiteColor,
+                      fontSize: 15,
+                      fontFamily: kFuturaPTDemi),
+                ),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.only(left: 15, right: 5),
+              scrollDirection: Axis.horizontal,
+              itemCount:
+                  videoController.videoList[0].data!.followingVideo!.length,
+              itemBuilder: (context, index) {
+                var discoverData =
+                    videoController.videoList[0].data!.followingVideo!;
+                if (discoverData.isNotEmpty) {
+                  var data = discoverData[index];
+                  int minutes = (data['videoDurationInSeconds']! / 60).floor();
+                  int seconds = (data['videoDurationInSeconds']! % 60).toInt();
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.videoDetailsPage);
+                      videoDetailController.videoId(data.id.toString());
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                height: 100,
+                                child: Image.asset(
+                                  "assets/images/imagebg.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                right: 10,
+                                top: 7,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: const Color.fromARGB(135, 0, 0, 0),
+                                      borderRadius: BorderRadius.circular(4)),
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(
+                                    "$minutes : $seconds",
+                                    style: const TextStyle(
+                                        color: kWhiteColor, fontSize: 12),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: 130,
+                                child: Text(
+                                  data['title'].toString(),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: kTextsecondarytopColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "${data['numberOfViews'].toString()} views",
+                                style: const TextStyle(
+                                    color: kTextsecondarybottomColor,
+                                    fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Text(
+                      "Video not Found",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: kWhiteColor,
+                          fontSize: 15,
+                          fontFamily: kFuturaPTDemi),
+                    ),
+                  );
+                }
+              },
+            );
+          }
+        } else {
+          return const Center(
+            child: Text(
+              "Video not Found",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: kWhiteColor, fontSize: 15, fontFamily: kFuturaPTDemi),
+            ),
+          );
+        }
+      }
+    });
+  }
+
+  buildLazyloading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: kButtonSecondaryColor,
+              highlightColor: kShimmerEffectSecondary,
+              enabled: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const NeverScrollableScrollPhysics(),
+                child: Row(
+                  children: [
+                    buildcard(),
+                    buildcard(),
+                    buildcard(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildcard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 150,
+            height: 100,
+            color: Colors.white,
+          ),
+        ),
+        Row(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 150,
+                    height: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 150,
+                    height: 12.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

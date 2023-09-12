@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../../services/follower_service.dart';
 import '../../services/video_service.dart';
-import '../profile/Followers/followers.dart';
-import '../profile/Following/following.dart';
 import '../profile/MyPlaylist/myplaylist.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';
+import '../OtherUserProfile/OtherUserFollower/other_user_follower.dart';
+import '../OtherUserProfile/OtherUserFollowing/other_user_following.dart';
 
 class OtherUserProfilePage extends StatefulWidget {
   final String? userId;
@@ -185,9 +185,13 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                                           checkText: "other",
                                         )
                                       : tabindex == 2
-                                          ? const FollowersPage()
+                                          ? OtherUserFollowersPage(
+                                              userId: widget.userId,
+                                            )
                                           : tabindex == 3
-                                              ? const FollowingPage()
+                                              ? OtherUserFollowingPage(
+                                                  userId: widget.userId,
+                                                )
                                               : Container()),
                         )
                       ],

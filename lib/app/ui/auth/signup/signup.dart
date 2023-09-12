@@ -6,6 +6,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/fcm_notification_service.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/social_login_widget.dart';
 import '../../../../config/constant/font_constant.dart';
@@ -25,12 +26,20 @@ class _SignUpPageState extends State<SignUpPage> {
   final _signUpFormKey = GlobalKey<FormState>();
   AuthService authService = AuthService();
   String selectedCountrydialCode = '+91';
+  String fcmToken = '';
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  FCMNotificationServices fCMNotificationServices = FCMNotificationServices();
+
+  @override
+  void initState() {
+    super.initState();
+    fCMNotificationServices.getDeviceToken().then((value) => fcmToken = value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -423,7 +432,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 emailController.text,
                 passwordController.text,
                 usernameController.text,
-                phoneNumber)
+                phoneNumber,
+                fcmToken)
             .then(
           (value) async {
             if (value.success == true) {
