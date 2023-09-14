@@ -65,7 +65,7 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
-                      videoDetailController.videoId(data.id.toString());
+                      videoDetailController.videoId(data['id'].toString());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

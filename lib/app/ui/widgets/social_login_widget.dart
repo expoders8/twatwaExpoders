@@ -1,14 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:opentrend/config/constant/font_constant.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/snackbar_provider.dart';
+import '../../services/auth_service.dart';
+import '../../services/fcm_notification_service.dart';
+import '../home/tab_page.dart';
 // import '../../services/fcm_notification_service.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -29,9 +33,9 @@ class SocialLoginPage extends StatefulWidget {
 class _SocialLoginPageState extends State<SocialLoginPage> {
   String idToken = "", fcmToken = "";
   GoogleSignInAccount? user;
-  // AuthService authService = AuthService();
-  // final FirebaseAuth auth = FirebaseAuth.instance;
-  // FCMNotificationServices fCMNotificationServices = FCMNotificationServices();
+  AuthService authService = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  FCMNotificationServices fCMNotificationServices = FCMNotificationServices();
 
   @override
   void initState() {
@@ -39,7 +43,7 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
     _googleSignIn.onCurrentUserChanged
         .listen((GoogleSignInAccount? account) {});
     _googleSignIn.signInSilently();
-    // fCMNotificationServices.getDeviceToken().then((value) => fcmToken = value);
+    fCMNotificationServices.getDeviceToken().then((value) => fcmToken = value);
   }
 
   Future<void> handleGoogleSignIn() async {
@@ -53,29 +57,29 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
         setState(() {
           idToken = googleSignInAuthentication.idToken.toString();
         });
-        // final AuthCredential authCredential = GoogleAuthProvider.credential(
-        //     idToken: googleSignInAuthentication.idToken,
-        //     accessToken: googleSignInAuthentication.accessToken);
+        final AuthCredential authCredential = GoogleAuthProvider.credential(
+            idToken: googleSignInAuthentication.idToken,
+            accessToken: googleSignInAuthentication.accessToken);
 
-        // UserCredential result = await auth.signInWithCredential(authCredential);
-        // User? user = result.user;
-        // var userName = user?.displayName;
-        // List<String> substrings = userName.toString().split(' ');
-        // await authService
-        //     .socialLogin(substrings[0], substrings[1], user?.email,
-        //         user?.photoURL, idToken, "Google", fcmToken)
-        //     .then(
-        //   (value) async {
-        //     if (value.success == true) {
-        //       Get.offAll(() => const TabPage());
-        //       box.write('onBoard', 0);
-        //     } else {
-        //       SnackbarUtils.showErrorSnackbar(
-        //           "Failed to Login", value.message.toString());
-        //     }
-        //     return null;
-        //   },
-        // );
+        UserCredential result = await auth.signInWithCredential(authCredential);
+        User? user = result.user;
+        var userName = user?.displayName;
+        List<String> substrings = userName.toString().split(' ');
+        await authService
+            .socialLogin(substrings[0], substrings[1], user?.email,
+                user?.photoURL, idToken, "Google", fcmToken)
+            .then(
+          (value) async {
+            if (value.success == true) {
+              LoaderX.hide();
+              Get.offAll(() => const TabPage());
+            } else {
+              SnackbarUtils.showErrorSnackbar(
+                  "Failed to Login", value.message.toString());
+            }
+            return null;
+          },
+        );
       }
     } catch (error) {
       SnackbarUtils.showErrorSnackbar("Failed to Login", error.toString());

@@ -1,17 +1,15 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../services/video_service.dart';
+import '../../../services/follower_service.dart';
 import '../../../../config/constant/constant.dart';
-import '../../../../config/provider/dotted_line_provider.dart';
 import '../../../controller/follower_controller.dart';
-import '../../../models/user_list_model.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
-import '../../../services/follower_service.dart';
-import '../../../services/video_service.dart';
+import '../../../../config/provider/dotted_line_provider.dart';
 
 class FollowingPage extends StatefulWidget {
   const FollowingPage({super.key});

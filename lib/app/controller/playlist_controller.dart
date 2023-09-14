@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../config/constant/constant.dart';
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';
 
@@ -10,7 +11,10 @@ class PlaylistController extends GetxController {
 
   @override
   void onInit() {
-    fetchAllPlaylist("", "");
+    var token = box.read('authToken') ?? "";
+    if (token != "") {
+      fetchAllPlaylist("", "");
+    }
     super.onInit();
   }
 

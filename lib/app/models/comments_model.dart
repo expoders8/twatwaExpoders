@@ -1,3 +1,16 @@
+class CommentRequestModel {
+  String? videoId;
+  String? commentId;
+  String? parentCommentId;
+  String? videoReferenceId;
+  String? currentUserId;
+  String? userId;
+  int? pageSize;
+  int? pageNumber;
+  String? searchText;
+  String? sortBy;
+}
+
 class GetAllComments {
   bool? success;
   String? message;

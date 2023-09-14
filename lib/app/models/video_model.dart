@@ -83,6 +83,7 @@ class GetAllVideoDataModel {
   String? videoUploadStatus;
   bool? isLiked;
   bool? isDisliked;
+  bool? hasFollowers;
   List? hashTags;
 
   GetAllVideoDataModel(
@@ -116,6 +117,7 @@ class GetAllVideoDataModel {
       this.videoUploadStatus,
       this.isLiked,
       this.isDisliked,
+      this.hasFollowers,
       this.hashTags});
 
   GetAllVideoDataModel.fromJson(Map<String, dynamic> json) {
@@ -151,6 +153,7 @@ class GetAllVideoDataModel {
     videoUploadStatus = json['videoUploadStatus'];
     isLiked = json['isLiked'];
     isDisliked = json['isDisliked'];
+    hasFollowers = json['hasFollowers'];
     hashTags = json['hashTags'];
   }
 
@@ -186,6 +189,7 @@ class GetAllVideoDataModel {
     data['videoUploadStatus'] = videoUploadStatus;
     data['isLiked'] = isLiked;
     data['isDisliked'] = isDisliked;
+    data['hasFollowers'] = hasFollowers;
     data['hashTags'] = hashTags;
     return data;
   }

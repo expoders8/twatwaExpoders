@@ -16,7 +16,7 @@ class LikeWidget extends StatefulWidget {
   final bool isdisLiked;
   final String? videoId;
   late int? likeCount = 0;
-  late int? dislikeCount;
+  late int? dislikeCount = 0;
   LikeWidget(
       {Key? key,
       required this.isLiked,
@@ -44,7 +44,6 @@ class _LikeWidgetState extends State<LikeWidget> {
     getToken();
     isLikedState = widget.isLiked;
     isdisLikedState = widget.isdisLiked;
-    dislikedData = widget.dislikeCount.toString();
     super.initState();
   }
 
@@ -56,7 +55,7 @@ class _LikeWidgetState extends State<LikeWidget> {
   }
 
   Future _toggleIsLikedState() async {
-    if (getIsLikedState) {
+    if (isLikedState) {
       setState(() =>
           {isLikedState = false, widget.likeCount = widget.likeCount! - 1});
       await likeStoryService.videoLike(widget.videoId).then((value) {
@@ -68,11 +67,24 @@ class _LikeWidgetState extends State<LikeWidget> {
         }
       });
     } else {
-      setState(() => {
-            isdisLikedState = false,
-            isLikedState = true,
-            widget.likeCount = (widget.likeCount! + 1)
-          });
+      setState(() {
+        isLikedState = true;
+        widget.likeCount = (widget.likeCount! + 1);
+      });
+      if (isdisLikedState) {
+        setState(() => {
+              isdisLikedState = false,
+              widget.dislikeCount = widget.dislikeCount! - 1,
+            });
+        await likeStoryService.videoDisLike(widget.videoId).then((value) {
+          if (value["success"] == true) {
+            LoaderX.hide();
+          } else {
+            LoaderX.hide();
+            SnackbarUtils.showErrorSnackbar(value["message"], "");
+          }
+        });
+      }
       await likeStoryService.videoLike(widget.videoId).then((value) {
         if (value["success"] == true) {
           LoaderX.hide();
@@ -85,7 +97,7 @@ class _LikeWidgetState extends State<LikeWidget> {
   }
 
   Future _toggleIsDisLikedState() async {
-    if (getIsdisLikedState) {
+    if (isdisLikedState) {
       setState(() => {
             isdisLikedState = false,
             widget.dislikeCount = widget.dislikeCount! - 1
@@ -99,11 +111,28 @@ class _LikeWidgetState extends State<LikeWidget> {
         }
       });
     } else {
-      setState(() => {
+      setState(
+        () => {
+          isdisLikedState = true,
+          widget.dislikeCount = (widget.dislikeCount! + 1)
+        },
+      );
+      if (isLikedState) {
+        setState(
+          () => {
             isLikedState = false,
-            isdisLikedState = true,
-            widget.dislikeCount = (widget.dislikeCount! + 1)
-          });
+            widget.likeCount = widget.likeCount! - 1,
+          },
+        );
+        await likeStoryService.videoLike(widget.videoId).then((value) {
+          if (value["success"] == true) {
+            LoaderX.hide();
+          } else {
+            LoaderX.hide();
+            SnackbarUtils.showErrorSnackbar(value["message"], "");
+          }
+        });
+      }
       await likeStoryService.videoDisLike(widget.videoId).then((value) {
         if (value["success"] == true) {
           LoaderX.hide();
@@ -140,7 +169,7 @@ class _LikeWidgetState extends State<LikeWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                getIsLikedState
+                isLikedState
                     ? SizedBox(
                         width: 18,
                         height: 17,
@@ -195,7 +224,7 @@ class _LikeWidgetState extends State<LikeWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                getIsdisLikedState
+                isdisLikedState
                     ? SizedBox(
                         width: 18,
                         height: 17,

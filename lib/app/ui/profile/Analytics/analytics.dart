@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:opentrend/app/ui/profile/Analytics/user_top_tranding.dart';
 
 import '../../../../config/provider/dotted_line_provider.dart';
 import '../../../models/user_list_model.dart';
@@ -53,8 +54,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -161,47 +163,58 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             const SizedBox(height: 10),
             SizedBox(
               width: Get.width - 25,
-              height: 25,
+              height: 8,
               child: CustomPaint(
                 painter: DottedLinePainter(),
               ),
             ),
             SizedBox(
-              height: 190,
+              height: 200,
               width: Get.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LineChart(
                   LineChartData(
                     gridData: FlGridData(show: true),
-                    titlesData: FlTitlesData(show: true),
+                    titlesData: FlTitlesData(
+                      leftTitles: SideTitles(
+                        showTitles: true,
+                      ), // Hide left titles
+                      bottomTitles: SideTitles(
+                        showTitles: true, // Hide bottom titles
+                      ),
+                      rightTitles:
+                          SideTitles(showTitles: false), // Show right titles
+                      topTitles:
+                          SideTitles(showTitles: false), // Show top titles
+                    ),
                     borderData: FlBorderData(
-                        show: true,
-                        border: Border.all(color: Colors.black, width: 1)),
-                    minX: 0,
-                    maxX: 7,
-                    minY: 0,
-                    maxY: 6,
+                      show: true,
+                      border: const Border(
+                        bottom: BorderSide(
+                            color: kButtonSecondaryColor,
+                            width: 1), // Customize bottom line
+                        left: BorderSide(
+                            color: kButtonSecondaryColor,
+                            width: 1), // Customize left line
+                      ),
+                    ),
                     backgroundColor: kBackGroundColor,
                     lineBarsData: [
                       LineChartBarData(
                         spots: [
-                          const FlSpot(0, 1),
-                          const FlSpot(1, 3),
-                          const FlSpot(2, 1.5),
-                          const FlSpot(3, 4),
-                          const FlSpot(4, 2),
-                          const FlSpot(5, 5),
-                          const FlSpot(6, 2.5),
+                          const FlSpot(5, 100),
+                          const FlSpot(12, 86),
+                          const FlSpot(13, 120),
+                          const FlSpot(14, 135),
+                          const FlSpot(15, 120),
+                          const FlSpot(16, 130),
+                          const FlSpot(17, 140),
                         ],
                         isCurved: true,
                         colors: [kButtonColor],
-                        dotData: FlDotData(
-                          show: true,
-                        ),
-                        belowBarData: BarAreaData(
-                          show: false,
-                        ),
+                        dotData: FlDotData(show: false),
+                        belowBarData: BarAreaData(show: false),
                       ),
                     ],
                   ),
@@ -218,114 +231,13 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             const SizedBox(height: 10),
             SizedBox(
               width: Get.width - 25,
-              height: 25,
               child: CustomPaint(
                 painter: DottedLinePainter(),
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                scrollDirection: Axis.vertical,
-                itemCount: videos.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                      height: 90,
-                      child: Card(
-                        color: kCardColor,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4)),
-                                    height: 100,
-                                    width: 100,
-                                    child: Image.asset(
-                                      videos[index].image,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0, top: 7),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: 135,
-                                              child: Text(
-                                                videos[index].title,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    color:
-                                                        kTextsecondarytopColor,
-                                                    fontSize: 13,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              videos[index].views,
-                                              style: const TextStyle(
-                                                color:
-                                                    kTextsecondarybottomColor,
-                                                fontSize: 11,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 9),
-                                child: Text(
-                                  videos[index].time,
-                                  style: const TextStyle(
-                                      color: kButtonSecondaryColor,
-                                      fontSize: 11,
-                                      fontFamily: kFuturaPTDemi),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(
-                                          width: 1, color: kWhiteColor)),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 8),
-                                    child: Text(
-                                      videos[index].numberTop.toString(),
-                                      style: const TextStyle(
-                                          color: kButtonSecondaryColor,
-                                          fontSize: 18,
-                                          fontFamily: kFuturaPTDemi),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ));
-                },
-              ),
-            ),
+            const Expanded(
+              child: UserTopTrandingHomeView(),
+            )
           ],
         ),
       ),

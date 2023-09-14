@@ -77,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: kBackGroundColor,
       body: WillPopScope(
         onWillPop: () {
@@ -372,7 +373,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              Get.offAll(() => const TabPage());
+                              Get.back();
                             },
                             icon: Padding(
                               padding: const EdgeInsets.only(left: 8.0),

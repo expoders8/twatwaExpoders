@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../config/constant/constant.dart';
 import '../models/notification_model.dart';
 import '../services/notification_service.dart';
 
@@ -9,7 +10,10 @@ class NotificationController extends GetxController {
   NotificationService notificationService = NotificationService();
   @override
   void onInit() {
-    fetchAllNotification();
+    var token = box.read('authToken') ?? "";
+    if (token != "") {
+      fetchAllNotification();
+    }
     super.onInit();
   }
 

@@ -63,7 +63,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.menuVideoListPage,
-      page: () => const MenuVideoListPage(),
+      page: () => const SearchVideoListPage(),
     ),
     GetPage(
       name: _Paths.videoDetailsPage,

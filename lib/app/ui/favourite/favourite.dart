@@ -36,14 +36,6 @@ class _FavouritePageState extends State<FavouritePage> {
   bool isLoading = true, firsttimeload = true;
   @override
   void initState() {
-    if (authToken != "") {
-      setState(() {
-        firsttimeload = false;
-      });
-      if (firsttimeload) {
-        playlistController.fetchAllPlaylist("", "");
-      }
-    }
     var authTokenValue = box.read('authToken');
     setState(() {
       authToken = authTokenValue ?? "";

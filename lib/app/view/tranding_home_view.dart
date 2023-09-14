@@ -66,7 +66,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
-                      videoDetailController.videoId(data.id);
+                      videoDetailController.videoId(data['id']);
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

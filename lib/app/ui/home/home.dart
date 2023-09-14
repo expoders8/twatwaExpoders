@@ -95,12 +95,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Row(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 23),
-                          height: 19.96,
-                          width: 19.96,
-                          child: Image.asset(
-                            "assets/icons/search.png",
+                        IconButton(
+                          onPressed: () {
+                            Get.toNamed(Routes.menuVideoListPage);
+                          },
+                          icon: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: Image.asset(
+                              "assets/icons/search.png",
+                            ),
                           ),
                         ),
                         GestureDetector(
@@ -273,12 +277,16 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(right: 23),
-                                      height: 19.96,
-                                      width: 19.96,
-                                      child: Image.asset(
-                                        "assets/icons/search.png",
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.toNamed(Routes.menuVideoListPage);
+                                      },
+                                      icon: SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: Image.asset(
+                                          "assets/icons/search.png",
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
@@ -431,7 +439,7 @@ class _HomePageState extends State<HomePage> {
                                                               20),
                                                       child: Image.network(
                                                         videoOfTheDayData
-                                                            .videoThumbnailImagePath
+                                                            .userProfileImage
                                                             .toString(),
                                                         fit: BoxFit.cover,
                                                         errorBuilder: (context,

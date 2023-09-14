@@ -9,7 +9,6 @@ import '../../view/discover_view.dart';
 import '../../view/trending_view.dart';
 import '../../view/education_view.dart';
 import '../../view/premiumshows_view.dart';
-import '../../controller/video_controller.dart';
 import '../../../config/constant/color_constant.dart';
 
 // ignore: camel_case_types

@@ -138,19 +138,19 @@ class AuthService {
     String? fcmToken,
   ) async {
     try {
-      var response =
-          await http.post(Uri.parse('$baseUrl/userapi/api/Auth/SocialLogin'),
-              body: json.encode({
-                "firstName": firstName,
-                "lastName": lastName,
-                "email": email,
-                "profilePicture": profilePicture,
-                "googleToken": googleToken,
-                "provider": provider,
-                "currency": "",
-                "fcmToken": fcmToken
-              }),
-              headers: {
+      var response = await http.post(
+          Uri.parse(
+              'https://opentrend-api.azurewebsites.net/api/Auth/SocialLogin'),
+          body: json.encode({
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "profilePicture": profilePicture,
+            "googleToken": googleToken,
+            "provider": provider,
+            "fcmToken": fcmToken
+          }),
+          headers: {
             'Content-type': 'application/json',
             'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });

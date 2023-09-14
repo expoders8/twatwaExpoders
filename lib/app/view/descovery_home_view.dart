@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../controller/video_controller.dart';
 import '../routes/app_pages.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
@@ -18,6 +19,8 @@ class DescoverHomeView extends StatefulWidget {
 class _DescoverHomeViewState extends State<DescoverHomeView> {
   final GetAllVideoLandingController videoController =
       Get.put(GetAllVideoLandingController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
 
@@ -66,6 +69,8 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
                       videoDetailController.videoId(data.id.toString());
+                      upNextVideoController
+                          .updateString(data.categoryId.toString());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

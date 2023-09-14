@@ -38,9 +38,6 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
   @override
   void initState() {
     getToken();
-    if (authToken != "") {
-      playlistController.fetchAllPlaylist("", "");
-    }
     super.initState();
   }
 

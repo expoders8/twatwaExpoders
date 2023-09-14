@@ -75,12 +75,23 @@ class _AppBarWidgetState extends State<AppBarWidget> {
           ),
           Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(right: 23),
-                height: 19.96,
-                width: 19.96,
-                child: Image.asset(
-                  "assets/icons/search.png",
+              // Container(
+              //   height: 19.96,
+              //   width: 19.96,
+              //   child: Image.asset(
+              //     "assets/icons/search.png",
+              //   ),
+              // ),
+              IconButton(
+                onPressed: () {
+                  Get.toNamed(Routes.menuVideoListPage);
+                },
+                icon: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/icons/search.png",
+                  ),
                 ),
               ),
               GestureDetector(
@@ -102,6 +113,32 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                         : Image.network(
                             userImage.toString(),
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                              "assets/images/blank_profile.png",
+                              fit: BoxFit.fill,
+                            ),
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: kWhiteColor,
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                   ),
                 ),

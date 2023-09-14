@@ -160,21 +160,21 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                               const SizedBox(height: 10),
                               Expanded(
                                 child: SizedBox(
-                                    height: Get.height,
-                                    child: tabindex == 0
-                                        ? UpNextPage(
-                                            categoryId: detailData.categoryId
-                                                .toString(),
-                                            userId:
-                                                detailData.userId.toString(),
-                                            videoId: detailData.id.toString())
-                                        : tabindex == 1
-                                            ? AboutPage(
-                                                description:
-                                                    detailData.description)
-                                            : CommentsPage(
-                                                videoId:
-                                                    detailData.id.toString())),
+                                  height: Get.height,
+                                  child: tabindex == 0
+                                      ? UpNextPage(
+                                          categoryId:
+                                              detailData.categoryId.toString(),
+                                          userId: detailData.userId.toString(),
+                                          videoId: detailData.id.toString())
+                                      : tabindex == 1
+                                          ? AboutPage(
+                                              description:
+                                                  detailData.description)
+                                          : CommentsPage(
+                                              videoId: detailData.id.toString(),
+                                            ),
+                                ),
                               ),
                             ],
                           ),

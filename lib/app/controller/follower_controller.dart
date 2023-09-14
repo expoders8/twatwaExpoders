@@ -29,6 +29,12 @@ class FollowingController extends GetxController {
   var followerList = <GetFollower>[].obs;
   FollowerService followerService = FollowerService();
 
+  @override
+  void onInit() {
+    fetchAllfollowing();
+    super.onInit();
+  }
+
   void fetchAllfollowing() async {
     try {
       isLoading(true);
