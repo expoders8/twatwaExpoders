@@ -2,12 +2,12 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../routes/app_pages.dart';
+import '../controller/comments_controller.dart';
 import '../../config/constant/font_constant.dart';
 import '../../config/provider/loader_provider.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../controller/getall_video_landing_controller.dart';
-import '../ui/video_details/video_details.dart';
 
 class PremiumHomeView extends StatefulWidget {
   const PremiumHomeView({super.key});
@@ -21,6 +21,7 @@ class _PremiumHomeViewState extends State<PremiumHomeView> {
       Get.put(GetAllVideoLandingController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final CommentsController commentsController = Get.put(CommentsController());
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -89,6 +90,8 @@ class _PremiumHomeViewState extends State<PremiumHomeView> {
                                 onTap: () {
                                   Get.toNamed(Routes.videoDetailsPage);
                                   videoDetailController.videoId(
+                                      educationData.videoId.toString());
+                                  commentsController.updateString(
                                       educationData.videoId.toString());
                                 },
                                 child: Column(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../routes/app_pages.dart';
+import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
@@ -20,6 +21,7 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
       Get.put(GetAllVideoLandingController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final CommentsController commentsController = Get.put(CommentsController());
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,7 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
                       videoDetailController.videoId(data['id'].toString());
+                      commentsController.updateString(data['id'].toString());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

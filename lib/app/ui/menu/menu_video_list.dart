@@ -5,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
 
 import '../../../config/constant/font_constant.dart';
+import '../../controller/comments_controller.dart';
 import '../../controller/video_controller.dart';
 import '../../controller/video_detail_controller.dart';
 import '../../routes/app_pages.dart';
@@ -23,6 +24,9 @@ class _SearchVideoListPageState extends State<SearchVideoListPage> {
       Get.put(SearchVideoController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
   bool islisteing = false;
   String text = "", searchText = "";
   var speechToText = stts.SpeechToText();
@@ -126,6 +130,9 @@ class _SearchVideoListPageState extends State<SearchVideoListPage> {
                       return GestureDetector(
                         onTap: () {
                           Get.toNamed(Routes.videoDetailsPage);
+                          upNextVideoController
+                              .updateString(data.categoryId.toString());
+                          commentsController.updateString(data.id.toString());
                           videoDetailController.videoId(data.id);
                         },
                         child: Padding(

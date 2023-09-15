@@ -5,7 +5,6 @@ import 'package:opentrend/app/ui/profile/Analytics/user_top_tranding.dart';
 
 import '../../../../config/provider/dotted_line_provider.dart';
 import '../../../models/user_list_model.dart';
-import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 
 enum Menu { lastweek, lastyear, today, lastmonth }

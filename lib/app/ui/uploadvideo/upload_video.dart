@@ -9,7 +9,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../view/hastage.dart';
-import '../../routes/app_pages.dart';
 import '../widgets/custom_textfield.dart';
 import '../../services/video_service.dart';
 import '../../../config/constant/constant.dart';

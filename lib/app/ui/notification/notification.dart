@@ -161,7 +161,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 240,
+                                          width: 250,
                                           child: Padding(
                                             padding: const EdgeInsets.only(
                                                 left: 8.0),
@@ -176,16 +176,22 @@ class _NotificationPageState extends State<NotificationPage> {
                                                       right: 33),
                                                   child: Row(
                                                     children: [
-                                                      Text(
-                                                        data.notificationTitle
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                            color:
-                                                                kTextsecondarybottomColor,
-                                                            fontSize: 13,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
+                                                      SizedBox(
+                                                        width: 208,
+                                                        child: Text(
+                                                          data.notificationTitle
+                                                              .toString(),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  kTextsecondarybottomColor,
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),

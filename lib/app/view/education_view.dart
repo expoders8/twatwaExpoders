@@ -1,12 +1,13 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../controller/other_user_controller.dart';
+import '../routes/app_pages.dart';
 import '../../config/constant/constant.dart';
 import '../controller/video_controller.dart';
-import '../routes/app_pages.dart';
+import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
@@ -26,6 +27,13 @@ class _EducationViewPageState extends State<EducationViewPage> {
       Get.put(EducationVideoController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final CommentsController commentsController = Get.put(CommentsController());
+  final OtherUserVideoController otherUserVideoController =
+      Get.put(OtherUserVideoController());
+  final OtherUserPlaylistController otherUserPlaylistController =
+      Get.put(OtherUserPlaylistController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
   String userId = "", followtext = "FOLLOW";
 
   @override
@@ -119,6 +127,10 @@ class _EducationViewPageState extends State<EducationViewPage> {
                                       Get.toNamed(Routes.videoDetailsPage);
                                       videoDetailController
                                           .videoId(data.id.toString());
+                                      upNextVideoController.updateString(
+                                          data.categoryId.toString());
+                                      commentsController
+                                          .updateString(data.id.toString());
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -282,6 +294,12 @@ class _EducationViewPageState extends State<EducationViewPage> {
                                                                       followtext),
                                                         ),
                                                       );
+                                                otherUserVideoController
+                                                    .updateString(
+                                                        data.userId.toString());
+                                                otherUserPlaylistController
+                                                    .updateString(
+                                                        data.userId.toString());
                                               },
                                               child: SizedBox(
                                                 height: 37,

@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:opentrend/app/ui/video_details/comments/comments_like.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/comments_model.dart';
 import '../comments/comments_reply.dart';
 import '../../../services/comment_service.dart';
 import '../../widgets/no_user_login_dialog.dart';
 import '../../../../config/constant/constant.dart';
 import '../../../controller/comments_controller.dart';
 import '../../../../config/constant/font_constant.dart';
+import '../../video_details/comments/comments_like.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
 import '../../../../config/provider/snackbar_provider.dart';
@@ -43,87 +42,11 @@ class _CommentsPageState extends State<CommentsPage> {
     }
   }
 
-  int skip = 1;
-  final int limit = 10;
-  bool _hasNextPage = true;
-  bool _isFirstLoadRunning = false;
-  bool _isLoadMoreRunning = false;
-  late Future<GetAllComments> _future;
-
-  ScrollController _scrollController = ScrollController();
-
-  getitem() {
-    if (mounted) {
-      setState(() {
-        _isFirstLoadRunning = true;
-      });
-      _future = commnetsService.getAllComments(widget.videoId, userId);
-      setState(() {
-        _isFirstLoadRunning = false;
-      });
-    }
-  }
-
-  loadMore() async {
-    if (_hasNextPage == true &&
-        _isFirstLoadRunning == false &&
-        _isLoadMoreRunning == false &&
-        _scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-      setState(() {
-        _isLoadMoreRunning = true;
-        SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              buildLazyloading(),
-            ],
-          ),
-        );
-      });
-      skip = skip + 1;
-      var fetchedPosts =
-          await commnetsService.getAllComments(widget.videoId, userId);
-
-      try {
-        if (fetchedPosts.data!.isNotEmpty) {
-          setState(() {
-            _future.then((value) => value.data!.addAll(fetchedPosts.data!));
-          });
-        } else {
-          setState(() {
-            _hasNextPage = false;
-          });
-        }
-      } catch (err) {
-        debugPrint('Something went wrong!');
-      }
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     getUser();
 
-    getitem();
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          loadMore();
-        });
-      });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (mounted) {
-      _scrollController.dispose();
-      super.dispose();
-    }
   }
 
   @override
@@ -197,389 +120,387 @@ class _CommentsPageState extends State<CommentsPage> {
             Expanded(
               child: Scaffold(
                 backgroundColor: kBackGroundColor,
-                body: _isFirstLoadRunning
-                    ? SingleChildScrollView(
+                body: Obx(
+                  () {
+                    if (commentsController.isLoading.value) {
+                      return SingleChildScrollView(
                         physics: const NeverScrollableScrollPhysics(),
                         child: Column(
                           children: [
                             buildLazyloading(),
                           ],
                         ),
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                            child: FutureBuilder<GetAllComments>(
-                              future: _future,
-                              builder: (context,
-                                  AsyncSnapshot<GetAllComments> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  if (snapshot.hasData) {
-                                    var itemData = snapshot.data!.data;
-                                    if (itemData!.isEmpty) {
-                                      return const Center(
-                                        child: Text(
-                                          'Video Not Found',
-                                          style: TextStyle(
-                                              color: kWhiteColor,
-                                              fontSize: 15,
-                                              fontFamily: kFuturaPTDemi),
+                      );
+                    } else {
+                      if (commentsController.commentList[0].data != null) {
+                        if (commentsController.commentList[0].data!.isEmpty) {
+                          return Center(
+                            child: SizedBox(
+                              width: Get.width - 80,
+                              child: const Text(
+                                "Video not Found",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontSize: 15,
+                                    fontFamily: kFuturaPTDemi),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  controller:
+                                      commentsController.scrollController,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: commentsController
+                                      .commentList[0].data!.length,
+                                  itemBuilder: (context, index) {
+                                    if (index == 0 &&
+                                        commentsController.isAddingMore.value) {
+                                      return SingleChildScrollView(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        child: Column(
+                                          children: [
+                                            buildLazyloading(),
+                                            buildLazyloading(),
+                                            buildLazyloading(),
+                                          ],
                                         ),
                                       );
                                     } else {
-                                      return ListView.builder(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8, 8, 8, 10),
-                                        scrollDirection: Axis.vertical,
-                                        controller: _scrollController,
-                                        itemCount: itemData.length,
-                                        itemBuilder: (context, index) {
-                                          var discoverData = itemData;
+                                      var discoverData = commentsController
+                                          .commentList[0].data!;
 
-                                          if (discoverData.isNotEmpty) {
-                                            var data = discoverData[index];
-                                            String formattedDate = DateFormat(
-                                                    'yyyy-MM-dd')
-                                                .format(DateTime.parse(
+                                      if (discoverData.isNotEmpty) {
+                                        var data = discoverData[index];
+                                        String formattedDate =
+                                            DateFormat('yyyy-MM-dd').format(
+                                                DateTime.parse(
                                                     data.createdOn.toString()));
-                                            String formattedTime = DateFormat(
-                                                    'HH:mm:ss')
-                                                .format(DateTime.parse(
+                                        String formattedTime =
+                                            DateFormat('HH:mm:ss').format(
+                                                DateTime.parse(
                                                     data.createdOn.toString()));
-                                            final splittedDate =
-                                                formattedDate.split("-");
-                                            final splittedTime =
-                                                formattedTime.split(":");
-                                            final date1 = DateTime(
-                                              int.parse(splittedDate[0]),
-                                              int.parse(splittedDate[1]),
-                                              int.parse(splittedDate[2]),
-                                              int.parse(splittedTime[0]),
-                                              int.parse(splittedTime[1]),
-                                              int.parse(splittedTime[2]),
-                                            );
-                                            final date2 = DateTime.now();
-                                            final difference =
-                                                date2.difference(date1).inDays;
-                                            final differenceHour =
-                                                date2.difference(date1).inHours;
-                                            final differenceMinute = date2
-                                                .difference(date1)
-                                                .inMinutes;
-                                            return Card(
-                                              color: kCardColor,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                child: Row(
+                                        final splittedDate =
+                                            formattedDate.split("-");
+                                        final splittedTime =
+                                            formattedTime.split(":");
+                                        final date1 = DateTime(
+                                          int.parse(splittedDate[0]),
+                                          int.parse(splittedDate[1]),
+                                          int.parse(splittedDate[2]),
+                                          int.parse(splittedTime[0]),
+                                          int.parse(splittedTime[1]),
+                                          int.parse(splittedTime[2]),
+                                        );
+                                        final date2 = DateTime.now();
+                                        final difference =
+                                            date2.difference(date1).inDays;
+                                        final differenceHour =
+                                            date2.difference(date1).inHours;
+                                        final differenceMinute =
+                                            date2.difference(date1).inMinutes;
+                                        return Card(
+                                          color: kCardColor,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 5),
+                                            child: Row(
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Row(
+                                                    Container(
+                                                      height: 30,
+                                                      width: 30,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 10),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        child: Image.network(
+                                                          data.commentUserProfilePhoto
+                                                              .toString(),
+                                                          fit: BoxFit.cover,
+                                                          errorBuilder: (context,
+                                                                  error,
+                                                                  stackTrace) =>
+                                                              Image.asset(
+                                                            "assets/images/blank_profile.png",
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                          loadingBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  Widget child,
+                                                                  ImageChunkEvent?
+                                                                      loadingProgress) {
+                                                            if (loadingProgress ==
+                                                                null) {
+                                                              return child;
+                                                            }
+                                                            return SizedBox(
+                                                              width: 17,
+                                                              height: 17,
+                                                              child: Center(
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  color:
+                                                                      kWhiteColor,
+                                                                  value: loadingProgress
+                                                                              .expectedTotalBytes !=
+                                                                          null
+                                                                      ? loadingProgress
+                                                                              .cumulativeBytesLoaded /
+                                                                          loadingProgress
+                                                                              .expectedTotalBytes!
+                                                                      : null,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Container(
-                                                          height: 30,
-                                                          width: 30,
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 10),
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            child:
-                                                                Image.network(
-                                                              data.commentUserProfilePhoto
-                                                                  .toString(),
-                                                              fit: BoxFit.cover,
-                                                              errorBuilder: (context,
-                                                                      error,
-                                                                      stackTrace) =>
-                                                                  Image.asset(
-                                                                "assets/images/blank_profile.png",
-                                                                fit: BoxFit
-                                                                    .contain,
-                                                              ),
-                                                              loadingBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      Widget
-                                                                          child,
-                                                                      ImageChunkEvent?
-                                                                          loadingProgress) {
-                                                                if (loadingProgress ==
-                                                                    null) {
-                                                                  return child;
-                                                                }
-                                                                return SizedBox(
-                                                                  width: 17,
-                                                                  height: 17,
-                                                                  child: Center(
-                                                                    child:
-                                                                        CircularProgressIndicator(
-                                                                      color:
-                                                                          kWhiteColor,
-                                                                      value: loadingProgress.expectedTotalBytes !=
-                                                                              null
-                                                                          ? loadingProgress.cumulativeBytesLoaded /
-                                                                              loadingProgress.expectedTotalBytes!
-                                                                          : null,
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
                                                           children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left: 8.0,
-                                                                      top: 6),
-                                                                  child: Text(
-                                                                    data.commentUserName
-                                                                        .toString(),
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color:
-                                                                          kTextsecondarybottomColor,
-                                                                      fontSize:
-                                                                          11,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Container(
-                                                                  margin: const EdgeInsets
-                                                                          .only(
-                                                                      left: 140,
-                                                                      top: 6),
-                                                                  child: Text(
-                                                                    difference >=
-                                                                            1
-                                                                        ? "${difference.toString()} Days ago"
-                                                                        : differenceHour >=
-                                                                                1
-                                                                            ? "${differenceHour.toString()} Hours ago"
-                                                                            : "${differenceMinute.toString()} Minits ago",
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color:
-                                                                          kTextsecondarybottomColor,
-                                                                      fontSize:
-                                                                          11,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            Container(
-                                                              width: 250,
+                                                            Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
-                                                                      left:
-                                                                          8.0),
+                                                                      left: 8.0,
+                                                                      top: 6),
                                                               child: Text(
-                                                                data.comment
+                                                                data.commentUserName
                                                                     .toString(),
-                                                                maxLines: 2,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: const TextStyle(
-                                                                    color:
-                                                                        kTextsecondarytopColor,
-                                                                    fontSize:
-                                                                        12.5,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color:
+                                                                      kTextsecondarybottomColor,
+                                                                  fontSize: 11,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 140,
+                                                                      top: 6),
+                                                              child: Text(
+                                                                difference >= 1
+                                                                    ? "${difference.toString()} Days ago"
+                                                                    : differenceHour >=
+                                                                            1
+                                                                        ? "${differenceHour.toString()} Hours ago"
+                                                                        : "${differenceMinute.toString()} Minits ago",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color:
+                                                                      kTextsecondarybottomColor,
+                                                                  fontSize: 11,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                        Container(
+                                                          width: 250,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 8.0),
+                                                          child: Text(
+                                                            data.comment
+                                                                .toString(),
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    kTextsecondarytopColor,
+                                                                fontSize: 12.5,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 5),
+                                                        Row(
+                                                          children: [
+                                                            CommnetsLikeWidget(
+                                                              isLiked:
+                                                                  data.isLiked,
+                                                              likeCount: data
+                                                                  .totalCommentLikes,
+                                                              commentsId:
+                                                                  data.id,
+                                                            ),
+                                                            const Text(
+                                                              "|",
+                                                              style: TextStyle(
+                                                                  fontSize: 25,
+                                                                  color:
+                                                                      kButtonSecondaryColor),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                authToken != ""
+                                                                    ? Navigator.of(
+                                                                            context)
+                                                                        .push(
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              CommentReplyPage(
+                                                                            videoId:
+                                                                                widget.videoId,
+                                                                            commentId:
+                                                                                data.id.toString(),
+                                                                            commentImage:
+                                                                                data.commentUserProfilePhoto,
+                                                                            userName:
+                                                                                data.commentUserName,
+                                                                            totalComment:
+                                                                                data.totalCommentReplies.toString(),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    : loginConfirmationDialog();
+                                                              },
+                                                              child: Container(
+                                                                height: 35,
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        19.0,
+                                                                    vertical:
+                                                                        8),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      width: 16,
+                                                                      height:
+                                                                          16,
+                                                                      child: Image
+                                                                          .asset(
+                                                                        "assets/icons/Reply.png",
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            5),
+                                                                    Text(
+                                                                      "${data.totalCommentReplies} REPLY",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              kButtonSecondaryColor),
+                                                                    )
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
                                                             const SizedBox(
-                                                                height: 5),
-                                                            Row(
-                                                              children: [
-                                                                CommnetsLikeWidget(
-                                                                  isLiked: data
-                                                                      .isLiked,
-                                                                  likeCount: data
-                                                                      .totalCommentLikes,
-                                                                  commentsId:
-                                                                      data.id,
+                                                                width: 58),
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                authToken != ""
+                                                                    ? showTypeBottomSheet(data
+                                                                        .id
+                                                                        .toString())
+                                                                    : loginConfirmationDialog();
+                                                              },
+                                                              icon: SizedBox(
+                                                                width: 16,
+                                                                height: 16,
+                                                                child:
+                                                                    Image.asset(
+                                                                  "assets/icons/dots.png",
                                                                 ),
-                                                                const Text(
-                                                                  "|",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          25,
-                                                                      color:
-                                                                          kButtonSecondaryColor),
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    authToken !=
-                                                                            ""
-                                                                        ? Navigator.of(context)
-                                                                            .push(
-                                                                            MaterialPageRoute(
-                                                                              builder: (context) => CommentReplyPage(
-                                                                                videoId: widget.videoId,
-                                                                                commentId: data.id.toString(),
-                                                                                commentImage: data.commentUserProfilePhoto,
-                                                                                userName: data.commentUserName,
-                                                                                totalComment: data.totalCommentReplies.toString(),
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        : loginConfirmationDialog();
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    height: 35,
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            19.0,
-                                                                        vertical:
-                                                                            8),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              50),
-                                                                    ),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        SizedBox(
-                                                                          width:
-                                                                              16,
-                                                                          height:
-                                                                              16,
-                                                                          child:
-                                                                              Image.asset(
-                                                                            "assets/icons/Reply.png",
-                                                                          ),
-                                                                        ),
-                                                                        const SizedBox(
-                                                                            width:
-                                                                                5),
-                                                                        Text(
-                                                                          "${data.totalCommentReplies} REPLY",
-                                                                          style: const TextStyle(
-                                                                              fontSize: 12,
-                                                                              color: kButtonSecondaryColor),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 58),
-                                                                IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    authToken !=
-                                                                            ""
-                                                                        ? showTypeBottomSheet(data
-                                                                            .id
-                                                                            .toString())
-                                                                        : loginConfirmationDialog();
-                                                                  },
-                                                                  icon:
-                                                                      SizedBox(
-                                                                    width: 16,
-                                                                    height: 16,
-                                                                    child: Image
-                                                                        .asset(
-                                                                      "assets/icons/dots.png",
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              ],
+                                                              ),
                                                             )
                                                           ],
-                                                        ),
+                                                        )
                                                       ],
                                                     ),
                                                   ],
                                                 ),
-                                              ),
-                                            );
-                                          } else {
-                                            return const Center(
-                                              child: Text(
-                                                "Video not Found",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: kWhiteColor,
-                                                    fontSize: 15,
-                                                    fontFamily: kFuturaPTDemi),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      );
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return const Center(
+                                          child: Text(
+                                            "Video not Found",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 15,
+                                                fontFamily: kFuturaPTDemi),
+                                          ),
+                                        );
+                                      }
                                     }
-                                  } else {
-                                    return const Center(
-                                      child: Text(
-                                        'video not Found',
-                                        style: TextStyle(
-                                            color: kWhiteColor,
-                                            fontSize: 15,
-                                            fontFamily: kFuturaPTDemi),
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  return SingleChildScrollView(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    child: Column(
-                                      children: [
-                                        buildLazyloading(),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                          if (_isLoadMoreRunning == true)
-                            SizedBox(
-                                height: 50,
-                                child: SingleChildScrollView(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  child: Column(
-                                    children: [
-                                      buildLazyloading(),
-                                    ],
+                                  },
+                                ),
+                              ),
+                              if (commentsController.isAddingMore.value)
+                                const Center(
+                                  child: CircularProgressIndicator(
+                                    color: kShimmerEffectSecondary,
                                   ),
-                                )),
-                        ],
-                      ),
+                                )
+                            ],
+                          );
+                        }
+                      } else {
+                        return const Center(
+                          child: Text(
+                            "Video not Found",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 15,
+                                fontFamily: kFuturaPTDemi),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
               ),
             ),
           ],
@@ -590,7 +511,7 @@ class _CommentsPageState extends State<CommentsPage> {
 
   commentSend() async {
     FocusScope.of(context).requestFocus(FocusNode());
-    // LoaderX.show(context, 70.0);
+    LoaderX.show(context, 70.0);
     await commnetsService
         .addComment(userId, widget.videoId, commentController.text, "", "")
         .then(
@@ -599,7 +520,7 @@ class _CommentsPageState extends State<CommentsPage> {
               {
                 LoaderX.hide(),
                 commentController.clear(),
-                commentsController.fetchComments(widget.videoId, userId),
+                commentsController.fetchComment()
               },
           },
         );
@@ -758,7 +679,8 @@ class _CommentsPageState extends State<CommentsPage> {
                 (value) async {
                   if (value['success'] == true) {
                     LoaderX.hide();
-                    commentsController.fetchComments(widget.videoId, userId);
+                    // commnetsService.getAllComments(createRequest());
+                    commentsController.fetchComment();
                     SnackbarUtils.showSnackbar(
                         "Comment Successfully Deleted", "");
                   } else {

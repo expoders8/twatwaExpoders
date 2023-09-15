@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../controller/video_controller.dart';
 import '../routes/app_pages.dart';
+import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
@@ -18,8 +20,11 @@ class CategoryVideoHomeView extends StatefulWidget {
 class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
   final GetAllVideoLandingController videoController =
       Get.put(GetAllVideoLandingController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final CommentsController commentsController = Get.put(CommentsController());
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +132,11 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                         onTap: () {
                                           Get.toNamed(Routes.videoDetailsPage);
                                           videoDetailController.videoId(
+                                              educationData.videoId.toString());
+                                          upNextVideoController.updateString(
+                                              educationData.categoryId
+                                                  .toString());
+                                          commentsController.updateString(
                                               educationData.videoId.toString());
                                         },
                                         child: Column(

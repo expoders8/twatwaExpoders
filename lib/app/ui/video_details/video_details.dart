@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../controller/other_user_controller.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
@@ -37,6 +38,11 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final OtherUserVideoController otherUserVideoController =
+      Get.put(OtherUserVideoController());
+  final OtherUserPlaylistController otherUserPlaylistController =
+      Get.put(OtherUserPlaylistController());
+
   FollowerService followerService = FollowerService();
   int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
   String qualityname = "",
@@ -323,18 +329,24 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                       children: [
                         GestureDetector(
                           onTap: () {
-                            authToken != ""
-                                ? currntuserId == userId
-                                    ? Container()
-                                    : Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              OtherUserProfilePage(
-                                                  userId: userId,
-                                                  followcheck: followtext),
-                                        ),
-                                      )
-                                : loginConfirmationDialog();
+                            if (authToken != "") {
+                              if (currntuserId == userId) {
+                                Container();
+                              } else {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => OtherUserProfilePage(
+                                        userId: userId,
+                                        followcheck: followtext),
+                                  ),
+                                );
+                                otherUserVideoController.updateString(userId);
+                                otherUserPlaylistController
+                                    .updateString(userId);
+                              }
+                            } else {
+                              loginConfirmationDialog();
+                            }
                           },
                           child: SizedBox(
                             height: 42,

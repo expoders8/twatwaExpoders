@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../controller/comments_controller.dart';
+import '../../../controller/video_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/playlist_service.dart';
 import '../../../../config/constant/constant.dart';
@@ -10,7 +12,6 @@ import '../../../controller/playlist_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../controller/video_detail_controller.dart';
-import '../../video_details/video_details.dart';
 
 class MyPlaylistPage extends StatefulWidget {
   final String? userId;
@@ -25,15 +26,15 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
   final PlaylistController playlistController = Get.put(PlaylistController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
   PlaylistService playlistService = PlaylistService();
   String userId = "";
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      playlistController.fetchAllPlaylist(widget.userId.toString(),
-          widget.checkText == "my" ? "" : "otherPlaylist");
-      getUser();
-    });
+    playlistController.fetchAllPlaylist();
+    getUser();
 
     super.initState();
   }
@@ -170,6 +171,13 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                                 onTap: () {
                                                   Get.toNamed(
                                                       Routes.videoDetailsPage);
+                                                  upNextVideoController
+                                                      .updateString(data
+                                                          .categoryId
+                                                          .toString());
+                                                  commentsController
+                                                      .updateString(
+                                                          data.id.toString());
                                                   videoDetailController.videoId(
                                                       data.id.toString());
                                                 },

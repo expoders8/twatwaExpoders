@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../controller/comments_controller.dart';
+import '../../controller/other_user_controller.dart';
 import '../../view/following_home_view.dart';
 import '../OtherUserProfile/other_user_profile.dart';
 import '../widgets/like_widget.dart';
 import '../../routes/app_pages.dart';
+import '../widgets/no_user_login_dialog.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/playlist_widget.dart';
 import '../../view/tranding_home_view.dart';
@@ -31,6 +34,13 @@ class _HomePageState extends State<HomePage> {
       Get.put(VideoOfTheDayController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final OtherUserVideoController otherUserVideoController =
+      Get.put(OtherUserVideoController());
+  final OtherUserPlaylistController otherUserPlaylistController =
+      Get.put(OtherUserPlaylistController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
 
   String authToken = "", userImage = "", likeValue = "";
   @override
@@ -418,17 +428,32 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            OtherUserProfilePage(
-                                                          userId:
+                                                    if (authToken == "") {
+                                                      loginConfirmationDialog();
+                                                    } else {
+                                                      otherUserVideoController
+                                                          .updateString(
                                                               videoOfTheDayData
                                                                   .userId
-                                                                  .toString(),
+                                                                  .toString());
+                                                      otherUserPlaylistController
+                                                          .updateString(
+                                                              videoOfTheDayData
+                                                                  .userId
+                                                                  .toString());
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtherUserProfilePage(
+                                                            userId:
+                                                                videoOfTheDayData
+                                                                    .userId
+                                                                    .toString(),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    );
+                                                      );
+                                                    }
                                                   },
                                                   child: SizedBox(
                                                     height: 42,
@@ -548,6 +573,11 @@ class _HomePageState extends State<HomePage> {
                                       onTap: () {
                                         Get.toNamed(Routes.videoDetailsPage);
                                         videoDetailController.videoId(
+                                            videoOfTheDayData.id.toString());
+                                        upNextVideoController.updateString(
+                                            videoOfTheDayData.categoryId
+                                                .toString());
+                                        commentsController.updateString(
                                             videoOfTheDayData.id.toString());
                                       },
                                       child: AvatarGlow(
@@ -735,6 +765,15 @@ class _HomePageState extends State<HomePage> {
         );
       }
     }));
+  }
+
+  loginConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const NoUserLoginDialog();
+      },
+    );
   }
 
   buildLazyloading() {

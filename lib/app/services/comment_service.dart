@@ -7,21 +7,21 @@ import '../../config/provider/snackbar_provider.dart';
 import '../models/comments_model.dart';
 
 class CommnetsService {
-  Future<GetAllComments> getAllComments(videoId, userId) async {
+  Future<GetAllComments> getAllComments(CommentRequestModel getRequest) async {
     try {
       final response =
           await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetComments'),
               body: json.encode({
-                "videoId": videoId,
-                "commentId": null,
-                "parentCommentId": null,
-                "userId": userId == "" ? null : userId,
-                "currentUserId": null,
-                "videoReferenceId": "",
-                "pageSize": 50,
-                "pageNumber": 1,
-                "searchText": "",
-                "sortBy": ""
+                "videoId": getRequest.videoId,
+                "commentId": getRequest.commentId,
+                "parentCommentId": getRequest.parentCommentId,
+                "userId": getRequest.userId,
+                "currentUserId": getRequest.currentUserId,
+                "videoReferenceId": getRequest.videoReferenceId,
+                "pageSize": getRequest.pageSize,
+                "pageNumber": getRequest.pageNumber,
+                "searchText": getRequest.searchText,
+                "sortBy": getRequest.sortBy
               }),
               headers: {
             'Content-type': 'application/json',

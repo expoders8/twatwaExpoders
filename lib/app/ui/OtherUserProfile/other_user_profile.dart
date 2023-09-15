@@ -2,12 +2,13 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../controller/other_user_controller.dart';
 import '../../services/follower_service.dart';
 import '../../services/video_service.dart';
-import '../profile/MyPlaylist/myplaylist.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';
+import '../OtherUserProfile/OtherUserPlaylist/other_user_playlist.dart';
 import '../OtherUserProfile/OtherUserFollower/other_user_follower.dart';
 import '../OtherUserProfile/OtherUserFollowing/other_user_following.dart';
 
@@ -33,9 +34,15 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
   bool firsttime = true;
   VideoService videoService = VideoService();
   FollowerService followerService = FollowerService();
+  final OtherUserVideoController otherUserVideoController =
+      Get.put(OtherUserVideoController());
+  final OtherUserPlaylistController otherUserPlaylistController =
+      Get.put(OtherUserPlaylistController());
   @override
   void initState() {
     callApi();
+    otherUserVideoController.updateString(widget.userId.toString());
+    otherUserPlaylistController.updateString(widget.userId.toString());
     setState(() {
       if (firsttime) {
         var xx = widget.followcheck.toString() == "UNFOLLOW"
@@ -180,10 +187,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                                       userId: widget.userId,
                                     )
                                   : tabindex == 1
-                                      ? MyPlaylistPage(
-                                          userId: widget.userId,
-                                          checkText: "other",
-                                        )
+                                      ? const OtherUserPlaylistPage()
                                       : tabindex == 2
                                           ? OtherUserFollowersPage(
                                               userId: widget.userId,

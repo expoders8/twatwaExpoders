@@ -1,3 +1,14 @@
+class PlaylistRequestModel {
+  String? videoId;
+  String? userId;
+  String? userName;
+  String? playlistId;
+  int? pageSize;
+  int? pageNumber;
+  String? searchText;
+  String? sortBy;
+}
+
 class PlaylistModel {
   bool? success;
   String? message;

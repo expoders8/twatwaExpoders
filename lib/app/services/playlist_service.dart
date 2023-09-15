@@ -49,25 +49,20 @@ class PlaylistService {
     }
   }
 
-  Future<PlaylistModel> getMyPlayLists(
-      String userId, checkotherplaylist) async {
+  Future<PlaylistModel> getMyPlayLists(PlaylistRequestModel getRequest) async {
     try {
-      var data = box.read('user');
-      var getUserData = jsonDecode(data);
       var token = box.read('authToken');
       var response = await http
           .post(Uri.parse('$baseUrl/videoapi/api/Video/GetMyPlayLists'),
               body: json.encode({
-                "videoId": null,
-                "userId": checkotherplaylist == "otherPlaylist"
-                    ? userId
-                    : getUserData['id'],
-                "userName": "",
-                "playlistId": null,
-                "pageSize": 0,
-                "pageNumber": 0,
-                "searchText": "",
-                "sortBy": "",
+                "videoId": getRequest.videoId,
+                "userId": getRequest.userId,
+                "userName": getRequest.userName,
+                "playlistId": getRequest.playlistId,
+                "pageSize": getRequest.pageSize,
+                "pageNumber": getRequest.pageNumber,
+                "searchText": getRequest.searchText,
+                "sortBy": getRequest.sortBy,
               }),
               headers: {
             'Content-type': 'application/json',

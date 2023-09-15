@@ -71,7 +71,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            commentsController.fetchComments(widget.videoId.toString(), userId);
+            commentsController.fetchComment();
             FocusScope.of(context).requestFocus(FocusNode());
             Get.back();
           },
@@ -152,7 +152,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       ),
       body: WillPopScope(
         onWillPop: () {
-          commentsController.fetchComments(widget.videoId.toString(), userId);
+          // commentsController.fetchComment();
           FocusScope.of(context).requestFocus(FocusNode());
           Get.back();
           return Future.value(false);
@@ -538,7 +538,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
 
   commentSend() async {
     FocusScope.of(context).requestFocus(FocusNode());
-    // LoaderX.show(context, 70.0);
+    LoaderX.show(context, 70.0);
     await commnetsService
         .addComment(userId, widget.videoId, commentController.text,
             widget.commentId, "reply")
@@ -550,8 +550,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                 commentController.clear(),
                 replayCommentsController.fetchReply(widget.videoId.toString(),
                     userId, widget.commentId.toString()),
-                commentsController.fetchComments(
-                    widget.videoId.toString(), userId)
+                // commentsController.fetchComment()
               },
           },
         );

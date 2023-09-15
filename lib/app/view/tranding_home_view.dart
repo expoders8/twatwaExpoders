@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../routes/app_pages.dart';
+import '../controller/video_controller.dart';
+import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
-import '../../../../config/provider/loader_provider.dart';
 import '../controller/getall_video_landing_controller.dart';
 
 class TrandingHomeView extends StatefulWidget {
@@ -21,6 +22,9 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
       Get.put(GetAllVideoLandingController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -67,6 +71,9 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
                       videoDetailController.videoId(data['id']);
+                      upNextVideoController
+                          .updateString(data['categoryId'].toString());
+                      commentsController.updateString(data['id'].toString());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

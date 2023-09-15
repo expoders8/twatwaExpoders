@@ -2,8 +2,9 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../controller/video_controller.dart';
 import '../routes/app_pages.dart';
+import '../controller/video_controller.dart';
+import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
@@ -21,6 +22,7 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
       Get.put(GetAllVideoLandingController());
   final UpNextVideoController upNextVideoController =
       Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
 
@@ -69,6 +71,7 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                     onTap: () {
                       Get.toNamed(Routes.videoDetailsPage);
                       videoDetailController.videoId(data.id.toString());
+                      commentsController.updateString(data.id.toString());
                       upNextVideoController
                           .updateString(data.categoryId.toString());
                     },

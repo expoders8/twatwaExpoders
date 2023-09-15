@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:opentrend/app/ui/home/tab_page.dart';
 
-import '../../controller/video_controller.dart';
 import '../../services/video_service.dart';
 import '../profile/updateprofile.dart';
 import '../profile/MyVideo/myvideo.dart';
