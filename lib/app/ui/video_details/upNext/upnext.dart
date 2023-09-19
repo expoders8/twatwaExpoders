@@ -29,6 +29,11 @@ class _UpNextPageState extends State<UpNextPage> {
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
   String userId = "";
+  @override
+  void initState() {
+    videoController.updateCheckVideoId(widget.videoId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

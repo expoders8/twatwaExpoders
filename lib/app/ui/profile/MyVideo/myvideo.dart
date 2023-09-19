@@ -256,21 +256,22 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                                       : data.videoUploadStatus ==
                                                               "Failed"
                                                           ? Container()
-                                                          : GestureDetector(
-                                                              onTap:
-                                                                  showTypeBottomSheet,
-                                                              child: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(11),
-                                                                width: 40,
-                                                                height: 40,
-                                                                child:
-                                                                    Image.asset(
-                                                                  "assets/icons/eclips-vartical.png",
-                                                                ),
-                                                              ),
-                                                            )
+                                                          : Container()
+                                              // GestureDetector(
+                                              //     onTap:
+                                              //         showTypeBottomSheet,
+                                              //     child: Container(
+                                              //       padding:
+                                              //           const EdgeInsets
+                                              //               .all(11),
+                                              //       width: 40,
+                                              //       height: 40,
+                                              //       child:
+                                              //           Image.asset(
+                                              //         "assets/icons/eclips-vartical.png",
+                                              //       ),
+                                              //     ),
+                                              //   )
                                             ],
                                           ),
                                         ),

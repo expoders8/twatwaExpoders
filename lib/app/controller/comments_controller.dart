@@ -46,7 +46,8 @@ class CommentsController extends GetxController {
   createRequest() {
     CommentRequestModel getRequest = CommentRequestModel();
     getRequest.videoId = selectedVideoId.toString();
-    getRequest.userId = selectedUserId.toString();
+    getRequest.userId =
+        selectedUserId.value == "" ? null : selectedUserId.toString();
     getRequest.videoReferenceId = "";
     getRequest.currentUserId = null;
     getRequest.pageNumber = page.toInt();

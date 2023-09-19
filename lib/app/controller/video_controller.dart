@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:opentrend/app/controller/video_detail_controller.dart';
 
 import '../../config/constant/constant.dart';
 import '../models/video_model.dart';
+import '../routes/app_pages.dart';
 import '../services/video_service.dart';
 
 class DiscoverVideoController extends GetxController {
@@ -675,6 +678,7 @@ class TalentVideoController extends GetxController {
 class UpNextVideoController extends GetxController {
   var isLoading = true.obs;
   var videoList = <GetAllVideoModel>[].obs;
+  var dataList = <GetAllVideoModel>[].obs;
   var page = 1.obs;
   var limit = 10.obs;
   int loadedItems = 0;
@@ -682,6 +686,11 @@ class UpNextVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   final RxString selectedcategoryId = "".obs;
+  final RxString checkVideoId = "".obs;
+  final currentIndex = 0.obs;
+  RxInt listIndex = 0.obs;
+  final VideoDetailController videoDetailController =
+      Get.put(VideoDetailController());
 
   @override
   void onInit() {
@@ -695,6 +704,11 @@ class UpNextVideoController extends GetxController {
   void updateString(String newValue) {
     selectedcategoryId.value = newValue;
     fetchVideo();
+  }
+
+  void updateCheckVideoId(String newValue) {
+    checkVideoId.value = newValue;
+    fetcheSkipVideo("");
   }
 
   createRequest() {
@@ -742,6 +756,40 @@ class UpNextVideoController extends GetxController {
       isLoading(false);
       isAddingMore(false);
     }
+  }
+
+  fetcheSkipVideo(String vId) async {
+    if (vId != "") {
+      var currentVideoIndex =
+          videoList[0].data?.indexWhere((video) => video.id == vId);
+      if (currentVideoIndex! < videoList[0].data!.length - 1) {
+        currentVideoIndex++;
+      }
+      var videoData = videoList[0].data![currentVideoIndex];
+      // var stories = await videoService.getAllVideo(createRequest());
+      // dataList.assign(stories);
+      // var xx = stories.data![3];
+      videoDetailController.videoId(videoData.id.toString());
+    }
+
+    return "done";
+  }
+
+  fetchePreviousVideo(String vId) async {
+    if (vId != "") {
+      var currentVideoIndex =
+          videoList[0].data?.indexWhere((video) => video.id == vId);
+      if (currentVideoIndex! < videoList[0].data!.length - 1) {
+        currentVideoIndex--;
+      }
+      var videoData = videoList[0].data![currentVideoIndex];
+      // var stories = await videoService.getAllVideo(createRequest());
+      // dataList.assign(stories);
+      // var xx = stories.data![3];
+      videoDetailController.videoId(videoData.id.toString());
+    }
+
+    return "done";
   }
 
   Future<void> _scrollListener() async {
