@@ -152,8 +152,6 @@ class _CommentsPageState extends State<CommentsPage> {
                             children: [
                               Expanded(
                                 child: ListView.builder(
-                                  controller:
-                                      commentsController.scrollController,
                                   padding:
                                       const EdgeInsets.fromLTRB(8, 8, 8, 10),
                                   scrollDirection: Axis.vertical,

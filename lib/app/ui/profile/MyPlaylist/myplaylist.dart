@@ -141,7 +141,6 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                     : SizedBox(
                                         height: 170,
                                         child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
                                           itemCount: data.videos!.length,
                                           itemBuilder: (context, index) {
                                             var discoverData = data.videos;
@@ -228,7 +227,7 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                                                   const EdgeInsets
                                                                       .all(4),
                                                               child: Text(
-                                                                "$minutes : $seconds",
+                                                                "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                                 style: const TextStyle(
                                                                     color:
                                                                         kWhiteColor,

@@ -15,13 +15,11 @@ class CommentsController extends GetxController {
   var limit = 10.obs;
   int loadedItems = 0;
   var isAddingMore = false.obs;
-  final scrollController = ScrollController();
   var selectedVideoId = "".obs;
   var selectedUserId = "".obs;
 
   @override
   void onInit() {
-    scrollController.addListener(_scrollListener);
     if (selectedVideoId.value != "") {
       fetchComment();
     }
@@ -50,8 +48,8 @@ class CommentsController extends GetxController {
         selectedUserId.value == "" ? null : selectedUserId.toString();
     getRequest.videoReferenceId = "";
     getRequest.currentUserId = null;
-    getRequest.pageNumber = page.toInt();
-    getRequest.pageSize = loadedItems == 0 ? limit.toInt() : loadedItems;
+    getRequest.pageNumber = 1;
+    getRequest.pageSize = 100;
     getRequest.searchText = "";
     getRequest.sortBy = "";
     return getRequest;
@@ -59,40 +57,12 @@ class CommentsController extends GetxController {
 
   void fetchComment() async {
     try {
-      if (loadedItems == 0) {
-        isAddingMore(false);
-        isLoading(true);
-      } else {
-        isAddingMore(true);
-      }
+      isLoading(true);
       var stories = await commnetsService.getAllComments(createRequest());
-      if (stories.data != null) {
-        if (loadedItems == 0) {
-          commentList.assign(stories);
-        } else {
-          commentList.add(stories);
-        }
-      }
+      commentList.assign(stories);
     } finally {
       isLoading(false);
-      isAddingMore(false);
     }
-  }
-
-  Future<void> _scrollListener() async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLoading.value) {
-      // limit += 10;
-      loadedItems += limit.toInt();
-      fetchComment();
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 }
 

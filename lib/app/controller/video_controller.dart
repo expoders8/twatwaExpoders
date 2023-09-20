@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,6 @@ import 'package:opentrend/app/controller/video_detail_controller.dart';
 
 import '../../config/constant/constant.dart';
 import '../models/video_model.dart';
-import '../routes/app_pages.dart';
 import '../services/video_service.dart';
 
 class DiscoverVideoController extends GetxController {
@@ -285,17 +283,15 @@ class MyVideoController extends GetxController {
   var isLoading = true.obs;
   var videoList = <GetAllVideoModel>[].obs;
   var page = 1.obs;
-  var limit = 10.obs;
+  var limit = 20.obs;
   int loadedItems = 0;
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
-  final scrollController = ScrollController();
   final RxString selectedUserId = "".obs;
 
   @override
   void onInit() {
     getUser();
-    scrollController.addListener(_scrollListener);
     if (selectedUserId.value != "") {
       fetchVideo();
     }
@@ -329,8 +325,8 @@ class MyVideoController extends GetxController {
     getRequest.videoUploadStatus = "";
     getRequest.requestType = "";
     getRequest.hashTag = "";
-    getRequest.pageNumber = page.toInt();
-    getRequest.pageSize = loadedItems == 0 ? limit.toInt() : loadedItems;
+    getRequest.pageNumber = 1;
+    getRequest.pageSize = 100;
     getRequest.searchText = "";
     getRequest.sortBy = "";
     return getRequest;
@@ -338,40 +334,12 @@ class MyVideoController extends GetxController {
 
   void fetchVideo() async {
     try {
-      if (loadedItems == 0) {
-        isAddingMore(false);
-        isLoading(true);
-      } else {
-        isAddingMore(true);
-      }
+      isLoading(true);
       var stories = await videoService.getAllVideo(createRequest());
-      if (stories.data != null) {
-        videoList.assign(stories);
-        if (loadedItems == 0) {
-          videoList.assign(stories);
-        } else {
-          videoList.add(stories);
-        }
-      }
+      videoList.assign(stories);
     } finally {
       isLoading(false);
-      isAddingMore(false);
     }
-  }
-
-  Future<void> _scrollListener() async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLoading.value) {
-      loadedItems += limit.toInt();
-      fetchVideo();
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 }
 
@@ -684,7 +652,7 @@ class UpNextVideoController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
-  final scrollController = ScrollController();
+
   final RxString selectedcategoryId = "".obs;
   final RxString checkVideoId = "".obs;
   final currentIndex = 0.obs;
@@ -694,7 +662,6 @@ class UpNextVideoController extends GetxController {
 
   @override
   void onInit() {
-    scrollController.addListener(_scrollListener);
     if (selectedcategoryId.value != "") {
       fetchVideo();
     }
@@ -728,8 +695,8 @@ class UpNextVideoController extends GetxController {
     getRequest.videoUploadStatus = "";
     getRequest.requestType = "";
     getRequest.hashTag = "";
-    getRequest.pageNumber = page.toInt();
-    getRequest.pageSize = loadedItems == 0 ? limit.toInt() : loadedItems;
+    getRequest.pageNumber = 1;
+    getRequest.pageSize = 100;
     getRequest.searchText = "";
     getRequest.sortBy = "";
     return getRequest;
@@ -737,24 +704,11 @@ class UpNextVideoController extends GetxController {
 
   void fetchVideo() async {
     try {
-      if (loadedItems == 0) {
-        isAddingMore(false);
-        isLoading(true);
-      } else {
-        isAddingMore(true);
-      }
+      isLoading(true);
       var stories = await videoService.getAllVideo(createRequest());
-      if (stories.data != null) {
-        videoList.assign(stories);
-        if (loadedItems == 0) {
-          videoList.assign(stories);
-        } else {
-          videoList.add(stories);
-        }
-      }
+      videoList.assign(stories);
     } finally {
       isLoading(false);
-      isAddingMore(false);
     }
   }
 
@@ -766,9 +720,6 @@ class UpNextVideoController extends GetxController {
         currentVideoIndex++;
       }
       var videoData = videoList[0].data![currentVideoIndex];
-      // var stories = await videoService.getAllVideo(createRequest());
-      // dataList.assign(stories);
-      // var xx = stories.data![3];
       videoDetailController.videoId(videoData.id.toString());
     }
 
@@ -783,29 +734,10 @@ class UpNextVideoController extends GetxController {
         currentVideoIndex--;
       }
       var videoData = videoList[0].data![currentVideoIndex];
-      // var stories = await videoService.getAllVideo(createRequest());
-      // dataList.assign(stories);
-      // var xx = stories.data![3];
       videoDetailController.videoId(videoData.id.toString());
     }
 
     return "done";
-  }
-
-  Future<void> _scrollListener() async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLoading.value) {
-      // limit += 10;
-      loadedItems += limit.toInt();
-      fetchVideo();
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 }
 

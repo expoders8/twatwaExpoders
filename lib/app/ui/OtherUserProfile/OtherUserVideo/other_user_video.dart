@@ -6,8 +6,11 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/constant/font_constant.dart';
+import '../../../controller/comments_controller.dart';
 import '../../../controller/other_user_controller.dart';
+import '../../../controller/video_controller.dart';
 import '../../../controller/video_detail_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../video_details/video_details.dart';
 
 class OtherUserVideoPage extends StatefulWidget {
@@ -23,6 +26,9 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
       Get.put(OtherUserVideoController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
   Timer? timer;
 
   @override
@@ -54,9 +60,7 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
                     children: [
                       Expanded(
                         child: ListView.builder(
-                          controller: otherUserVideoController.scrollController,
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
-                          scrollDirection: Axis.vertical,
                           itemCount: otherUserVideoController
                               .videoList[0].data!.length,
                           itemBuilder: (context, index) {
@@ -75,13 +79,13 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
                                     (data.videoDurationInSeconds! % 60).toInt();
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => VideoDetailsPage(
-                                          videoId: data.id,
-                                        ),
-                                      ),
-                                    );
+                                    Get.toNamed(Routes.videoDetailsPage);
+                                    upNextVideoController.updateString(
+                                        data.categoryId.toString());
+                                    commentsController
+                                        .updateString(data.id.toString());
+                                    videoDetailController
+                                        .videoId(data.id.toString());
                                   },
                                   child: SizedBox(
                                     height: 90,
@@ -194,7 +198,7 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
                                                         const EdgeInsets.only(
                                                             right: 8.0),
                                                     child: Text(
-                                                      "$minutes : $seconds",
+                                                      "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                       style: const TextStyle(
                                                           color:
                                                               kButtonSecondaryColor,

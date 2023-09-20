@@ -5,6 +5,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../controller/comments_controller.dart';
+import '../../controller/getall_video_landing_controller.dart';
 import '../../controller/other_user_controller.dart';
 import '../../view/following_home_view.dart';
 import '../OtherUserProfile/other_user_profile.dart';
@@ -41,8 +42,10 @@ class _HomePageState extends State<HomePage> {
   final UpNextVideoController upNextVideoController =
       Get.put(UpNextVideoController());
   final CommentsController commentsController = Get.put(CommentsController());
+  final GetAllVideoLandingController videoController =
+      Get.put(GetAllVideoLandingController());
 
-  String authToken = "", userImage = "", likeValue = "";
+  String authToken = "", userImage = "", likeValue = "", userId = "";
   @override
   void initState() {
     getUser();
@@ -58,12 +61,14 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         authToken = token ?? "";
         userImage = getUserData['profilePhoto'] ?? "";
+        userId = getUserData['id'] ?? "";
       });
     }
   }
 
   Future<void> _pullRefresh() async {
     videoOfTheDayController.fetchVideoOfTheDay();
+    videoController.fetchAllLandingVideos();
   }
 
   @override
@@ -428,31 +433,35 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
-                                                    if (authToken == "") {
-                                                      loginConfirmationDialog();
-                                                    } else {
-                                                      otherUserVideoController
-                                                          .updateString(
-                                                              videoOfTheDayData
-                                                                  .userId
-                                                                  .toString());
-                                                      otherUserPlaylistController
-                                                          .updateString(
-                                                              videoOfTheDayData
-                                                                  .userId
-                                                                  .toString());
-                                                      Navigator.of(context)
-                                                          .push(
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OtherUserProfilePage(
-                                                            userId:
+                                                    if (videoOfTheDayData
+                                                            .userId !=
+                                                        userId) {
+                                                      if (authToken == "") {
+                                                        loginConfirmationDialog();
+                                                      } else {
+                                                        otherUserVideoController
+                                                            .updateString(
                                                                 videoOfTheDayData
                                                                     .userId
-                                                                    .toString(),
+                                                                    .toString());
+                                                        otherUserPlaylistController
+                                                            .updateString(
+                                                                videoOfTheDayData
+                                                                    .userId
+                                                                    .toString());
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                OtherUserProfilePage(
+                                                              userId:
+                                                                  videoOfTheDayData
+                                                                      .userId
+                                                                      .toString(),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      );
+                                                        );
+                                                      }
                                                     }
                                                   },
                                                   child: SizedBox(

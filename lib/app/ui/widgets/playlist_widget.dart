@@ -253,7 +253,11 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
                       child: CupertinoButton(
                         color: kButtonColor,
                         borderRadius: BorderRadius.circular(25),
-                        onPressed: addToPlaylistinVideo,
+                        onPressed: () {
+                          playlistController.playList[0].data!.isEmpty
+                              ? Container()
+                              : addToPlaylistinVideo();
+                        },
                         child: const Text(
                           'DONE',
                           style: TextStyle(

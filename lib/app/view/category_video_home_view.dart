@@ -180,7 +180,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                                           const EdgeInsets.all(
                                                               4),
                                                       child: Text(
-                                                        "$minutes : $seconds",
+                                                        "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                         style: const TextStyle(
                                                             color: kWhiteColor,
                                                             fontSize: 12),

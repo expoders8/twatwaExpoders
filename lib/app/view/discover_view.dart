@@ -204,7 +204,7 @@ class _DiscoverViewPageState extends State<DiscoverViewPage> {
                                                 padding:
                                                     const EdgeInsets.all(4),
                                                 child: Text(
-                                                  "$minutes : $seconds",
+                                                  "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                   style: const TextStyle(
                                                       color: kWhiteColor,
                                                       fontSize: 12),

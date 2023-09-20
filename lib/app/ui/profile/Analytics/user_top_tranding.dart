@@ -138,7 +138,7 @@ class _UserTopTrandingHomeViewState extends State<UserTopTrandingHomeView> {
                               Container(
                                 margin: const EdgeInsets.only(top: 9),
                                 child: Text(
-                                  "$minutes : $seconds",
+                                  "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                   style: const TextStyle(
                                       color: kButtonSecondaryColor,
                                       fontSize: 11,

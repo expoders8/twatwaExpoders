@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/playlist_model.dart';
@@ -14,11 +13,9 @@ class OtherUserVideoController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
-  final scrollController = ScrollController();
   final RxString selectedOtherUserId = "".obs;
   @override
   void onInit() {
-    scrollController.addListener(_scrollListener);
     if (selectedOtherUserId.value != "") {
       fetchVideo();
     }
@@ -47,8 +44,8 @@ class OtherUserVideoController extends GetxController {
     getRequest.videoUploadStatus = "";
     getRequest.requestType = "";
     getRequest.hashTag = "";
-    getRequest.pageNumber = page.toInt();
-    getRequest.pageSize = loadedItems == 0 ? limit.toInt() : loadedItems;
+    getRequest.pageNumber = 1;
+    getRequest.pageSize = 100;
     getRequest.searchText = "";
     getRequest.sortBy = "";
     return getRequest;
@@ -56,40 +53,12 @@ class OtherUserVideoController extends GetxController {
 
   void fetchVideo() async {
     try {
-      if (loadedItems == 0) {
-        isAddingMore(false);
-        isLoading(true);
-      } else {
-        isAddingMore(true);
-      }
+      isLoading(true);
       var stories = await videoService.getAllVideo(createRequest());
-      if (stories.data != null) {
-        videoList.assign(stories);
-        if (loadedItems == 0) {
-          videoList.assign(stories);
-        } else {
-          videoList.add(stories);
-        }
-      }
+      videoList.assign(stories);
     } finally {
       isLoading(false);
-      isAddingMore(false);
     }
-  }
-
-  Future<void> _scrollListener() async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLoading.value) {
-      loadedItems += limit.toInt();
-      fetchVideo();
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 }
 
@@ -101,12 +70,10 @@ class OtherUserPlaylistController extends GetxController {
   var limit = 10.obs;
   int loadedItems = 0;
   var isAddingMore = false.obs;
-  final scrollController = ScrollController();
   final RxString selectedUserId = "".obs;
 
   @override
   void onInit() {
-    scrollController.addListener(_scrollListener);
     if (selectedUserId.value != "") {
       fetchAllPlaylist();
     }
@@ -124,8 +91,8 @@ class OtherUserPlaylistController extends GetxController {
     getRequest.userId = selectedUserId.toString();
     getRequest.userName = "";
     getRequest.playlistId = null;
-    getRequest.pageNumber = page.toInt();
-    getRequest.pageSize = loadedItems == 0 ? limit.toInt() : loadedItems;
+    getRequest.pageNumber = 1;
+    getRequest.pageSize = 100;
     getRequest.searchText = "";
     getRequest.sortBy = "";
     return getRequest;
@@ -133,39 +100,11 @@ class OtherUserPlaylistController extends GetxController {
 
   void fetchAllPlaylist() async {
     try {
-      if (loadedItems == 0) {
-        isAddingMore(false);
-        isLoading(true);
-      } else {
-        isAddingMore(true);
-      }
+      isLoading(true);
       var stories = await playlistService.getMyPlayLists(createRequest());
-      if (stories.data != null) {
-        playList.assign(stories);
-        if (loadedItems == 0) {
-          playList.assign(stories);
-        } else {
-          playList.add(stories);
-        }
-      }
+      playList.assign(stories);
     } finally {
       isLoading(false);
-      isAddingMore(false);
     }
-  }
-
-  Future<void> _scrollListener() async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLoading.value) {
-      loadedItems += limit.toInt();
-      fetchAllPlaylist();
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 }

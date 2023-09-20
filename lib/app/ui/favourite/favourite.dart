@@ -308,7 +308,7 @@ class _FavouritePageState extends State<FavouritePage> {
                                                                               4),
                                                                       child:
                                                                           Text(
-                                                                        "$minutes : $seconds",
+                                                                        "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                                         style: const TextStyle(
                                                                             color:
                                                                                 kWhiteColor,

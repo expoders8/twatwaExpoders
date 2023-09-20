@@ -97,9 +97,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        controller: myVideoController.scrollController,
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                        scrollDirection: Axis.vertical,
                         itemCount: myVideoController.videoList[0].data!.length,
                         itemBuilder: (context, index) {
                           if (index == 0 &&

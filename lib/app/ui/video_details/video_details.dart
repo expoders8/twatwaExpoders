@@ -59,10 +59,13 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // var videoId = videoDetailController.videoId();
-      // videoService.videoView(videoId);
-      box.remove('videobuttonStates');
       getUser();
+      if (authToken != "") {
+        var videoId = videoDetailController.videoId();
+        videoService.videoView(videoId);
+      }
+      box.remove('videobuttonStates');
+
       videoDetailController.fetchStoryDetail(
           widget.videoId.toString(), currntuserId);
     });

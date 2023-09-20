@@ -71,7 +71,6 @@ class _UpNextPageState extends State<UpNextPage> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        controller: videoController.scrollController,
                         padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
                         scrollDirection: Axis.vertical,
                         itemCount: videoController.videoList[0].data!.length,
@@ -231,7 +230,7 @@ class _UpNextPageState extends State<UpNextPage> {
                                                           const EdgeInsets.only(
                                                               right: 8.0),
                                                       child: Text(
-                                                        "$minutes : $seconds",
+                                                        "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                         style: const TextStyle(
                                                             color:
                                                                 kButtonSecondaryColor,

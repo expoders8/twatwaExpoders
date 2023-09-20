@@ -15,13 +15,11 @@ class PlaylistController extends GetxController {
   var limit = 10.obs;
   int loadedItems = 0;
   var isAddingMore = false.obs;
-  final scrollController = ScrollController();
   final RxString selectedUserId = "".obs;
 
   @override
   void onInit() {
     getUser();
-    scrollController.addListener(_scrollListener);
     var token = box.read('authToken') ?? "";
     if (token != "") {
       fetchAllPlaylist();
@@ -45,8 +43,8 @@ class PlaylistController extends GetxController {
     getRequest.userId = selectedUserId.toString();
     getRequest.userName = "";
     getRequest.playlistId = null;
-    getRequest.pageNumber = page.toInt();
-    getRequest.pageSize = loadedItems == 0 ? limit.toInt() : loadedItems;
+    getRequest.pageNumber = 1;
+    getRequest.pageSize = 100;
     getRequest.searchText = "";
     getRequest.sortBy = "";
     return getRequest;
@@ -54,39 +52,11 @@ class PlaylistController extends GetxController {
 
   void fetchAllPlaylist() async {
     try {
-      if (loadedItems == 0) {
-        isAddingMore(false);
-        isLoading(true);
-      } else {
-        isAddingMore(true);
-      }
+      isLoading(true);
       var stories = await playlistService.getMyPlayLists(createRequest());
-      if (stories.data != null) {
-        playList.assign(stories);
-        if (loadedItems == 0) {
-          playList.assign(stories);
-        } else {
-          playList.add(stories);
-        }
-      }
+      playList.assign(stories);
     } finally {
       isLoading(false);
-      isAddingMore(false);
     }
-  }
-
-  Future<void> _scrollListener() async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLoading.value) {
-      loadedItems += limit.toInt();
-      fetchAllPlaylist();
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 }

@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../controller/comments_controller.dart';
 import '../../../controller/other_user_controller.dart';
+import '../../../controller/video_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/playlist_service.dart';
 import '../../../../config/constant/font_constant.dart';
@@ -21,6 +23,9 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
       Get.put(OtherUserPlaylistController());
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
+  final CommentsController commentsController = Get.put(CommentsController());
   PlaylistService playlistService = PlaylistService();
   @override
   Widget build(BuildContext context) {
@@ -60,8 +65,6 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                         children: [
                           Expanded(
                             child: ListView.builder(
-                              controller:
-                                  otherUserPlaylistController.scrollController,
                               padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                               scrollDirection: Axis.vertical,
                               itemCount: otherUserPlaylistController
@@ -173,6 +176,14 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                                                         onTap: () {
                                                           Get.toNamed(Routes
                                                               .videoDetailsPage);
+                                                          upNextVideoController
+                                                              .updateString(data
+                                                                  .categoryId
+                                                                  .toString());
+                                                          commentsController
+                                                              .updateString(data
+                                                                  .id
+                                                                  .toString());
                                                           videoDetailController
                                                               .videoId(data.id
                                                                   .toString());
@@ -226,7 +237,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                                                                               4),
                                                                       child:
                                                                           Text(
-                                                                        "$minutes : $seconds",
+                                                                        "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                                                         style: const TextStyle(
                                                                             color:
                                                                                 kWhiteColor,
