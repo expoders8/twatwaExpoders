@@ -1,28 +1,50 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:opentrend/app/ui/video_details/video_details.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/constant/constant.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../controller/video_controller.dart';
+import '../../controller/video_detail_controller.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
-  const VideoPlayerScreen({super.key, required this.videoUrl});
+  final String videoid;
+  final String videoQualityDatas;
+  const VideoPlayerScreen(
+      {super.key,
+      required this.videoUrl,
+      required this.videoQualityDatas,
+      required this.videoid});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  final UpNextVideoController videoController =
+      Get.put(UpNextVideoController());
+  final VideoDetailController videoDetailController =
+      Get.put(VideoDetailController());
   double _sliderValue = 0.0;
   late VideoPlayerController _controller;
   bool isChecked = false,
       showOverlay = true,
+      xxplay = false,
       _isPlaying = false,
+      localValue = true,
+      videoquality = true,
       click = false,
       _isFullScreen = false;
-  int selectvideoQualityIndex = 6;
-  String qualityname = "";
+  List<bool> buttonStates = List.generate(10, (index) => false);
+  int selectvideoQualityIndex = 3;
+  String qualityname = "", tsecond = "";
   @override
   void initState() {
     super.initState();
@@ -34,19 +56,39 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       showOverlay = false;
       _isPlaying = true;
     });
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..initialize().then((_) {
-        setState(() {});
-      });
+    videoPlayerController(widget.videoUrl.toString());
+  }
 
+  videoPlayerController(String url) {
+    Future.delayed(const Duration(milliseconds: 180), () async {
+      showOverlay = false;
+      _isPlaying = true;
+    });
+    _controller = VideoPlayerController.networkUrl(Uri.parse(url))
+      ..initialize().then((_) {
+        setState(() {
+          _controller.play();
+        });
+      });
     _controller.addListener(() {
       if (_controller.value.isPlaying) {
         setState(() {
           _sliderValue = _controller.value.position.inMilliseconds.toDouble();
         });
       }
+      if (_controller.value.position == _controller.value.duration) {
+        if (videoquality) {
+          if (tsecond != "00") {
+            _playNextVideo();
+          }
+        }
+      }
     });
     _controller.play();
+  }
+
+  _playNextVideo() {
+    videotonext();
   }
 
   @override
@@ -57,14 +99,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: kBackGroundColor,
       width: Get.width,
-      height: _isFullScreen ? Get.height : 240,
+      height: _isFullScreen
+          ? Get.height
+          : _controller.value.aspectRatio <= 0.80
+              ? 480
+              : 240,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           _controller.value.isInitialized
-              ? VideoPlayer(_controller)
+              ? _isFullScreen
+                  ? VideoPlayer(
+                      _controller,
+                    )
+                  : AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(
+                        _controller,
+                      ))
               : const Center(
                   child: Padding(
                   padding: EdgeInsets.only(top: 10.0),
@@ -95,9 +150,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           color: Colors.black.withOpacity(0.7),
           child: Column(
             children: [
+              SizedBox(
+                  height: _isFullScreen
+                      ? _controller.value.aspectRatio <= 0.80
+                          ? 20
+                          : 0
+                      : 4),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: _isFullScreen ? 50 : 10,
+                    horizontal: _isFullScreen
+                        ? _controller.value.aspectRatio <= 0.80
+                            ? 10
+                            : 50
+                        : 10,
                     vertical: _isFullScreen ? 10 : 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,16 +198,26 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: _isFullScreen ? 60 : 0),
+              SizedBox(
+                  height: _isFullScreen
+                      ? _controller.value.aspectRatio <= 0.80
+                          ? 270
+                          : 60
+                      : _controller.value.aspectRatio <= 0.80
+                          ? 110
+                          : 0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 25,
-                    width: 25,
-                    child: Image.asset(
-                      "assets/icons/previousNext.png",
-                      fit: BoxFit.cover,
+                  IconButton(
+                    onPressed: videotoprevious,
+                    icon: SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: Image.asset(
+                        "assets/icons/previousNext.png",
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   SizedBox(width: _isFullScreen ? 60 : 33),
@@ -176,17 +251,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     ),
                   ),
                   SizedBox(width: _isFullScreen ? 60 : 30),
-                  SizedBox(
-                    height: 25,
-                    width: 25,
-                    child: Image.asset(
-                      "assets/icons/nextVideo.png",
-                      fit: BoxFit.cover,
+                  IconButton(
+                    onPressed: videotonext,
+                    icon: SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: Image.asset(
+                        "assets/icons/nextVideo.png",
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
+                  )
                 ],
               ),
-              SizedBox(height: _isFullScreen ? 100 : 40),
+              SizedBox(
+                  height: _isFullScreen
+                      ? _controller.value.aspectRatio <= 0.80
+                          ? 300
+                          : 100
+                      : _controller.value.aspectRatio <= 0.80
+                          ? 170
+                          : 40),
               Container(
                 padding:
                     EdgeInsets.symmetric(horizontal: _isFullScreen ? 30 : 10),
@@ -255,6 +340,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   String _formatDuration(Duration duration) {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    // if (_controller.value.position == _controller.value.duration) {
+    //   videotonext();
+    // }
+    setState(() {
+      tsecond = seconds;
+    });
     return "$minutes:$seconds";
   }
 
@@ -278,11 +369,50 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     }
   }
 
+  videotonext() {
+    videoController.fetcheSkipVideo(widget.videoid).then((value) => {
+          if (value == "done")
+            {
+              videoDetailController.videoId(),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const VideoDetailsPage(),
+                ),
+              ),
+            }
+        });
+  }
+
+  videotoprevious() {
+    videoController.fetchePreviousVideo(widget.videoid).then((value) => {
+          if (value == "done")
+            {
+              videoDetailController.videoId(),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const VideoDetailsPage(),
+                ),
+              ),
+            }
+        });
+  }
+
   void _toggleFullScreen() {
     setState(() {
-      _isFullScreen ? _exitFullScreen() : _enterFullScreen();
+      _isFullScreen
+          ? _exitFullScreen()
+          : _controller.value.aspectRatio <= 0.80
+              ? _enterpotraitFullScreen()
+              : _enterFullScreen();
       _isFullScreen = !_isFullScreen;
     });
+  }
+
+  void _enterpotraitFullScreen() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 
   void _enterFullScreen() {
@@ -313,6 +443,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   videoQualitySelectBottomsheet() {
+    var videoQualityData = jsonDecode(widget.videoQualityDatas.toString());
+    buttonStates =
+        List.generate(videoQualityData['source'].length, (index) => false);
+    if (buttonStates.isNotEmpty) {
+      buttonStates[buttonStates.length - 1] = true;
+    }
+
+    if (localValue) {
+      box.write('videobuttonStates', buttonStates);
+    }
+    var activeButton = box.read('videobuttonStates');
     FocusScope.of(context).requestFocus(FocusNode());
     return showModalBottomSheet(
         isScrollControlled: true,
@@ -371,399 +512,678 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: Get.height - 125,
-                      child: ListView.builder(
-                        itemCount: 1,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       selectvideoQualityIndex = 0;
-                              //       qualityname = "1080p";
-                              //     });
-                              //     Get.back();
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 15.0, vertical: 5),
-                              //     child: Container(
-                              //       width: _isFullScreen
-                              //           ? Get.width - 300
-                              //           : Get.width,
-                              //       height: 70,
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(5)),
-                              //       child: Card(
-                              //           color: kCardColor,
-                              //           shape: RoundedRectangleBorder(
-                              //               side: BorderSide(
-                              //                   color:
-                              //                       selectvideoQualityIndex == 0
-                              //                           ? kButtonColor
-                              //                           : kCardColor,
-                              //                   width: 2.0),
-                              //               borderRadius:
-                              //                   BorderRadius.circular(4.0)),
-                              //           child: Center(
-                              //               child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: const [
-                              //               Text(
-                              //                 "1080p",
-                              //                 style: TextStyle(
-                              //                   color: kWhiteColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 5),
-                              //               Text(
-                              //                 "FHD",
-                              //                 style: TextStyle(
-                              //                   color: kButtonColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ))),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       selectvideoQualityIndex = 1;
-                              //       qualityname = "720p";
-                              //     });
-                              //     Get.back();
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 15.0, vertical: 5),
-                              //     child: Container(
-                              //       width: _isFullScreen
-                              //           ? Get.width - 300
-                              //           : Get.width,
-                              //       height: 70,
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(5)),
-                              //       child: Card(
-                              //           color: kCardColor,
-                              //           shape: RoundedRectangleBorder(
-                              //               side: BorderSide(
-                              //                   color:
-                              //                       selectvideoQualityIndex == 1
-                              //                           ? kButtonColor
-                              //                           : kCardColor,
-                              //                   width: 2.0),
-                              //               borderRadius:
-                              //                   BorderRadius.circular(4.0)),
-                              //           child: Center(
-                              //               child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: const [
-                              //               Text(
-                              //                 "720p",
-                              //                 style: TextStyle(
-                              //                   color: kWhiteColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 5),
-                              //               Text(
-                              //                 "HD",
-                              //                 style: TextStyle(
-                              //                   color: kButtonColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ))),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       selectvideoQualityIndex = 2;
-                              //       qualityname = "480p";
-                              //     });
-                              //     Get.back();
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 15.0, vertical: 5),
-                              //     child: Container(
-                              //       width: _isFullScreen
-                              //           ? Get.width - 300
-                              //           : Get.width,
-                              //       height: 70,
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(5)),
-                              //       child: Card(
-                              //           color: kCardColor,
-                              //           shape: RoundedRectangleBorder(
-                              //               side: BorderSide(
-                              //                   color:
-                              //                       selectvideoQualityIndex == 2
-                              //                           ? kButtonColor
-                              //                           : kCardColor,
-                              //                   width: 2.0),
-                              //               borderRadius:
-                              //                   BorderRadius.circular(4.0)),
-                              //           child: Center(
-                              //               child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: const [
-                              //               Text(
-                              //                 "480p",
-                              //                 style: TextStyle(
-                              //                   color: kWhiteColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 5),
-                              //               Text(
-                              //                 "",
-                              //                 style: TextStyle(
-                              //                   color: kButtonColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ))),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       selectvideoQualityIndex = 3;
-                              //       qualityname = "360p";
-                              //     });
-                              //     Get.back();
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 15.0, vertical: 5),
-                              //     child: Container(
-                              //       width: _isFullScreen
-                              //           ? Get.width - 300
-                              //           : Get.width,
-                              //       height: 70,
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(5)),
-                              //       child: Card(
-                              //           color: kCardColor,
-                              //           shape: RoundedRectangleBorder(
-                              //               side: BorderSide(
-                              //                   color:
-                              //                       selectvideoQualityIndex == 3
-                              //                           ? kButtonColor
-                              //                           : kCardColor,
-                              //                   width: 2.0),
-                              //               borderRadius:
-                              //                   BorderRadius.circular(4.0)),
-                              //           child: Center(
-                              //               child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: const [
-                              //               Text(
-                              //                 "360p",
-                              //                 style: TextStyle(
-                              //                   color: kWhiteColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 5),
-                              //               Text(
-                              //                 "",
-                              //                 style: TextStyle(
-                              //                   color: kButtonColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ))),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       selectvideoQualityIndex = 4;
-                              //       qualityname = "240p";
-                              //     });
-                              //     Get.back();
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 15.0, vertical: 5),
-                              //     child: Container(
-                              //       width: _isFullScreen
-                              //           ? Get.width - 300
-                              //           : Get.width,
-                              //       height: 70,
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(5)),
-                              //       child: Card(
-                              //           color: kCardColor,
-                              //           shape: RoundedRectangleBorder(
-                              //               side: BorderSide(
-                              //                   color:
-                              //                       selectvideoQualityIndex == 4
-                              //                           ? kButtonColor
-                              //                           : kCardColor,
-                              //                   width: 2.0),
-                              //               borderRadius:
-                              //                   BorderRadius.circular(4.0)),
-                              //           child: Center(
-                              //               child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: const [
-                              //               Text(
-                              //                 "240p",
-                              //                 style: TextStyle(
-                              //                   color: kWhiteColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 5),
-                              //               Text(
-                              //                 "",
-                              //                 style: TextStyle(
-                              //                   color: kButtonColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ))),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     setState(() {
-                              //       selectvideoQualityIndex = 5;
-                              //       qualityname = "144p";
-                              //     });
-                              //     Get.back();
-                              //   },
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 15.0, vertical: 5),
-                              //     child: Container(
-                              //       width: _isFullScreen
-                              //           ? Get.width - 300
-                              //           : Get.width,
-                              //       height: 70,
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(5)),
-                              //       child: Card(
-                              //           color: kCardColor,
-                              //           shape: RoundedRectangleBorder(
-                              //               side: BorderSide(
-                              //                   color:
-                              //                       selectvideoQualityIndex == 5
-                              //                           ? kButtonColor
-                              //                           : kCardColor,
-                              //                   width: 2.0),
-                              //               borderRadius:
-                              //                   BorderRadius.circular(4.0)),
-                              //           child: Center(
-                              //               child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: const [
-                              //               Text(
-                              //                 "144p",
-                              //                 style: TextStyle(
-                              //                   color: kWhiteColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 5),
-                              //               Text(
-                              //                 "",
-                              //                 style: TextStyle(
-                              //                   color: kButtonColor,
-                              //                   fontSize: 14,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ))),
-                              //     ),
-                              //   ),
-                              // ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectvideoQualityIndex = 6;
-                                    qualityname = "Auto";
-                                  });
-                                  Get.back();
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0, vertical: 5),
-                                  child: Container(
-                                    width: _isFullScreen
-                                        ? Get.width - 300
-                                        : Get.width,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Card(
-                                      color: kCardColor,
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color:
-                                                  selectvideoQualityIndex == 6
-                                                      ? kButtonColor
-                                                      : kCardColor,
-                                              width: 2.0),
-                                          borderRadius:
-                                              BorderRadius.circular(4.0)),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Text(
-                                              "Auto",
-                                              style: TextStyle(
-                                                color: kWhiteColor,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              "",
-                                              style: TextStyle(
-                                                color: kButtonColor,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
+                    videoQualityData == null
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 290.0),
+                            child: Center(
+                              child: Text(
+                                "No Video Quality found",
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontSize: 15,
+                                    fontFamily: kFuturaPTDemi),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            height: Get.height - 125,
+                            child: ListView.builder(
+                              itemCount: videoQualityData['source'].length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                var discoverData = videoQualityData['source'];
+
+                                if (discoverData!.isEmpty) {
+                                  return const Center(
+                                    child: Text(
+                                      "No Video found",
+                                      style: TextStyle(
+                                          color: kWhiteColor,
+                                          fontSize: 15,
+                                          fontFamily: kFuturaPTDemi),
+                                    ),
+                                  );
+                                } else {
+                                  var data = discoverData[index];
+                                  return Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            if (buttonStates.isNotEmpty) {
+                                              buttonStates[buttonStates.length -
+                                                  1] = false;
+                                            }
+                                            buttonStates[index] =
+                                                !buttonStates[index];
+                                            localValue = false;
+                                            box.write('videobuttonStates',
+                                                buttonStates);
+                                            videoquality = false;
+                                            videoPlayerController(
+                                                data['Data']['Url']);
+                                          });
+                                          Get.back();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15.0, vertical: 5),
+                                          child: Container(
+                                            width: _isFullScreen
+                                                ? Get.width - 300
+                                                : Get.width,
+                                            height: 70,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            child: Card(
+                                                color: kCardColor,
+                                                shape: RoundedRectangleBorder(
+                                                    side: BorderSide(
+                                                        color:
+                                                            activeButton[index]
+                                                                ? kButtonColor
+                                                                : kCardColor,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0)),
+                                                child: Center(
+                                                    child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      data['Quality'], // 1080
+                                                      style: const TextStyle(
+                                                        color: kWhiteColor,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 5),
+                                                    Text(
+                                                      data['Quality'] == "2160p"
+                                                          ? "FHD"
+                                                          : data['Quality'] ==
+                                                                  "1080p"
+                                                              ? "HD"
+                                                              : "",
+                                                      style: const TextStyle(
+                                                        color: kButtonColor,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     setState(() {
+                                      //       selectvideoQualityIndex = 4;
+                                      //       qualityname = "240p";
+                                      //     });
+                                      //     Get.back();
+                                      //   },
+                                      //   child: Padding(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 15.0, vertical: 5),
+                                      //     child: Container(
+                                      //       width: _isFullScreen
+                                      //           ? Get.width - 300
+                                      //           : Get.width,
+                                      //       height: 70,
+                                      //       decoration: BoxDecoration(
+                                      //           borderRadius:
+                                      //               BorderRadius.circular(5)),
+                                      //       child: Card(
+                                      //           color: kCardColor,
+                                      //           shape: RoundedRectangleBorder(
+                                      //               side: BorderSide(
+                                      //                   color:
+                                      //                       selectvideoQualityIndex ==
+                                      //                               4
+                                      //                           ? kButtonColor
+                                      //                           : kCardColor,
+                                      //                   width: 2.0),
+                                      //               borderRadius:
+                                      //                   BorderRadius.circular(
+                                      //                       4.0)),
+                                      //           child: Center(
+                                      //               child: Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment.center,
+                                      //             children: [
+                                      //               Text(
+                                      //                 discoverData[2]
+                                      //                     ['Quality'],
+                                      //                 style: const TextStyle(
+                                      //                   color: kWhiteColor,
+                                      //                   fontSize: 14,
+                                      //                 ),
+                                      //               ),
+                                      //               const SizedBox(width: 5),
+                                      //               const Text(
+                                      //                 "",
+                                      //                 style: TextStyle(
+                                      //                   color: kButtonColor,
+                                      //                   fontSize: 14,
+                                      //                 ),
+                                      //               ),
+                                      //             ],
+                                      //           ))),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     setState(() {
+                                      //       selectvideoQualityIndex = 5;
+                                      //       qualityname = "144p";
+                                      //     });
+                                      //     Get.back();
+                                      //   },
+                                      //   child: Padding(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 15.0, vertical: 5),
+                                      //     child: Container(
+                                      //       width: _isFullScreen
+                                      //           ? Get.width - 300
+                                      //           : Get.width,
+                                      //       height: 70,
+                                      //       decoration: BoxDecoration(
+                                      //           borderRadius:
+                                      //               BorderRadius.circular(5)),
+                                      //       child: Card(
+                                      //           color: kCardColor,
+                                      //           shape: RoundedRectangleBorder(
+                                      //               side: BorderSide(
+                                      //                   color:
+                                      //                       selectvideoQualityIndex ==
+                                      //                               5
+                                      //                           ? kButtonColor
+                                      //                           : kCardColor,
+                                      //                   width: 2.0),
+                                      //               borderRadius:
+                                      //                   BorderRadius.circular(
+                                      //                       4.0)),
+                                      //           child: Center(
+                                      //               child: Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment.center,
+                                      //             children: const [
+                                      //               Text(
+                                      //                 "144p",
+                                      //                 style: TextStyle(
+                                      //                   color: kWhiteColor,
+                                      //                   fontSize: 14,
+                                      //                 ),
+                                      //               ),
+                                      //               SizedBox(width: 5),
+                                      //               Text(
+                                      //                 "",
+                                      //                 style: TextStyle(
+                                      //                   color: kButtonColor,
+                                      //                   fontSize: 14,
+                                      //                 ),
+                                      //               ),
+                                      //             ],
+                                      //           ))),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     setState(() {
+                                      //       selectvideoQualityIndex = 6;
+                                      //       qualityname = "Auto";
+                                      //     });
+                                      //     Get.back();
+                                      //   },
+                                      //   child: Padding(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 15.0, vertical: 5),
+                                      //     child: Container(
+                                      //       width: _isFullScreen
+                                      //           ? Get.width - 300
+                                      //           : Get.width,
+                                      //       height: 70,
+                                      //       decoration: BoxDecoration(
+                                      //           borderRadius:
+                                      //               BorderRadius.circular(5)),
+                                      //       child: Card(
+                                      //         color: kCardColor,
+                                      //         shape: RoundedRectangleBorder(
+                                      //             side: BorderSide(
+                                      //                 color:
+                                      //                     selectvideoQualityIndex ==
+                                      //                             6
+                                      //                         ? kButtonColor
+                                      //                         : kCardColor,
+                                      //                 width: 2.0),
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(
+                                      //                     4.0)),
+                                      //         child: Center(
+                                      //           child: Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment.center,
+                                      //             children: const [
+                                      //               Text(
+                                      //                 "Auto",
+                                      //                 style: TextStyle(
+                                      //                   color: kWhiteColor,
+                                      //                   fontSize: 14,
+                                      //                 ),
+                                      //               ),
+                                      //               SizedBox(width: 5),
+                                      //               Text(
+                                      //                 "",
+                                      //                 style: TextStyle(
+                                      //                   color: kButtonColor,
+                                      //                   fontSize: 14,
+                                      //                 ),
+                                      //               ),
+                                      //             ],
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
+                                  );
+                                }
+                              },
+                            ),
+                            // itemBuilder: (context, index) {
+                            //   return Column(
+                            //     children: [
+                            //       // GestureDetector(
+                            //       //   onTap: () {
+                            //       //     setState(() {
+                            //       //       selectvideoQualityIndex = 0;
+                            //       //       qualityname = "1080p";
+                            //       //     });
+                            //       //     Get.back();
+                            //       //   },
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.symmetric(
+                            //       //         horizontal: 15.0, vertical: 5),
+                            //       //     child: Container(
+                            //       //       width: _isFullScreen
+                            //       //           ? Get.width - 300
+                            //       //           : Get.width,
+                            //       //       height: 70,
+                            //       //       decoration: BoxDecoration(
+                            //       //           borderRadius: BorderRadius.circular(5)),
+                            //       //       child: Card(
+                            //       //           color: kCardColor,
+                            //       //           shape: RoundedRectangleBorder(
+                            //       //               side: BorderSide(
+                            //       //                   color:
+                            //       //                       selectvideoQualityIndex == 0
+                            //       //                           ? kButtonColor
+                            //       //                           : kCardColor,
+                            //       //                   width: 2.0),
+                            //       //               borderRadius:
+                            //       //                   BorderRadius.circular(4.0)),
+                            //       //           child: Center(
+                            //       //               child: Row(
+                            //       //             mainAxisAlignment:
+                            //       //                 MainAxisAlignment.center,
+                            //       //             children: const [
+                            //       //               Text(
+                            //       //                 "1080p",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kWhiteColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //               SizedBox(width: 5),
+                            //       //               Text(
+                            //       //                 "FHD",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kButtonColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //             ],
+                            //       //           ))),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //       // GestureDetector(
+                            //       //   onTap: () {
+                            //       //     setState(() {
+                            //       //       selectvideoQualityIndex = 1;
+                            //       //       qualityname = "720p";
+                            //       //     });
+                            //       //     Get.back();
+                            //       //   },
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.symmetric(
+                            //       //         horizontal: 15.0, vertical: 5),
+                            //       //     child: Container(
+                            //       //       width: _isFullScreen
+                            //       //           ? Get.width - 300
+                            //       //           : Get.width,
+                            //       //       height: 70,
+                            //       //       decoration: BoxDecoration(
+                            //       //           borderRadius: BorderRadius.circular(5)),
+                            //       //       child: Card(
+                            //       //           color: kCardColor,
+                            //       //           shape: RoundedRectangleBorder(
+                            //       //               side: BorderSide(
+                            //       //                   color:
+                            //       //                       selectvideoQualityIndex == 1
+                            //       //                           ? kButtonColor
+                            //       //                           : kCardColor,
+                            //       //                   width: 2.0),
+                            //       //               borderRadius:
+                            //       //                   BorderRadius.circular(4.0)),
+                            //       //           child: Center(
+                            //       //               child: Row(
+                            //       //             mainAxisAlignment:
+                            //       //                 MainAxisAlignment.center,
+                            //       //             children: const [
+                            //       //               Text(
+                            //       //                 "720p",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kWhiteColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //               SizedBox(width: 5),
+                            //       //               Text(
+                            //       //                 "HD",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kButtonColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //             ],
+                            //       //           ))),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //       // GestureDetector(
+                            //       //   onTap: () {
+                            //       //     setState(() {
+                            //       //       selectvideoQualityIndex = 2;
+                            //       //       qualityname = "480p";
+                            //       //     });
+                            //       //     Get.back();
+                            //       //   },
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.symmetric(
+                            //       //         horizontal: 15.0, vertical: 5),
+                            //       //     child: Container(
+                            //       //       width: _isFullScreen
+                            //       //           ? Get.width - 300
+                            //       //           : Get.width,
+                            //       //       height: 70,
+                            //       //       decoration: BoxDecoration(
+                            //       //           borderRadius: BorderRadius.circular(5)),
+                            //       //       child: Card(
+                            //       //           color: kCardColor,
+                            //       //           shape: RoundedRectangleBorder(
+                            //       //               side: BorderSide(
+                            //       //                   color:
+                            //       //                       selectvideoQualityIndex == 2
+                            //       //                           ? kButtonColor
+                            //       //                           : kCardColor,
+                            //       //                   width: 2.0),
+                            //       //               borderRadius:
+                            //       //                   BorderRadius.circular(4.0)),
+                            //       //           child: Center(
+                            //       //               child: Row(
+                            //       //             mainAxisAlignment:
+                            //       //                 MainAxisAlignment.center,
+                            //       //             children: const [
+                            //       //               Text(
+                            //       //                 "480p",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kWhiteColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //               SizedBox(width: 5),
+                            //       //               Text(
+                            //       //                 "",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kButtonColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //             ],
+                            //       //           ))),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //       // GestureDetector(
+                            //       //   onTap: () {
+                            //       //     setState(() {
+                            //       //       selectvideoQualityIndex = 3;
+                            //       //       qualityname = "360p";
+                            //       //     });
+                            //       //     Get.back();
+                            //       //   },
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.symmetric(
+                            //       //         horizontal: 15.0, vertical: 5),
+                            //       //     child: Container(
+                            //       //       width: _isFullScreen
+                            //       //           ? Get.width - 300
+                            //       //           : Get.width,
+                            //       //       height: 70,
+                            //       //       decoration: BoxDecoration(
+                            //       //           borderRadius: BorderRadius.circular(5)),
+                            //       //       child: Card(
+                            //       //           color: kCardColor,
+                            //       //           shape: RoundedRectangleBorder(
+                            //       //               side: BorderSide(
+                            //       //                   color:
+                            //       //                       selectvideoQualityIndex == 3
+                            //       //                           ? kButtonColor
+                            //       //                           : kCardColor,
+                            //       //                   width: 2.0),
+                            //       //               borderRadius:
+                            //       //                   BorderRadius.circular(4.0)),
+                            //       //           child: Center(
+                            //       //               child: Row(
+                            //       //             mainAxisAlignment:
+                            //       //                 MainAxisAlignment.center,
+                            //       //             children: const [
+                            //       //               Text(
+                            //       //                 "360p",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kWhiteColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //               SizedBox(width: 5),
+                            //       //               Text(
+                            //       //                 "",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kButtonColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //             ],
+                            //       //           ))),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //       // GestureDetector(
+                            //       //   onTap: () {
+                            //       //     setState(() {
+                            //       //       selectvideoQualityIndex = 4;
+                            //       //       qualityname = "240p";
+                            //       //     });
+                            //       //     Get.back();
+                            //       //   },
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.symmetric(
+                            //       //         horizontal: 15.0, vertical: 5),
+                            //       //     child: Container(
+                            //       //       width: _isFullScreen
+                            //       //           ? Get.width - 300
+                            //       //           : Get.width,
+                            //       //       height: 70,
+                            //       //       decoration: BoxDecoration(
+                            //       //           borderRadius: BorderRadius.circular(5)),
+                            //       //       child: Card(
+                            //       //           color: kCardColor,
+                            //       //           shape: RoundedRectangleBorder(
+                            //       //               side: BorderSide(
+                            //       //                   color:
+                            //       //                       selectvideoQualityIndex == 4
+                            //       //                           ? kButtonColor
+                            //       //                           : kCardColor,
+                            //       //                   width: 2.0),
+                            //       //               borderRadius:
+                            //       //                   BorderRadius.circular(4.0)),
+                            //       //           child: Center(
+                            //       //               child: Row(
+                            //       //             mainAxisAlignment:
+                            //       //                 MainAxisAlignment.center,
+                            //       //             children: const [
+                            //       //               Text(
+                            //       //                 "240p",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kWhiteColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //               SizedBox(width: 5),
+                            //       //               Text(
+                            //       //                 "",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kButtonColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //             ],
+                            //       //           ))),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //       // GestureDetector(
+                            //       //   onTap: () {
+                            //       //     setState(() {
+                            //       //       selectvideoQualityIndex = 5;
+                            //       //       qualityname = "144p";
+                            //       //     });
+                            //       //     Get.back();
+                            //       //   },
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.symmetric(
+                            //       //         horizontal: 15.0, vertical: 5),
+                            //       //     child: Container(
+                            //       //       width: _isFullScreen
+                            //       //           ? Get.width - 300
+                            //       //           : Get.width,
+                            //       //       height: 70,
+                            //       //       decoration: BoxDecoration(
+                            //       //           borderRadius: BorderRadius.circular(5)),
+                            //       //       child: Card(
+                            //       //           color: kCardColor,
+                            //       //           shape: RoundedRectangleBorder(
+                            //       //               side: BorderSide(
+                            //       //                   color:
+                            //       //                       selectvideoQualityIndex == 5
+                            //       //                           ? kButtonColor
+                            //       //                           : kCardColor,
+                            //       //                   width: 2.0),
+                            //       //               borderRadius:
+                            //       //                   BorderRadius.circular(4.0)),
+                            //       //           child: Center(
+                            //       //               child: Row(
+                            //       //             mainAxisAlignment:
+                            //       //                 MainAxisAlignment.center,
+                            //       //             children: const [
+                            //       //               Text(
+                            //       //                 "144p",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kWhiteColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //               SizedBox(width: 5),
+                            //       //               Text(
+                            //       //                 "",
+                            //       //                 style: TextStyle(
+                            //       //                   color: kButtonColor,
+                            //       //                   fontSize: 14,
+                            //       //                 ),
+                            //       //               ),
+                            //       //             ],
+                            //       //           ))),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //       GestureDetector(
+                            //         onTap: () {
+                            //           setState(() {
+                            //             selectvideoQualityIndex = 6;
+                            //             qualityname = "Auto";
+                            //           });
+                            //           Get.back();
+                            //         },
+                            //         child: Padding(
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: 15.0, vertical: 5),
+                            //           child: Container(
+                            //             width: _isFullScreen
+                            //                 ? Get.width - 300
+                            //                 : Get.width,
+                            //             height: 70,
+                            //             decoration: BoxDecoration(
+                            //                 borderRadius: BorderRadius.circular(5)),
+                            //             child: Card(
+                            //               color: kCardColor,
+                            //               shape: RoundedRectangleBorder(
+                            //                   side: BorderSide(
+                            //                       color:
+                            //                           selectvideoQualityIndex == 6
+                            //                               ? kButtonColor
+                            //                               : kCardColor,
+                            //                       width: 2.0),
+                            //                   borderRadius:
+                            //                       BorderRadius.circular(4.0)),
+                            //               child: Center(
+                            //                 child: Row(
+                            //                   mainAxisAlignment:
+                            //                       MainAxisAlignment.center,
+                            //                   children: const [
+                            //                     Text(
+                            //                       "Auto",
+                            //                       style: TextStyle(
+                            //                         color: kWhiteColor,
+                            //                         fontSize: 14,
+                            //                       ),
+                            //                     ),
+                            //                     SizedBox(width: 5),
+                            //                     Text(
+                            //                       "",
+                            //                       style: TextStyle(
+                            //                         color: kButtonColor,
+                            //                         fontSize: 14,
+                            //                       ),
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   );
+                            // },
+                          ),
                   ],
                 ),
               ),

@@ -61,6 +61,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // var videoId = videoDetailController.videoId();
       // videoService.videoView(videoId);
+      box.remove('videobuttonStates');
       getUser();
       videoDetailController.fetchStoryDetail(
           widget.videoId.toString(), currntuserId);
@@ -123,7 +124,10 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
               child: Column(
                 children: [
                   VideoPlayerScreen(
-                      videoUrl: detailData.videoStreamingUrl.toString()),
+                    videoid: detailData.id.toString(),
+                    videoUrl: detailData.videoStreamingUrl.toString(),
+                    videoQualityDatas: detailData.qualityJson.toString(),
+                  ),
                   Expanded(
                     child: SizedBox(
                       height: Get.height,
@@ -143,7 +147,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                               detailData.id,
                               detailData.isLiked,
                               detailData.isDisliked,
-                              detailData.userProfileImage.toString() ?? "",
+                              detailData.userProfileImage ?? "",
                               detailData.numberOfFollowers,
                               detailData.userId,
                             ),
