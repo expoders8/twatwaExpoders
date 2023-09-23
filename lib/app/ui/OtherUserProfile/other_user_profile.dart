@@ -261,7 +261,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                   children: [
                     Container(
                       padding:
-                          const EdgeInsets.only(top: 20, left: 20, bottom: 0),
+                          const EdgeInsets.only(top: 28, left: 20, bottom: 0),
                       decoration: const BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
@@ -273,12 +273,12 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                             onPressed: () {
                               Get.back();
                             },
-                            icon: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
+                            icon: SizedBox(
+                              height: 16,
+                              width: 26,
                               child: Image.asset(
-                                "assets/icons/back.png",
-                                scale: 9,
-                                color: kWhiteColor,
+                                "assets/icons/back_white.png",
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

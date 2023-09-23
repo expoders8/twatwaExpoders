@@ -148,7 +148,9 @@ class GetAllVideoDataModel {
     videoHashTagId = json['videoHashTagId'];
     videoDurationInSeconds = json['videoDurationInSeconds'] == 0
         ? 0.00
-        : json['videoDurationInSeconds'];
+        : json['videoDurationInSeconds'] >= 0
+            ? double.parse("${json['videoDurationInSeconds']}")
+            : json['videoDurationInSeconds'];
     videoThumbnailImagePath = json['videoThumbnailImagePath'];
     videoUploadStatus = json['videoUploadStatus'];
     isLiked = json['isLiked'];

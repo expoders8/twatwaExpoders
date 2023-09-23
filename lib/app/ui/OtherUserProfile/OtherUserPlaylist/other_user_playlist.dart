@@ -211,7 +211,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                                                                               stackTrace) =>
                                                                           Image
                                                                               .asset(
-                                                                        "assets/images/tranding1.png",
+                                                                        "assets/Opentrend_light_applogo.jpeg",
                                                                         fit: BoxFit
                                                                             .fill,
                                                                       ),

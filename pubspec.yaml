@@ -59,6 +59,10 @@ dependencies:
   flutter_local_notifications: ^15.1.1
   firebase_messaging: ^14.6.7
   firebase_core: ^2.14.0
+  flutter_stripe: ^7.0.0
+  flutter_typeahead: ^4.7.0
+  webview_flutter: 3.0.1
+  http_auth: ^1.0.1
 
 dev_dependencies:
   flutter_test:

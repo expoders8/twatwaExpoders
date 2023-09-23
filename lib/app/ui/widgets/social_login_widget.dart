@@ -52,6 +52,7 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       if (googleSignInAccount != null) {
+        LoaderX.show(context, 70.0);
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
         setState(() {
@@ -74,6 +75,7 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
               LoaderX.hide();
               Get.offAll(() => const TabPage());
             } else {
+              LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(
                   "Failed to Login", value.message.toString());
             }

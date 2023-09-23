@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../routes/app_pages.dart';
-import '../models/user_list_model.dart';
 import '../../../../config/constant/color_constant.dart';
 
 class PopularHomeView extends StatefulWidget {
@@ -13,29 +12,29 @@ class PopularHomeView extends StatefulWidget {
 }
 
 class _PopularHomeViewState extends State<PopularHomeView> {
-  List<Videos> videos = [
-    Videos(
-      image: "assets/images/popular1.png",
-      title: "Shawn Mendes - Treat You Better",
-      views: "1,854,681,298 views",
-    ),
-    Videos(
-      image: "assets/images/popular2.png",
-      title: "Marshmello & Anne-Marie Friends",
-      views: "1,854,681,298 views",
-    ),
-    Videos(
-      image: "assets/images/popular3.png",
-      title: "The Chainsmokers & Coldplay - Something",
-      views: "1,854,681,298 views",
-    )
-  ];
+  // List<Videos> videos = [
+  //   Videos(
+  //     image: "assets/images/popular1.png",
+  //     title: "Shawn Mendes - Treat You Better",
+  //     views: "1,854,681,298 views",
+  //   ),
+  //   Videos(
+  //     image: "assets/images/popular2.png",
+  //     title: "Marshmello & Anne-Marie Friends",
+  //     views: "1,854,681,298 views",
+  //   ),
+  //   Videos(
+  //     image: "assets/images/popular3.png",
+  //     title: "The Chainsmokers & Coldplay - Something",
+  //     views: "1,854,681,298 views",
+  //   )
+  // ];
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.only(left: 15),
       scrollDirection: Axis.horizontal,
-      itemCount: videos.length,
+      itemCount: 2,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
@@ -48,14 +47,14 @@ class _PopularHomeViewState extends State<PopularHomeView> {
                 padding: const EdgeInsets.all(8.0),
                 child: Stack(
                   children: [
-                    SizedBox(
-                      width: 150,
-                      height: 100,
-                      child: Image.asset(
-                        videos[index].image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 150,
+                    //   height: 100,
+                    //   child: Image.asset(
+                    //     videos[index].image,
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
                     Positioned(
                       right: 10,
                       top: 7,
@@ -77,24 +76,24 @@ class _PopularHomeViewState extends State<PopularHomeView> {
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
+                  children: const [
+                    SizedBox(height: 10),
                     SizedBox(
                       width: 130,
                       child: Text(
-                        videos[index].title,
+                        "videos[index].title",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: kTextsecondarytopColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    SizedBox(height: 5),
                     Text(
-                      videos[index].views,
-                      style: const TextStyle(
+                      " videos[index].views",
+                      style: TextStyle(
                           color: kTextsecondarybottomColor, fontSize: 12),
                     ),
                   ],

@@ -241,6 +241,11 @@ class _UpNextPageState extends State<UpNextPage> {
                                                     ),
                                                     Container(
                                                       decoration: BoxDecoration(
+                                                          color: widget
+                                                                      .videoId ==
+                                                                  data.id
+                                                              ? kButtonColor
+                                                              : kBackGroundColor,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(30),
@@ -249,12 +254,7 @@ class _UpNextPageState extends State<UpNextPage> {
                                                               color: widget
                                                                           .videoId ==
                                                                       data.id
-                                                                  ? const Color
-                                                                          .fromARGB(
-                                                                      255,
-                                                                      244,
-                                                                      43,
-                                                                      29)
+                                                                  ? kButtonColor
                                                                   : kWhiteColor)),
                                                       child: Container(
                                                         padding:
@@ -267,11 +267,7 @@ class _UpNextPageState extends State<UpNextPage> {
                                                                   data.id
                                                               ? "assets/icons/pause.png"
                                                               : "assets/icons/Play.png",
-                                                          color:
-                                                              widget.videoId ==
-                                                                      data.id
-                                                                  ? Colors.red
-                                                                  : kWhiteColor,
+                                                          color: kWhiteColor,
                                                           scale: 9,
                                                         ),
                                                       ),

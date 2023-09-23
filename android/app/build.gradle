@@ -27,7 +27,7 @@ apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -74,5 +74,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'	
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.stripe:stripe-android:20.4.0'
     
 }

@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../controller/other_user_controller.dart';
-import '../../routes/app_pages.dart';
 import '../widgets/like_widget.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/playlist_widget.dart';
@@ -19,11 +17,13 @@ import '../../services/follower_service.dart';
 import '../widgets/no_user_login_dialog.dart';
 import '../../../config/constant/constant.dart';
 import '../video_details/comments/comments.dart';
+import '../../controller/other_user_controller.dart';
 import '../OtherUserProfile/other_user_profile.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../controller/video_detail_controller.dart';
 import '../../../config/provider/dotted_line_provider.dart';
+import '../video_details/checkout_Payment/checkout_payment.dart';
 
 class VideoDetailsPage extends StatefulWidget {
   final String? videoId;
@@ -50,6 +50,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       likeValue = "",
       url = "",
       currntuserId = "",
+      paymentTime = "",
       authToken = "";
 
   VideoService videoService = VideoService();
@@ -88,7 +89,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     return WillPopScope(
       onWillPop: () {
         videoDetailController.videoId("");
-        Navigator.of(context).pop();
+        Get.back();
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.portraitUp,
           DeviceOrientation.portraitDown,
@@ -130,6 +131,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                     videoid: detailData.id.toString(),
                     videoUrl: detailData.videoStreamingUrl.toString(),
                     videoQualityDatas: detailData.qualityJson.toString(),
+                    paymentTime: paymentTime,
                   ),
                   Expanded(
                     child: SizedBox(
@@ -432,10 +434,21 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      authToken != ""
-                                          ? Get.toNamed(
-                                              Routes.checkOutPaymentPage)
-                                          : loginConfirmationDialog();
+                                      if (authToken != "") {
+                                        setState(() {
+                                          paymentTime = "done";
+                                        });
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CheckOutPaymentPage(
+                                              videoId: id.toString(),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        loginConfirmationDialog();
+                                      }
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.only(

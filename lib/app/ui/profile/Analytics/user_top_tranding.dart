@@ -90,7 +90,7 @@ class _UserTopTrandingHomeViewState extends State<UserTopTrandingHomeView> {
                                       errorBuilder:
                                           (context, error, stackTrace) =>
                                               Image.asset(
-                                        "assets/images/tranding1.png",
+                                        "assets/Opentrend_light_applogo.jpeg",
                                         fit: BoxFit.fill,
                                       ),
                                       fit: BoxFit.cover,

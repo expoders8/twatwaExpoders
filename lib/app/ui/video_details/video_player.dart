@@ -17,11 +17,13 @@ class VideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
   final String videoid;
   final String videoQualityDatas;
+  final String paymentTime;
   const VideoPlayerScreen(
       {super.key,
       required this.videoUrl,
       required this.videoQualityDatas,
-      required this.videoid});
+      required this.videoid,
+      required this.paymentTime});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -79,6 +81,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             _playNextVideo();
           }
         }
+      }
+      if (widget.paymentTime == "done") {
+        _controller.pause();
+        _isPlaying = false;
       }
     });
     _controller.play();
@@ -180,12 +186,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                        _exitFullScreen();
+                    IconButton(
+                      onPressed: () {
+                        if (showOverlay) {
+                          Get.back();
+                          _exitFullScreen();
+                          Future.delayed(const Duration(milliseconds: 2000),
+                              () async {
+                            showOverlay = !showOverlay;
+                          });
+                        } else {
+                          setState(() {
+                            showOverlay = !showOverlay;
+                          });
+                        }
                       },
-                      child: SizedBox(
+                      icon: SizedBox(
                         height: 16,
                         width: 26,
                         child: Image.asset(
@@ -194,8 +210,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
+                    IconButton(
+                      onPressed: () {
                         if (showOverlay) {
                           videoQualitySelectBottomsheet();
                           Future.delayed(const Duration(milliseconds: 2000),
@@ -208,10 +224,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           });
                         }
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(13),
-                        height: 50,
-                        width: 50,
+                      icon: SizedBox(
+                        height: 23,
+                        width: 23,
                         child: Image.asset(
                           "assets/icons/setting.png",
                           fit: BoxFit.cover,
@@ -517,7 +532,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   children: [
                     Container(
                       padding:
-                          const EdgeInsets.only(top: 25, left: 20, bottom: 15),
+                          const EdgeInsets.only(top: 10, left: 20, bottom: 15),
                       decoration: const BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
@@ -525,16 +540,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () {
+                          IconButton(
+                            onPressed: () {
                               Get.back();
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
+                            icon: SizedBox(
+                              height: 16,
+                              width: 26,
                               child: Image.asset(
-                                "assets/icons/back.png",
-                                scale: 9,
-                                color: kWhiteColor,
+                                "assets/icons/back_white.png",
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

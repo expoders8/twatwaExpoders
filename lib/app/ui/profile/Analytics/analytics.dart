@@ -18,38 +18,7 @@ class AnalyticsPage extends StatefulWidget {
 
 class _AnalyticsPageState extends State<AnalyticsPage> {
   String selecttext = "Today";
-  List<Analytics> videos = [
-    Analytics(
-        image: "assets/images/tranding1.png",
-        title: "We Don’t Talk Anymore feat. Selena Gomez",
-        views: "65k followers",
-        numberTop: 1,
-        time: "3:43"),
-    Analytics(
-        image: "assets/images/tranding2.png",
-        title: "The Chainsmokers & Coldplay - Something",
-        views: "65k followers",
-        numberTop: 2,
-        time: ""),
-    Analytics(
-        image: "assets/images/tranding3.png",
-        title: "We Don’t Talk Anymore feat. Selena Gomez",
-        views: "65k followers",
-        numberTop: 3,
-        time: ""),
-    Analytics(
-        image: "assets/images/jobs1.png",
-        title: "We Don’t Talk Anymore feat. Selena Gomez",
-        views: "65k followers",
-        numberTop: 4,
-        time: ""),
-    Analytics(
-        image: "assets/images/jobs2.png",
-        title: "The Chainsmokers & Coldplay - Something",
-        views: "65k followers",
-        numberTop: 5,
-        time: ""),
-  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

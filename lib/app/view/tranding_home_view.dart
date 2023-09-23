@@ -89,7 +89,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                                   data['videoThumbnailImagePath'].toString(),
                                   errorBuilder: (context, error, stackTrace) =>
                                       Image.asset(
-                                    "assets/images/tranding1.png",
+                                    "assets/Opentrend_light_applogo.jpeg",
                                     fit: BoxFit.fill,
                                   ),
                                   fit: BoxFit.cover,
