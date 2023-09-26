@@ -68,7 +68,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         child: SizedBox(
                           width: Get.width - 80,
                           child: const Text(
-                            "Video not Found",
+                            "Notification not Found",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: kWhiteColor,
@@ -251,7 +251,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             } else {
                               return const Center(
                                 child: Text(
-                                  "Video not Found",
+                                  "Notification not Found",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: kWhiteColor,
@@ -267,7 +267,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   } else {
                     return const Center(
                       child: Text(
-                        "Video not Found",
+                        "Notification not Found",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: kWhiteColor,

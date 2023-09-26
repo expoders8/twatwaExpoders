@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:opentrend/app/controller/comments_controller.dart';
 import 'package:opentrend/app/controller/video_detail_controller.dart';
 
 import '../../config/constant/constant.dart';
@@ -644,6 +645,7 @@ class TalentVideoController extends GetxController {
 }
 
 class UpNextVideoController extends GetxController {
+  final CommentsController commentsController = Get.put(CommentsController());
   var isLoading = true.obs;
   var videoList = <GetAllVideoModel>[].obs;
   var dataList = <GetAllVideoModel>[].obs;
@@ -721,6 +723,10 @@ class UpNextVideoController extends GetxController {
       }
       var videoData = videoList[0].data![currentVideoIndex];
       videoDetailController.videoId(videoData.id.toString());
+      commentsController.updateString(videoData.id.toString());
+      selectedcategoryId.value = videoData.categoryId.toString();
+      fetchVideo();
+      commentsController.fetchComment();
     }
 
     return "done";
@@ -735,6 +741,10 @@ class UpNextVideoController extends GetxController {
       }
       var videoData = videoList[0].data![currentVideoIndex];
       videoDetailController.videoId(videoData.id.toString());
+      commentsController.updateString(videoData.id.toString());
+      selectedcategoryId.value = videoData.categoryId.toString();
+      fetchVideo();
+      commentsController.fetchComment();
     }
 
     return "done";

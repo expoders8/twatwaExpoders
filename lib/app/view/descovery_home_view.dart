@@ -85,8 +85,37 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                               SizedBox(
                                 width: 150,
                                 height: 100,
-                                child: Image.asset(
-                                  "assets/images/imagebg.png",
+                                child: Image.network(
+                                  data.videoThumbnailImagePath.toString(),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                    "assets/Opentrend_light_applogo.jpeg",
+                                    fit: BoxFit.fill,
+                                  ),
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return SizedBox(
+                                      width: 17,
+                                      height: 17,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: kWhiteColor,
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                 ),
                               ),

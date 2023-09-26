@@ -300,7 +300,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                                               margin:
                                                                   const EdgeInsets
                                                                           .only(
-                                                                      left: 140,
+                                                                      left: 126,
                                                                       top: 6),
                                                               child: Text(
                                                                 difference >= 1
@@ -375,6 +375,8 @@ class _CommentsPageState extends State<CommentsPage> {
                                                                                 widget.videoId,
                                                                             commentId:
                                                                                 data.id.toString(),
+                                                                            userId:
+                                                                                data.userId.toString(),
                                                                             commentImage:
                                                                                 data.commentUserProfilePhoto,
                                                                             userName:

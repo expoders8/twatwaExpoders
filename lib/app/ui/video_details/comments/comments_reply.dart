@@ -17,6 +17,7 @@ import '../../../../config/provider/loader_provider.dart';
 class CommentReplyPage extends StatefulWidget {
   final String? videoId;
   final String? commentId;
+  final String? userId;
   final String? commentImage;
   final String? userName;
   final String? totalComment;
@@ -26,7 +27,8 @@ class CommentReplyPage extends StatefulWidget {
       this.commentId,
       this.commentImage,
       this.userName,
-      this.totalComment});
+      this.totalComment,
+      this.userId});
 
   @override
   State<CommentReplyPage> createState() => _CommentReplyPageState();
@@ -43,11 +45,9 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getUser();
-      replayCommentsController.fetchReply(
-          widget.videoId.toString(), userId, widget.commentId.toString());
-    });
+    getUser();
+    replayCommentsController.updateString(widget.videoId.toString(),
+        widget.userId.toString(), widget.commentId.toString());
 
     super.initState();
   }
@@ -389,7 +389,13 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                                   );
                                 } else {
                                   return const Center(
-                                    child: Text("No Comments found"),
+                                    child: Text(
+                                      "No Comments found",
+                                      style: TextStyle(
+                                          color: kWhiteColor,
+                                          fontSize: 15,
+                                          fontFamily: kFuturaPTDemi),
+                                    ),
                                   );
                                 }
                               },
@@ -397,7 +403,13 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                           }
                         } else {
                           return const Center(
-                            child: Text("No Comments found"),
+                            child: Text(
+                              "No Comments found",
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontSize: 15,
+                                  fontFamily: kFuturaPTDemi),
+                            ),
                           );
                         }
                       }
@@ -548,9 +560,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
               {
                 LoaderX.hide(),
                 commentController.clear(),
-                replayCommentsController.fetchReply(widget.videoId.toString(),
-                    userId, widget.commentId.toString()),
-                // commentsController.fetchComment()
+                replayCommentsController.fetchComment()
               },
           },
         );
@@ -637,10 +647,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                 (value) async {
                   if (value['success'] == true) {
                     LoaderX.hide();
-                    replayCommentsController.fetchReply(
-                        widget.videoId.toString(),
-                        userId,
-                        widget.commentId.toString());
+                    replayCommentsController.fetchComment();
                     SnackbarUtils.showSnackbar(
                         "Comment Successfully Deleted", "");
                   } else {

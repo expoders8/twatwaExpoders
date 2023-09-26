@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../controller/video_controller.dart';
 import '../routes/app_pages.dart';
 import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
@@ -22,6 +23,8 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
   final CommentsController commentsController = Get.put(CommentsController());
+  final UpNextVideoController upNextVideoController =
+      Get.put(UpNextVideoController());
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +72,8 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
                       Get.toNamed(Routes.videoDetailsPage);
                       videoDetailController.videoId(data['id'].toString());
                       commentsController.updateString(data['id'].toString());
+                      upNextVideoController
+                          .updateString(data['categoryId'].toString());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,8 +85,37 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
                               SizedBox(
                                 width: 150,
                                 height: 100,
-                                child: Image.asset(
-                                  "assets/images/imagebg.png",
+                                child: Image.network(
+                                  data['videoThumbnailImagePath'].toString(),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                    "assets/Opentrend_light_applogo.jpeg",
+                                    fit: BoxFit.fill,
+                                  ),
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return SizedBox(
+                                      width: 17,
+                                      height: 17,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: kWhiteColor,
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                 ),
                               ),

@@ -479,9 +479,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   void _enterFullScreen() {
     setState(() {
-      _controller.play();
       _isFullScreen = false;
-      _isPlaying = true;
     });
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations([
@@ -489,9 +487,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       DeviceOrientation.landscapeRight,
     ]);
     setState(() {
-      _controller.play();
       _isFullScreen = false;
-      _isPlaying = true;
     });
   }
 
