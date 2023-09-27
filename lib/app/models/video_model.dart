@@ -1,4 +1,13 @@
 class VideoRequestModel {
+  String? userId;
+  String? videoType;
+  String? categoryId;
+  int? pageSize;
+  int? pageNumber;
+  String? searchText;
+}
+
+class VideoOfTheDayRequestModel {
   String? videoId;
   String? userId;
   String? userName;

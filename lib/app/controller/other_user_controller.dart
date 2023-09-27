@@ -29,25 +29,12 @@ class OtherUserVideoController extends GetxController {
 
   createRequest() {
     VideoRequestModel getRequest = VideoRequestModel();
-    getRequest.videoId = null;
     getRequest.userId = selectedOtherUserId.toString();
-    getRequest.userName = "";
     getRequest.videoType = "";
-    getRequest.currentUserId = null;
     getRequest.categoryId = null;
-    getRequest.thumbnailId = null;
-    getRequest.categoryName = "";
-    getRequest.playlistId = null;
-    getRequest.videoReferenceId = "";
-    getRequest.videoEncoderReference = "";
-    getRequest.visibleStatus = "";
-    getRequest.videoUploadStatus = "";
-    getRequest.requestType = "";
-    getRequest.hashTag = "";
     getRequest.pageNumber = 1;
     getRequest.pageSize = 100;
     getRequest.searchText = "";
-    getRequest.sortBy = "";
     return getRequest;
   }
 

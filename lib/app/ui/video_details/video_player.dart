@@ -108,7 +108,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       height: _isFullScreen
           ? Get.height
           : _controller.value.aspectRatio <= 0.80
-              ? 480
+              ? Get.height / 1.6
               : 250,
       child: Stack(
         alignment: Alignment.bottomCenter,

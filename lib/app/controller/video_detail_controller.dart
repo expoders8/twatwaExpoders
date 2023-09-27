@@ -28,28 +28,11 @@ class VideoDetailController extends GetxController {
               body: json.encode({
                 "videoId": videoId.toString(),
                 "userId": token == null ? null : userId,
-                "userName": "",
-                "videoType": "",
-                "currentUserId": null,
-                "categoryId": null,
-                "thumbnailId": null,
-                "categoryName": "",
-                "playlistId": null,
-                "videoReferenceId": "",
-                "videoEncoderReference": "",
-                "visibleStatus": "",
-                "videoUploadStatus": "",
-                "requestType": "",
-                "hashTag": "",
-                "pageSize": 0,
-                "pageNumber": 0,
-                "searchText": "",
-                "sortBy": ""
               }),
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
+            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var model = jsonDecode(response.body);
