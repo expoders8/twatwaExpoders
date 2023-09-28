@@ -1,11 +1,10 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../config/constant/constant.dart';
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';
+import '../../config/constant/constant.dart';
+import '../controller/network_controller.dart';
 
 class PlaylistController extends GetxController {
   var isLoading = true.obs;
@@ -16,13 +15,16 @@ class PlaylistController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   final RxString selectedUserId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     getUser();
     var token = box.read('authToken') ?? "";
-    if (token != "") {
-      fetchAllPlaylist();
+    if (apiController.shouldMakeApiCall()) {
+      if (token != "") {
+        fetchAllPlaylist();
+      }
     }
     super.onInit();
   }
@@ -34,7 +36,9 @@ class PlaylistController extends GetxController {
     if (getUserData != null) {
       selectedUserId.value = getUserData['id'] ?? "";
     }
-    fetchAllPlaylist();
+    if (apiController.shouldMakeApiCall()) {
+      fetchAllPlaylist();
+    }
   }
 
   createRequest() {

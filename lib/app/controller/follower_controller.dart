@@ -2,14 +2,18 @@ import 'package:get/get.dart';
 
 import '../models/follower_model.dart';
 import '../services/follower_service.dart';
+import '../controller/network_controller.dart';
 
 class FollowerController extends GetxController {
   var isLoading = true.obs;
   var followerList = <GetFollower>[].obs;
   FollowerService followerService = FollowerService();
+  final ApiController apiController = Get.put(ApiController());
   @override
   void onInit() {
-    fetchAllfollower();
+    if (apiController.shouldMakeApiCall()) {
+      fetchAllfollower();
+    }
     super.onInit();
   }
 
@@ -28,10 +32,13 @@ class FollowingController extends GetxController {
   var isLoading = true.obs;
   var followerList = <GetFollower>[].obs;
   FollowerService followerService = FollowerService();
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
-    fetchAllfollowing();
+    if (apiController.shouldMakeApiCall()) {
+      fetchAllfollowing();
+    }
     super.onInit();
   }
 

@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 
-import '../models/playlist_model.dart';
 import '../models/video_model.dart';
-import '../services/playlist_service.dart';
+import '../models/playlist_model.dart';
 import '../services/video_service.dart';
+import '../services/playlist_service.dart';
+import '../controller/network_controller.dart';
 
 class OtherUserVideoController extends GetxController {
   var isLoading = true.obs;
@@ -14,10 +15,13 @@ class OtherUserVideoController extends GetxController {
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
   final RxString selectedOtherUserId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
   @override
   void onInit() {
-    if (selectedOtherUserId.value != "") {
-      fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      if (selectedOtherUserId.value != "") {
+        fetchVideo();
+      }
     }
     super.onInit();
   }
@@ -58,11 +62,14 @@ class OtherUserPlaylistController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   final RxString selectedUserId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
-    if (selectedUserId.value != "") {
-      fetchAllPlaylist();
+    if (apiController.shouldMakeApiCall()) {
+      if (selectedUserId.value != "") {
+        fetchAllPlaylist();
+      }
     }
     super.onInit();
   }

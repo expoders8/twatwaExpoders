@@ -246,7 +246,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             height: _isFullScreen
                 ? Get.height
                 : _controller.value.aspectRatio <= 0.80
-                    ? Get.height / 1.6
+                    ? Get.height / 1.5
                     : 250,
             child: Stack(
               alignment: Alignment.bottomCenter,
@@ -257,11 +257,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             ? VideoPlayer(
                                 _controller,
                               )
-                            : AspectRatio(
-                                aspectRatio: _controller.value.aspectRatio,
+                            : SizedBox(
+                                width: Get.width - 10,
                                 child: VideoPlayer(
                                   _controller,
-                                ))
+                                ),
+                              )
                         : Padding(
                             padding:
                                 EdgeInsets.only(top: _isFullScreen ? 0 : 28.0),

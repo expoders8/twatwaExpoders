@@ -8,14 +8,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '.env';
+import 'app/controller/network_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'config/provider/theme_provider.dart';
+import 'app/controller/dependency_injection .dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;
   await Firebase.initializeApp();
   await GetStorage.init();
+  DependencyInjection.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   return runApp(
     ChangeNotifierProvider<ThemeProvider>(
@@ -39,6 +42,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final networkController = NetworkController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -50,6 +54,9 @@ class MyApp extends StatelessWidget {
       theme: Provider.of<ThemeProvider>(context, listen: false).getTheme(),
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
+      initialBinding: BindingsBuilder(() {
+        networkController.checkInitialConnectivity();
+      }),
     );
   }
 }

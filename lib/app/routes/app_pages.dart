@@ -9,10 +9,11 @@ import '../ui/auth/signup/signup.dart';
 import '../ui/menu/menu_video_list.dart';
 import '../ui/widgets/video_quality.dart';
 import '../ui/uploadvideo/upload_video.dart';
+import '../ui/widgets/no_internet_screen.dart';
 import '../ui/video_details/video_details.dart';
-import '../ui/auth/forgotpassword/forgot_passowrd.dart';
 import '../ui/favourite/create_and_edit_playlist.dart';
 import '../ui/uploadVideo/success_video_uploaded.dart';
+import '../ui/auth/forgotpassword/forgot_passowrd.dart';
 import '../ui/OtherUserProfile/other_user_profile.dart';
 import '../ui/video_details/comments/comments_reply.dart';
 import '../ui/video_details/checkout_Payment/checkout_payment.dart';
@@ -88,6 +89,10 @@ class AppPages {
     GetPage(
       name: _Paths.videoQualityPage,
       page: () => const VideoQualityPage(),
+    ),
+    GetPage(
+      name: _Paths.noInternetScreen,
+      page: () => const NoInternetScreen(),
     ),
   ];
 }

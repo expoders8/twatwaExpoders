@@ -21,6 +21,7 @@ abstract class Routes {
   static const createPlaylistPage = _Paths.createPlaylistPage;
   static const checkOutPaymentPage = _Paths.checkOutPaymentPage;
   static const otherUserProfilePage = _Paths.otherUserProfilePage;
+  static const noInternetScreen = _Paths.noInternetScreen;
 }
 
 abstract class _Paths {
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const createPlaylistPage = '/createPlaylistPage';
   static const checkOutPaymentPage = '/checkOutPaymentPage';
   static const otherUserProfilePage = '/otherUserProfilePage';
+  static const noInternetScreen = '/noInternetScreen';
 }

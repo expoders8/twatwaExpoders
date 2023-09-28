@@ -81,7 +81,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
-      length: 5,
+      length: 4,
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
           return <Widget>[
@@ -163,7 +163,6 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
               tabs: [
                 Tab(text: 'My Videos'),
                 Tab(text: 'My Playlist'),
-                Tab(text: 'Analytics'),
                 Tab(text: 'Followers'),
                 Tab(text: 'Following'),
               ],

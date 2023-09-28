@@ -1,27 +1,27 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:shimmer/shimmer.dart';
 
-import '../../controller/comments_controller.dart';
-import '../../controller/getall_video_landing_controller.dart';
-import '../../controller/other_user_controller.dart';
-import '../../view/following_home_view.dart';
-import '../OtherUserProfile/other_user_profile.dart';
 import '../widgets/like_widget.dart';
 import '../../routes/app_pages.dart';
-import '../widgets/no_user_login_dialog.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/playlist_widget.dart';
 import '../../view/tranding_home_view.dart';
 import '../../view/descovery_home_view.dart';
+import '../../view/following_home_view.dart';
+import '../widgets/no_user_login_dialog.dart';
 import '../../controller/video_controller.dart';
 import '../../../config/constant/constant.dart';
 import '../../view/category_video_home_view.dart';
+import '../../controller/comments_controller.dart';
+import '../OtherUserProfile/other_user_profile.dart';
+import '../../controller/other_user_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../controller/video_detail_controller.dart';
+import '../../controller/getall_video_landing_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

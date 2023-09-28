@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../config/constant/constant.dart';
 import '../models/comments_model.dart';
 import '../services/comment_service.dart';
+import '../controller/network_controller.dart';
 
 class CommentsController extends GetxController {
   var isLoading = true.obs;
@@ -17,11 +17,14 @@ class CommentsController extends GetxController {
   var isAddingMore = false.obs;
   var selectedVideoId = "".obs;
   var selectedUserId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
-    if (selectedVideoId.value != "") {
-      fetchComment();
+    if (apiController.shouldMakeApiCall()) {
+      if (selectedVideoId.value != "") {
+        fetchComment();
+      }
     }
     super.onInit();
   }

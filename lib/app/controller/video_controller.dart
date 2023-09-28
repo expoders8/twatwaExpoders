@@ -1,13 +1,13 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:opentrend/app/controller/comments_controller.dart';
-import 'package:opentrend/app/controller/video_detail_controller.dart';
+import 'package:flutter/material.dart';
 
-import '../../config/constant/constant.dart';
 import '../models/video_model.dart';
 import '../services/video_service.dart';
+import '../../config/constant/constant.dart';
+import '../controller/network_controller.dart';
+import '../controller/comments_controller.dart';
+import '../controller/video_detail_controller.dart';
 
 class DiscoverVideoController extends GetxController {
   var isLoading = true.obs;
@@ -19,11 +19,14 @@ class DiscoverVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -67,7 +70,9 @@ class DiscoverVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
     }
   }
 
@@ -88,11 +93,14 @@ class TrendingVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -136,7 +144,9 @@ class TrendingVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
     }
   }
 
@@ -152,10 +162,13 @@ class SearchVideoController extends GetxController {
   VideoService videoService = VideoService();
   var videoList = <GetAllVideoModel>[].obs;
   var searchQuery = ''.obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -237,13 +250,17 @@ class MyVideoController extends GetxController {
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
   final RxString selectedUserId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     getUser();
-    if (selectedUserId.value != "") {
-      fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      if (selectedUserId.value != "") {
+        fetchVideo();
+      }
     }
+
     super.onInit();
   }
 
@@ -254,7 +271,9 @@ class MyVideoController extends GetxController {
     if (getUserData != null) {
       selectedUserId.value = getUserData['id'] ?? "";
     }
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
   }
 
   createRequest() {
@@ -284,6 +303,7 @@ class VideoOfTheDayController extends GetxController {
   VideoService videoService = VideoService();
   var videoList = <GetVideoOfTheDayData>[].obs;
   RxString currentUserId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
@@ -292,7 +312,9 @@ class VideoOfTheDayController extends GetxController {
       var getUserData = jsonDecode(data);
       currentUserId(getUserData['id'] ?? "");
     }
-    fetchVideoOfTheDay();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideoOfTheDay();
+    }
     super.onInit();
   }
 
@@ -343,11 +365,14 @@ class JobsVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -391,7 +416,9 @@ class JobsVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
     }
   }
 
@@ -412,11 +439,14 @@ class EducationVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -460,7 +490,9 @@ class EducationVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
     }
   }
 
@@ -481,11 +513,14 @@ class TalentVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
+  final ApiController apiController = Get.put(ApiController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -529,7 +564,9 @@ class TalentVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
     }
   }
 
@@ -550,6 +587,7 @@ class UpNextVideoController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
+  final ApiController apiController = Get.put(ApiController());
 
   final RxString selectedcategoryId = "".obs;
   final RxString checkVideoId = "".obs;
@@ -560,15 +598,20 @@ class UpNextVideoController extends GetxController {
 
   @override
   void onInit() {
-    if (selectedcategoryId.value != "") {
-      fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      if (selectedcategoryId.value != "") {
+        fetchVideo();
+      }
     }
+
     super.onInit();
   }
 
   void updateString(String newValue) {
     selectedcategoryId.value = newValue;
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
   }
 
   void updateCheckVideoId(String newValue) {
@@ -608,7 +651,9 @@ class UpNextVideoController extends GetxController {
       videoDetailController.videoId(videoData.id.toString());
       commentsController.updateString(videoData.id.toString());
       selectedcategoryId.value = videoData.categoryId.toString();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
       commentsController.fetchComment();
     }
     return "done";
@@ -625,7 +670,9 @@ class UpNextVideoController extends GetxController {
       videoDetailController.videoId(videoData.id.toString());
       commentsController.updateString(videoData.id.toString());
       selectedcategoryId.value = videoData.categoryId.toString();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
       commentsController.fetchComment();
       return [
         videoData.videoThumbnailImagePath.toString(),
@@ -664,11 +711,13 @@ class PremiumShowVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-
+  final ApiController apiController = Get.put(ApiController());
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    fetchVideo();
+    if (apiController.shouldMakeApiCall()) {
+      fetchVideo();
+    }
     super.onInit();
   }
 
@@ -712,7 +761,9 @@ class PremiumShowVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      fetchVideo();
+      if (apiController.shouldMakeApiCall()) {
+        fetchVideo();
+      }
     }
   }
 

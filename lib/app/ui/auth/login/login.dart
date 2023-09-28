@@ -133,7 +133,11 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.toNamed(Routes.forgotPasswordPage);
+                                    var userEmail = {
+                                      "email": emailController.text.toString(),
+                                    };
+                                    Get.toNamed(Routes.forgotPasswordPage,
+                                        parameters: userEmail);
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,

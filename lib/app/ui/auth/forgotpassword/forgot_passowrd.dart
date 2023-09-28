@@ -22,6 +22,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   AuthService authService = AuthService();
   final _forgotPasswordFormKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
+
+  @override
+  void initState() {
+    var getEmail = Get.parameters['email'];
+    setState(() {
+      emailController.text = getEmail.toString();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

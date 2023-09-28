@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:opentrend/app/ui/home/home.dart';
 
+import '../../controller/network_controller.dart';
 import '../tranding/tranding.dart';
 import '../../routes/app_pages.dart';
 import '../favourite/favourite.dart';
@@ -35,6 +36,7 @@ class _TabPageState extends State<TabPage> {
   Widget currentScreen = const HomePage();
   List<dynamic> getAllCategory = [];
   CategoryService categoryService = CategoryService();
+  final networkController = NetworkController();
 
   @override
   void initState() {
@@ -44,21 +46,21 @@ class _TabPageState extends State<TabPage> {
   }
 
   callApi() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (networkController.isConnected.value) {
       categoryService.getAllCategory();
-      if (widget.selectedTabIndex == 3) {
-        setState(() {
-          currentScreen = const FavouritePage();
-          currentTab = 3;
-        });
-      }
-      if (widget.selectedTabIndex == 1) {
-        setState(() {
-          currentScreen = TrendingPage(type: widget.selectedVideoType);
-          currentTab = 1;
-        });
-      }
-    });
+    }
+    if (widget.selectedTabIndex == 3) {
+      setState(() {
+        currentScreen = const FavouritePage();
+        currentTab = 3;
+      });
+    }
+    if (widget.selectedTabIndex == 1) {
+      setState(() {
+        currentScreen = TrendingPage(type: widget.selectedVideoType);
+        currentTab = 1;
+      });
+    }
   }
 
   @override

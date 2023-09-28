@@ -64,6 +64,8 @@ dependencies:
   webview_flutter: 3.0.1
   http_auth: ^1.0.1
   vertical_card_pager: ^1.5.0
+  connectivity_plus: ^4.0.2
+  app_settings: ^4.2.0
 
 dev_dependencies:
   flutter_test:

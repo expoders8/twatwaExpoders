@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../controller/network_controller.dart';
 
 import '../../config/constant/constant.dart';
 import '../models/notification_model.dart';
@@ -8,11 +9,14 @@ class NotificationController extends GetxController {
   var isLoading = true.obs;
   var notificationList = <GetAllNotification>[].obs;
   NotificationService notificationService = NotificationService();
+  final ApiController apiController = Get.put(ApiController());
   @override
   void onInit() {
     var token = box.read('authToken') ?? "";
-    if (token != "") {
-      fetchAllNotification();
+    if (apiController.shouldMakeApiCall()) {
+      if (token != "") {
+        fetchAllNotification();
+      }
     }
     super.onInit();
   }
