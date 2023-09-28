@@ -119,85 +119,121 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
           final splityear = splittedDate[0];
           final splitmonth = splittedDate[1];
           final splitday = splittedDate[2];
-          return Scaffold(
-            backgroundColor: kBackGroundColor,
-            body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Column(
-                children: [
-                  VideoPlayerScreen(
-                    videoid: detailData.id.toString(),
-                    videoUrl: detailData.videoStreamingUrl.toString(),
-                    videoQualityDatas: detailData.qualityJson.toString(),
-                    paymentTime: paymentTime,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      height: Get.height,
-                      child: NestedScrollView(
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxScrolled) {
-                          return <Widget>[
-                            createSilverAppBar1(
-                              detailData.title.toString(),
-                              detailData.userName,
-                              detailData.numberOfViews,
-                              detailData.numberOfLikes,
-                              detailData.numberOfDislikes,
-                              splitday,
-                              splitmonth,
-                              splityear,
-                              detailData.id,
-                              detailData.isLiked,
-                              detailData.isDisliked,
-                              detailData.userProfileImage ?? "",
-                              detailData.numberOfFollowers,
-                              detailData.userId,
-                            ),
-                          ];
-                        },
-                        body: Container(
-                          color: kBackGroundColor,
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  buildTabindex("UP NEXT VIDEOS", 0, 110),
-                                  buildTabindex("ABOUT", 1, 90),
-                                  buildTabindex("COMMENTS", 2, 90)
+          return DefaultTabController(
+            initialIndex: 0,
+            length: 3,
+            child: Scaffold(
+              backgroundColor: kBackGroundColor,
+              body: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Column(
+                  children: [
+                    VideoPlayerScreen(
+                      videoid: detailData.id.toString(),
+                      videoUrl: detailData.videoStreamingUrl.toString(),
+                      videoQualityDatas: detailData.qualityJson.toString(),
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        height: Get.height,
+                        child: NestedScrollView(
+                          headerSliverBuilder:
+                              (BuildContext context, bool innerBoxScrolled) {
+                            return <Widget>[
+                              createSilverAppBar1(
+                                detailData.title.toString(),
+                                detailData.userName,
+                                detailData.numberOfViews,
+                                detailData.numberOfLikes,
+                                detailData.numberOfDislikes,
+                                splitday,
+                                splitmonth,
+                                splityear,
+                                detailData.id,
+                                detailData.isLiked,
+                                detailData.isDisliked,
+                                detailData.userProfileImage ?? "",
+                                detailData.numberOfFollowers,
+                                detailData.userId,
+                              ),
+                            ];
+                          },
+                          body: Scaffold(
+                            appBar: AppBar(
+                              backgroundColor: kBackGroundColor,
+                              automaticallyImplyLeading: false,
+                              toolbarHeight: 0,
+                              bottom: const TabBar(
+                                unselectedLabelColor: kButtonSecondaryColor,
+                                labelColor: kButtonColor,
+                                isScrollable: true,
+                                indicatorColor: kButtonColor,
+                                dividerColor: kAmberColor,
+                                tabs: [
+                                  Tab(text: 'UP NEXT VIDEOS'),
+                                  Tab(text: 'ABOUT'),
+                                  Tab(text: 'COMMENTS'),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                              Expanded(
-                                child: SizedBox(
-                                  height: Get.height,
-                                  child: tabindex == 0
-                                      ? UpNextPage(
-                                          categoryId:
-                                              detailData.categoryId.toString(),
-                                          userId: detailData.userId.toString(),
-                                          videoId: detailData.id.toString())
-                                      : tabindex == 1
-                                          ? AboutPage(
-                                              description:
-                                                  detailData.description)
-                                          : CommentsPage(
-                                              videoId: detailData.id.toString(),
-                                            ),
+                            ),
+                            body: TabBarView(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: UpNextPage(
+                                      categoryId:
+                                          detailData.categoryId.toString(),
+                                      userId: detailData.userId.toString(),
+                                      videoId: detailData.id.toString()),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: AboutPage(
+                                      description: detailData.description),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: CommentsPage(
+                                    videoId: detailData.id.toString(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Container(
+                            //   color: kBackGroundColor,
+                            //   child: Column(
+                            //     children: [
+                            //       Expanded(
+                            //         child: SizedBox(
+                            //           height: Get.height,
+                            //           child: tabindex == 0
+                            //               ? UpNextPage(
+                            //                   categoryId: detailData.categoryId
+                            //                       .toString(),
+                            //                   userId:
+                            //                       detailData.userId.toString(),
+                            //                   videoId: detailData.id.toString())
+                            //               : tabindex == 1
+                            //                   ? AboutPage(
+                            //                       description:
+                            //                           detailData.description)
+                            //                   : CommentsPage(
+                            //                       videoId:
+                            //                           detailData.id.toString(),
+                            //                     ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -435,9 +471,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                   GestureDetector(
                                     onTap: () {
                                       if (authToken != "") {
-                                        setState(() {
-                                          paymentTime = "done";
-                                        });
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>

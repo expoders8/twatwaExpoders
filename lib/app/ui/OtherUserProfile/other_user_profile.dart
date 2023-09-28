@@ -79,134 +79,253 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 5,
+      child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
+          return <Widget>[
+            createSilverAppBar1(),
+          ];
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: Get.height,
-                child: NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxScrolled) {
-                    return <Widget>[
-                      createSilverAppBar1(),
-                    ];
-                  },
-                  body: Container(
-                    color: kBackGroundColor,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 30),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              // if (followButton == "follow") {
-                              //   setState(() {
-                              //     followButton = "following";
-                              //   });
-                              // } else {
-                              //   if (followButton == "following") {
-                              //     setState(() {
-                              //       followButton = "follow";
-                              //     });
-                              //   }
-                              // }
-                              followerService
-                                  .followAndUnfollow(widget.userId.toString())
-                                  .then((value) => {
-                                        if (value['success'])
-                                          {
-                                            if (followtext == "Follow")
-                                              {
-                                                setState(() {
-                                                  firsttime = false;
-                                                  followtext = "Following";
-                                                })
-                                              }
-                                            else
-                                              {
-                                                if (followtext == "Following")
-                                                  {
-                                                    setState(() {
-                                                      firsttime = false;
-                                                      followtext = "Follow";
-                                                    })
-                                                  }
-                                              }
-                                          }
-                                      });
-                            },
-                            child: Container(
-                              width: 120,
-                              padding: const EdgeInsets.all(11),
-                              decoration: BoxDecoration(
-                                color: followtext == "Follow"
-                                    ? kButtonColor
-                                    : kBackGroundColor,
-                                border:
-                                    Border.all(width: 1, color: kButtonColor),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    followtext,
-                                    style: const TextStyle(
-                                        fontSize: 13, color: kWhiteColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              // buildTabSelection("Home", 90.0, 0),
-                              buildTabSelection("Videos", 100.0, 0),
-                              buildTabSelection("Playlist", 100.0, 1),
-                              buildTabSelection("Followers", 100.0, 2),
-                              buildTabSelection("Following", 100.0, 3),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Expanded(
-                          child: SizedBox(
-                              height: Get.height,
-                              child: tabindex == 0
-                                  ? OtherUserVideoPage(
-                                      userId: widget.userId,
-                                    )
-                                  : tabindex == 1
-                                      ? const OtherUserPlaylistPage()
-                                      : tabindex == 2
-                                          ? OtherUserFollowersPage(
-                                              userId: widget.userId,
-                                            )
-                                          : tabindex == 3
-                                              ? OtherUserFollowingPage(
-                                                  userId: widget.userId,
-                                                )
-                                              : Container()),
-                        )
-                      ],
-                    ),
+        body: Scaffold(
+          appBar: AppBar(
+            backgroundColor: kBackGroundColor,
+            automaticallyImplyLeading: false,
+            title: Center(
+              child: GestureDetector(
+                onTap: () {
+                  // if (followButton == "follow") {
+                  //   setState(() {
+                  //     followButton = "following";
+                  //   });
+                  // } else {
+                  //   if (followButton == "following") {
+                  //     setState(() {
+                  //       followButton = "follow";
+                  //     });
+                  //   }
+                  // }
+                  followerService
+                      .followAndUnfollow(widget.userId.toString())
+                      .then((value) => {
+                            if (value['success'])
+                              {
+                                if (followtext == "Follow")
+                                  {
+                                    setState(() {
+                                      firsttime = false;
+                                      followtext = "Following";
+                                    })
+                                  }
+                                else
+                                  {
+                                    if (followtext == "Following")
+                                      {
+                                        setState(() {
+                                          firsttime = false;
+                                          followtext = "Follow";
+                                        })
+                                      }
+                                  }
+                              }
+                          });
+                },
+                child: Container(
+                  width: 120,
+                  padding: const EdgeInsets.all(11),
+                  decoration: BoxDecoration(
+                    color: followtext == "Follow"
+                        ? kButtonColor
+                        : kBackGroundColor,
+                    border: Border.all(width: 1, color: kButtonColor),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        followtext,
+                        style:
+                            const TextStyle(fontSize: 13, color: kWhiteColor),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
+            bottom: const TabBar(
+              unselectedLabelColor: kButtonSecondaryColor,
+              labelColor: kButtonColor,
+              isScrollable: true,
+              indicatorColor: kButtonColor,
+              dividerColor: kAmberColor,
+              tabs: [
+                Tab(text: 'My Videos'),
+                Tab(text: 'My Playlist'),
+                Tab(text: 'Analytics'),
+                Tab(text: 'Followers'),
+                Tab(text: 'Following'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: OtherUserVideoPage(
+                  userId: widget.userId,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: OtherUserPlaylistPage(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: OtherUserFollowersPage(
+                  userId: widget.userId,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: OtherUserFollowingPage(
+                  userId: widget.userId,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      // child: Scaffold(
+      //   body: GestureDetector(
+      //     onTap: () {
+      //       FocusScope.of(context).requestFocus(FocusNode());
+      //     },
+      //     child: Column(
+      //       children: [
+      //         Expanded(
+      //           child: SizedBox(
+      //             height: Get.height,
+      //             child: NestedScrollView(
+      //               headerSliverBuilder:
+      //                   (BuildContext context, bool innerBoxScrolled) {
+      //                 return <Widget>[
+      //                   createSilverAppBar1(),
+      //                 ];
+      //               },
+      //               body: Container(
+      //                 color: kBackGroundColor,
+      //                 child: Column(
+      //                   children: [
+      //                     const SizedBox(height: 30),
+      //                     Center(
+      //                       child: GestureDetector(
+      //                         onTap: () {
+      //                           // if (followButton == "follow") {
+      //                           //   setState(() {
+      //                           //     followButton = "following";
+      //                           //   });
+      //                           // } else {
+      //                           //   if (followButton == "following") {
+      //                           //     setState(() {
+      //                           //       followButton = "follow";
+      //                           //     });
+      //                           //   }
+      //                           // }
+      //                           followerService
+      //                               .followAndUnfollow(widget.userId.toString())
+      //                               .then((value) => {
+      //                                     if (value['success'])
+      //                                       {
+      //                                         if (followtext == "Follow")
+      //                                           {
+      //                                             setState(() {
+      //                                               firsttime = false;
+      //                                               followtext = "Following";
+      //                                             })
+      //                                           }
+      //                                         else
+      //                                           {
+      //                                             if (followtext == "Following")
+      //                                               {
+      //                                                 setState(() {
+      //                                                   firsttime = false;
+      //                                                   followtext = "Follow";
+      //                                                 })
+      //                                               }
+      //                                           }
+      //                                       }
+      //                                   });
+      //                         },
+      //                         child: Container(
+      //                           width: 120,
+      //                           padding: const EdgeInsets.all(11),
+      //                           decoration: BoxDecoration(
+      //                             color: followtext == "Follow"
+      //                                 ? kButtonColor
+      //                                 : kBackGroundColor,
+      //                             border:
+      //                                 Border.all(width: 1, color: kButtonColor),
+      //                             borderRadius: BorderRadius.circular(30),
+      //                           ),
+      //                           child: Row(
+      //                             mainAxisAlignment: MainAxisAlignment.center,
+      //                             children: [
+      //                               Text(
+      //                                 followtext,
+      //                                 style: const TextStyle(
+      //                                     fontSize: 13, color: kWhiteColor),
+      //                               ),
+      //                             ],
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ),
+      //                     const SizedBox(height: 20),
+      //                     SingleChildScrollView(
+      //                       scrollDirection: Axis.horizontal,
+      //                       child: Row(
+      //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //                         children: [
+      //                           // buildTabSelection("Home", 90.0, 0),
+      //                           buildTabSelection("Videos", 100.0, 0),
+      //                           buildTabSelection("Playlist", 100.0, 1),
+      //                           buildTabSelection("Followers", 100.0, 2),
+      //                           buildTabSelection("Following", 100.0, 3),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                     const SizedBox(height: 5),
+      //                     Expanded(
+      //                       child: SizedBox(
+      //                           height: Get.height,
+      //                           child: tabindex == 0
+      //                               ? OtherUserVideoPage(
+      //                                   userId: widget.userId,
+      //                                 )
+      //                               : tabindex == 1
+      //                                   ? const OtherUserPlaylistPage()
+      //                                   : tabindex == 2
+      //                                       ? OtherUserFollowersPage(
+      //                                           userId: widget.userId,
+      //                                         )
+      //                                       : tabindex == 3
+      //                                           ? OtherUserFollowingPage(
+      //                                               userId: widget.userId,
+      //                                             )
+      //                                           : Container()),
+      //                     )
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 
@@ -214,7 +333,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid ? 315 : 300,
+      expandedHeight: Platform.isAndroid ? 320 : 300,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         return FlexibleSpaceBar(

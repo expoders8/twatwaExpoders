@@ -112,69 +112,50 @@ class PlaylistDataModel {
 class Videos {
   String? id;
   String? videoReferenceId;
-  String? videoEncoderReference;
   String? title;
   String? description;
   String? userId;
   String? userName;
+  String? userProfileImage;
   String? categoryId;
   String? categoryName;
   int? numberOfLikes;
   int? numberOfDislikes;
-  int? numberOfShares;
   int? numberOfViews;
-  String? videoQualityId;
+  int? numberOfFollowers;
   String? videoStreamingUrl;
   String? createdOn;
-  String? createdById;
-  String? updatedOn;
-  String? updatedById;
-  bool? isActive;
-  String? videoType;
-  String? videoThumbnailId;
-  String? videoHashTagId;
+  String? qualityJson;
   double? videoDurationInSeconds;
   String? videoThumbnailImagePath;
-  String? videoUploadStatus;
   bool? isLiked;
   bool? isDisliked;
-  List? hashTags;
+  bool? hasFollowers;
 
-  Videos(
-      {this.id,
-      this.videoReferenceId,
-      this.videoEncoderReference,
-      this.title,
-      this.description,
-      this.userId,
-      this.userName,
-      this.categoryId,
-      this.categoryName,
-      this.numberOfLikes,
-      this.numberOfDislikes,
-      this.numberOfShares,
-      this.numberOfViews,
-      this.videoQualityId,
-      this.videoStreamingUrl,
-      this.createdOn,
-      this.createdById,
-      this.updatedOn,
-      this.updatedById,
-      this.isActive,
-      this.videoType,
-      this.videoThumbnailId,
-      this.videoHashTagId,
-      this.videoDurationInSeconds,
-      this.videoThumbnailImagePath,
-      this.videoUploadStatus,
-      this.isLiked,
-      this.isDisliked,
-      this.hashTags});
+  Videos({
+    this.id,
+    this.videoReferenceId,
+    this.title,
+    this.description,
+    this.userId,
+    this.userName,
+    this.categoryId,
+    this.categoryName,
+    this.numberOfLikes,
+    this.numberOfDislikes,
+    this.numberOfViews,
+    this.videoStreamingUrl,
+    this.createdOn,
+    this.qualityJson,
+    this.videoDurationInSeconds,
+    this.videoThumbnailImagePath,
+    this.isLiked,
+    this.isDisliked,
+  });
 
   Videos.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     videoReferenceId = json['videoReferenceId'];
-    videoEncoderReference = json['videoEncoderReference'];
     title = json['title'];
     description = json['description'];
     userId = json['userId'];
@@ -183,38 +164,22 @@ class Videos {
     categoryName = json['categoryName'];
     numberOfLikes = json['numberOfLikes'];
     numberOfDislikes = json['numberOfDislikes'];
-    numberOfShares = json['numberOfShares'];
     numberOfViews = json['numberOfViews'];
-    videoQualityId = json['videoQualityId'];
     videoStreamingUrl = json['videoStreamingUrl'];
     createdOn = json['createdOn'];
-    createdById = json['createdById'];
-    updatedOn = json['updatedOn'];
-    updatedById = json['updatedById'];
-    isActive = json['isActive'];
-    videoType = json['videoType'];
-    videoThumbnailId = json['videoThumbnailId'];
-    videoHashTagId = json['videoHashTagId'];
+    qualityJson = json['qualityJson'];
     videoDurationInSeconds = json['videoDurationInSeconds'] == 0
         ? 0.00
         : json['videoDurationInSeconds'];
     videoThumbnailImagePath = json['videoThumbnailImagePath'];
-    videoUploadStatus = json['videoUploadStatus'];
     isLiked = json['isLiked'];
     isDisliked = json['isDisliked'];
-    if (json['hashTags'] != null) {
-      hashTags = <Null>[];
-      json['hashTags'].forEach((v) {
-        hashTags!.add(v);
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['videoReferenceId'] = videoReferenceId;
-    data['videoEncoderReference'] = videoEncoderReference;
     data['title'] = title;
     data['description'] = description;
     data['userId'] = userId;
@@ -223,26 +188,15 @@ class Videos {
     data['categoryName'] = categoryName;
     data['numberOfLikes'] = numberOfLikes;
     data['numberOfDislikes'] = numberOfDislikes;
-    data['numberOfShares'] = numberOfShares;
     data['numberOfViews'] = numberOfViews;
-    data['videoQualityId'] = videoQualityId;
     data['videoStreamingUrl'] = videoStreamingUrl;
     data['createdOn'] = createdOn;
-    data['createdById'] = createdById;
-    data['updatedOn'] = updatedOn;
-    data['updatedById'] = updatedById;
-    data['isActive'] = isActive;
-    data['videoType'] = videoType;
-    data['videoThumbnailId'] = videoThumbnailId;
-    data['videoHashTagId'] = videoHashTagId;
+    data['qualityJson'] = qualityJson;
     data['videoDurationInSeconds'] = videoDurationInSeconds;
     data['videoThumbnailImagePath'] = videoThumbnailImagePath;
-    data['videoUploadStatus'] = videoUploadStatus;
     data['isLiked'] = isLiked;
     data['isDisliked'] = isDisliked;
-    if (hashTags != null) {
-      data['hashTags'] = hashTags!.map((v) => v.toJson()).toList();
-    }
+
     return data;
   }
 }

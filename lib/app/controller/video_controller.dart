@@ -611,8 +611,28 @@ class UpNextVideoController extends GetxController {
       fetchVideo();
       commentsController.fetchComment();
     }
-
     return "done";
+  }
+
+  fetcheAutoSkipVideo(String vId) async {
+    if (vId != "") {
+      var currentVideoIndex =
+          videoList[0].data?.indexWhere((video) => video.id == vId);
+      if (currentVideoIndex! < videoList[0].data!.length - 1) {
+        currentVideoIndex++;
+      }
+      var videoData = videoList[0].data![currentVideoIndex];
+      videoDetailController.videoId(videoData.id.toString());
+      commentsController.updateString(videoData.id.toString());
+      selectedcategoryId.value = videoData.categoryId.toString();
+      fetchVideo();
+      commentsController.fetchComment();
+      return [
+        videoData.videoThumbnailImagePath.toString(),
+        videoData.title.toString(),
+        videoData.description.toString()
+      ];
+    }
   }
 
   fetchePreviousVideo(String vId) async {
