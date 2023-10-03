@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:opentrend/app/controller/network_controller.dart';
 
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';
 import '../../config/constant/constant.dart';
-import '../controller/network_controller.dart';
 
 class PlaylistController extends GetxController {
   var isLoading = true.obs;
@@ -15,13 +15,13 @@ class PlaylistController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   final RxString selectedUserId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
     getUser();
     var token = box.read('authToken') ?? "";
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (token != "") {
         fetchAllPlaylist();
       }
@@ -36,7 +36,7 @@ class PlaylistController extends GetxController {
     if (getUserData != null) {
       selectedUserId.value = getUserData['id'] ?? "";
     }
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchAllPlaylist();
     }
   }

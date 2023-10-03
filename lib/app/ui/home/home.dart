@@ -639,13 +639,6 @@ class _HomePageState extends State<HomePage> {
                                       dislikeCount:
                                           videoOfTheDayData.numberOfDislikes,
                                       isdisLiked: videoOfTheDayData.isDisliked!,
-                                      callbackDate: (val) {
-                                        if (mounted) {
-                                          setState(() {
-                                            likeValue = val.toString();
-                                          });
-                                        }
-                                      },
                                     ),
                                     const SizedBox(width: 10),
                                     ShareWidget(

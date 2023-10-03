@@ -9,11 +9,11 @@ class NotificationController extends GetxController {
   var isLoading = true.obs;
   var notificationList = <GetAllNotification>[].obs;
   NotificationService notificationService = NotificationService();
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
   @override
   void onInit() {
     var token = box.read('authToken') ?? "";
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (token != "") {
         fetchAllNotification();
       }

@@ -8,10 +8,10 @@ class FollowerController extends GetxController {
   var isLoading = true.obs;
   var followerList = <GetFollower>[].obs;
   FollowerService followerService = FollowerService();
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchAllfollower();
     }
     super.onInit();
@@ -32,11 +32,11 @@ class FollowingController extends GetxController {
   var isLoading = true.obs;
   var followerList = <GetFollower>[].obs;
   FollowerService followerService = FollowerService();
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchAllfollowing();
     }
     super.onInit();

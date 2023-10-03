@@ -12,15 +12,25 @@ import '../../../config/constant/font_constant.dart';
 import '../../controller/video_controller.dart';
 import '../../controller/video_detail_controller.dart';
 
+typedef StringCallback = void Function(String val);
+
 class VideoPlayerScreen extends StatefulWidget {
+  final ValueNotifier<int> valueNotifier;
+  final int videoSize;
   final String videoUrl;
   final String videoid;
   final String videoQualityDatas;
+  final StringCallback callbackSize;
+  final StringCallback callbackPlay;
   const VideoPlayerScreen({
     super.key,
     required this.videoUrl,
     required this.videoQualityDatas,
     required this.videoid,
+    required this.callbackSize,
+    required this.callbackPlay,
+    required this.videoSize,
+    required this.valueNotifier,
   });
 
   @override
@@ -36,6 +46,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
   bool isChecked = false,
       showOverlay = true,
+      fullHeight = false,
       _isPlaying = false,
       upnextVidepPlay = false,
       onetimecall = true,
@@ -43,6 +54,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       localValue = true,
       videoquality = true,
       _isFullScreen = false;
+  double aspectRatio = 0.0;
+  int currentIndex = 0;
   List<bool> buttonStates = List.generate(10, (index) => false);
   String tsecond = "",
       videoThumbhnilImage = "",
@@ -62,7 +75,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     videoPlayerController(widget.videoUrl.toString());
   }
 
-  videoPlayerController(String url) {
+  videoPlayerController(String url) async {
     Future.delayed(const Duration(milliseconds: 180), () async {
       showOverlay = false;
       _isPlaying = true;
@@ -71,8 +84,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       ..initialize().then((_) {
         setState(() {
           _controller.play();
+          aspectRatio = _controller.value.aspectRatio;
+          widget.callbackSize(aspectRatio.toString());
         });
       });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {});
     _controller.addListener(() {
       if (_controller.value.isPlaying) {
         setState(() {
@@ -91,6 +108,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           }
         }
       }
+      setState(() {
+        currentIndex = widget.videoSize;
+      });
     });
     _controller.play();
   }
@@ -99,6 +119,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    widget.valueNotifier.addListener(_valueListener);
+  }
+
+  void _valueListener() {
+    if (mounted) {
+      setState(() {
+        currentIndex = widget.valueNotifier.value;
+      });
+    }
   }
 
   @override
@@ -131,6 +165,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             onetimecall = false;
                             _controller.pause();
                           });
+                          widget.callbackPlay(upnextVidepPlay.toString());
                         },
                         icon: const Icon(
                           Icons.cancel_outlined,
@@ -219,7 +254,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           setState(() {
                             upnextVidepPlay = false;
                             rePlayVideo = true;
+                            onetimecall = false;
+                            _controller.pause();
                           });
+                          widget.callbackPlay(upnextVidepPlay.toString());
                         }),
                     const SizedBox(width: 10),
                     CupertinoButton(
@@ -249,7 +287,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     ? Get.height / 1.5
                     : 250,
             child: Stack(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.topCenter,
               children: [
                 _controller.value.isInitialized
                     ? _controller.value.aspectRatio <= 0.80
@@ -258,9 +296,48 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                 _controller,
                               )
                             : SizedBox(
-                                width: Get.width - 10,
-                                child: VideoPlayer(
-                                  _controller,
+                                width: currentIndex == 0
+                                    ? Get.width - 23
+                                    : currentIndex == 1
+                                        ? Get.width - 30
+                                        : currentIndex == 2
+                                            ? Get.width - 60
+                                            : currentIndex == 3
+                                                ? Get.width - 80
+                                                : currentIndex == 4
+                                                    ? Get.width - 110
+                                                    : currentIndex == 5
+                                                        ? Get.width - 160
+                                                        : currentIndex == 6
+                                                            ? Get.width - 170
+                                                            : currentIndex == 7
+                                                                ? Get.width -
+                                                                    190
+                                                                : Get.width -
+                                                                    23,
+                                height: currentIndex == 0
+                                    ? Get.height
+                                    : currentIndex == 1
+                                        ? Get.height - 100
+                                        : currentIndex == 2
+                                            ? Get.height - 100
+                                            : currentIndex == 3
+                                                ? Get.height - 200
+                                                : currentIndex == 4
+                                                    ? Get.height - 250
+                                                    : currentIndex == 5
+                                                        ? Get.height - 340
+                                                        : currentIndex == 6
+                                                            ? Get.height - 380
+                                                            : currentIndex == 7
+                                                                ? Get.height -
+                                                                    400
+                                                                : Get.height,
+                                child: AspectRatio(
+                                  aspectRatio: _controller.value.aspectRatio,
+                                  child: VideoPlayer(
+                                    _controller,
+                                  ),
                                 ),
                               )
                         : Padding(
@@ -297,6 +374,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   Widget _buildControls() {
     return GestureDetector(
       onTap: () {
+        // if (currentIndex == 1 ||
+        //     currentIndex == 2 ||
+        //     currentIndex == 3 ||
+        //     currentIndex == 4 ||
+        //     currentIndex == 5 ||
+        //     currentIndex == 6) {
+        //   setState(() {
+        //     fullHeight = true;
+        //   });
+        // }
         setState(() {
           showOverlay = !showOverlay;
         });
@@ -314,7 +401,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       ? _controller.value.aspectRatio <= 0.80
                           ? 20
                           : 0
-                      : 4),
+                      : currentIndex == 0
+                          ? 4
+                          : currentIndex == 1
+                              ? 20
+                              : currentIndex == 2
+                                  ? 30
+                                  : currentIndex == 3
+                                      ? 40
+                                      : currentIndex == 4
+                                          ? 50
+                                          : currentIndex == 5
+                                              ? 70
+                                              : currentIndex == 6
+                                                  ? 75
+                                                  : currentIndex == 7
+                                                      ? 80
+                                                      : 4),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: _isFullScreen
@@ -382,7 +485,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           ? 260
                           : 60
                       : _controller.value.aspectRatio <= 0.80
-                          ? 110
+                          ? currentIndex == 0
+                              ? 170
+                              : currentIndex == 1
+                                  ? 150
+                                  : currentIndex == 2
+                                      ? 120
+                                      : currentIndex == 3
+                                          ? 90
+                                          : currentIndex == 4
+                                              ? 70
+                                              : currentIndex == 5
+                                                  ? 45
+                                                  : currentIndex == 6
+                                                      ? 10
+                                                      : currentIndex == 7
+                                                          ? 10
+                                                          : 170
                           : 0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -509,7 +628,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           ? 280
                           : 100
                       : _controller.value.aspectRatio <= 0.80
-                          ? 170
+                          ? currentIndex == 0
+                              ? 190
+                              : currentIndex == 1
+                                  ? 160
+                                  : currentIndex == 2
+                                      ? 140
+                                      : currentIndex == 3
+                                          ? 120
+                                          : currentIndex == 4
+                                              ? 100
+                                              : currentIndex == 5
+                                                  ? 75
+                                                  : currentIndex == 6
+                                                      ? 70
+                                                      : currentIndex == 7
+                                                          ? 50
+                                                          : 190
                           : 40),
               Container(
                 padding:
@@ -609,6 +744,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   videoAutotonext() {
+    widget.callbackPlay(upnextVidepPlay.toString());
     videoController.fetcheAutoSkipVideo(widget.videoid).then((value) => {
           if (value[0] != "")
             {
@@ -617,11 +753,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 videotitle = value[1];
                 videoDescription = value[2];
               })
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => const VideoDetailsPage(),
-              //   ),
-              // ),
             }
         });
   }

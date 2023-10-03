@@ -36,12 +36,16 @@ class VideoDetailsPage extends StatefulWidget {
 
 class _VideoDetailsPageState extends State<VideoDetailsPage>
     with TickerProviderStateMixin {
+  final ValueNotifier<int> parentValueNotifier = ValueNotifier<int>(0);
   final VideoDetailController videoDetailController =
       Get.put(VideoDetailController());
   final OtherUserVideoController otherUserVideoController =
       Get.put(OtherUserVideoController());
   final OtherUserPlaylistController otherUserPlaylistController =
       Get.put(OtherUserPlaylistController());
+  void updateValue(int newValue) {
+    parentValueNotifier.value = newValue;
+  }
 
   FollowerService followerService = FollowerService();
   int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
@@ -51,10 +55,12 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       url = "",
       currntuserId = "",
       paymentTime = "",
-      authToken = "";
-
+      authToken = "",
+      upNextVideoPlaySize = "";
+  double pickedSize = 0.0;
+  int currentIndex = 0;
   VideoService videoService = VideoService();
-
+  final ScrollController _controller = ScrollController();
   bool isChecked = false, showOverlay = true, click = false, onetime = true;
   @override
   void initState() {
@@ -69,7 +75,21 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
 
       videoDetailController.fetchStoryDetail(
           widget.videoId.toString(), currntuserId);
+      _controller.addListener(_onScroll);
     });
+  }
+
+  void _onScroll() {
+    const itemHeight = 50.0;
+    final offset = _controller.offset;
+    final newIndex = (offset / itemHeight).round();
+    if (newIndex != currentIndex) {
+      setState(() {
+        currentIndex = newIndex;
+      });
+    }
+    print(currentIndex);
+    updateValue(currentIndex);
   }
 
   Future getUser() async {
@@ -128,112 +148,170 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                 },
-                child: Column(
-                  children: [
-                    VideoPlayerScreen(
-                      videoid: detailData.id.toString(),
-                      videoUrl: detailData.videoStreamingUrl.toString(),
-                      videoQualityDatas: detailData.qualityJson.toString(),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: Get.height,
-                        child: NestedScrollView(
-                          headerSliverBuilder:
-                              (BuildContext context, bool innerBoxScrolled) {
-                            return <Widget>[
-                              createSilverAppBar1(
+                child: pickedSize <= 0.80
+                    ? CustomScrollView(
+                        controller: _controller,
+                        slivers: <Widget>[
+                          SliverAppBar(
+                            titleSpacing: 100,
+                            backgroundColor: kBackGroundColor,
+                            automaticallyImplyLeading: false,
+                            expandedHeight:
+                                upNextVideoPlaySize == "true" ? 250 : 550.0,
+                            floating: false,
+                            pinned: true,
+                            flexibleSpace: FlexibleSpaceBar(
+                              background: VideoPlayerScreen(
+                                valueNotifier: parentValueNotifier,
+                                videoSize: currentIndex,
+                                videoid: detailData.id.toString(),
+                                videoUrl:
+                                    detailData.videoStreamingUrl.toString(),
+                                videoQualityDatas:
+                                    detailData.qualityJson.toString(),
+                                callbackSize: (val) {
+                                  if (mounted) {
+                                    setState(() {
+                                      pickedSize = double.parse(val);
+                                    });
+                                  }
+                                },
+                                callbackPlay: (val1) {
+                                  if (mounted) {
+                                    setState(() {
+                                      upNextVideoPlaySize = val1;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          SliverPersistentHeader(
+                            delegate: _SliverPersistentHeaderDelegate(
                                 detailData.title.toString(),
-                                detailData.userName,
-                                detailData.numberOfViews,
-                                detailData.numberOfLikes,
-                                detailData.numberOfDislikes,
                                 splitday,
                                 splitmonth,
                                 splityear,
-                                detailData.id,
+                                detailData.numberOfViews.toString(),
+                                detailData.id.toString(),
+                                int.parse(detailData.numberOfLikes.toString()),
+                                int.parse(
+                                    detailData.numberOfDislikes.toString()),
                                 detailData.isLiked,
                                 detailData.isDisliked,
-                                detailData.userProfileImage ?? "",
-                                detailData.numberOfFollowers,
-                                detailData.userId,
-                              ),
-                            ];
-                          },
-                          body: Scaffold(
-                            appBar: AppBar(
-                              backgroundColor: kBackGroundColor,
-                              automaticallyImplyLeading: false,
-                              toolbarHeight: 0,
-                              bottom: const TabBar(
-                                unselectedLabelColor: kButtonSecondaryColor,
-                                labelColor: kButtonColor,
-                                isScrollable: true,
-                                indicatorColor: kButtonColor,
-                                dividerColor: kAmberColor,
-                                tabs: [
-                                  Tab(text: 'UP NEXT VIDEOS'),
-                                  Tab(text: 'ABOUT'),
-                                  Tab(text: 'COMMENTS'),
-                                ],
-                              ),
-                            ),
-                            body: TabBarView(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: UpNextPage(
-                                      categoryId:
-                                          detailData.categoryId.toString(),
-                                      userId: detailData.userId.toString(),
-                                      videoId: detailData.id.toString()),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: AboutPage(
-                                      description: detailData.description),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: CommentsPage(
-                                    videoId: detailData.id.toString(),
+                                authToken,
+                                detailData.userId.toString(),
+                                currntuserId,
+                                detailData.userProfileImage.toString(),
+                                detailData.userName.toString(),
+                                detailData.numberOfFollowers!,
+                                detailData.categoryId.toString(),
+                                detailData.description.toString()),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          VideoPlayerScreen(
+                            valueNotifier: parentValueNotifier,
+                            videoSize: currentIndex,
+                            videoid: detailData.id.toString(),
+                            videoUrl: detailData.videoStreamingUrl.toString(),
+                            videoQualityDatas:
+                                detailData.qualityJson.toString(),
+                            callbackSize: (val) {
+                              if (mounted) {
+                                setState(() {
+                                  pickedSize = double.parse(val);
+                                });
+                              }
+                            },
+                            callbackPlay: (val1) {
+                              if (mounted) {
+                                setState(() {
+                                  upNextVideoPlaySize = val1;
+                                });
+                              }
+                            },
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: Get.height,
+                              child: NestedScrollView(
+                                headerSliverBuilder: (BuildContext context,
+                                    bool innerBoxScrolled) {
+                                  return <Widget>[
+                                    createSilverAppBar1(
+                                      detailData.title.toString(),
+                                      detailData.userName,
+                                      detailData.numberOfViews,
+                                      detailData.numberOfLikes,
+                                      detailData.numberOfDislikes,
+                                      splitday,
+                                      splitmonth,
+                                      splityear,
+                                      detailData.id,
+                                      detailData.isLiked,
+                                      detailData.isDisliked,
+                                      detailData.userProfileImage ?? "",
+                                      detailData.numberOfFollowers,
+                                      detailData.userId,
+                                    ),
+                                  ];
+                                },
+                                body: Scaffold(
+                                  appBar: AppBar(
+                                    backgroundColor: kBackGroundColor,
+                                    automaticallyImplyLeading: false,
+                                    toolbarHeight: 0,
+                                    bottom: const TabBar(
+                                      unselectedLabelColor:
+                                          kButtonSecondaryColor,
+                                      labelColor: kButtonColor,
+                                      isScrollable: true,
+                                      indicatorColor: kButtonColor,
+                                      dividerColor: kAmberColor,
+                                      tabs: [
+                                        Tab(text: 'UP NEXT VIDEOS'),
+                                        Tab(text: 'ABOUT'),
+                                        Tab(text: 'COMMENTS'),
+                                      ],
+                                    ),
+                                  ),
+                                  body: TabBarView(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: UpNextPage(
+                                            categoryId: detailData.categoryId
+                                                .toString(),
+                                            userId:
+                                                detailData.userId.toString(),
+                                            videoId: detailData.id.toString()),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: AboutPage(
+                                            description:
+                                                detailData.description),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: CommentsPage(
+                                          videoId: detailData.id.toString(),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                            // Container(
-                            //   color: kBackGroundColor,
-                            //   child: Column(
-                            //     children: [
-                            //       Expanded(
-                            //         child: SizedBox(
-                            //           height: Get.height,
-                            //           child: tabindex == 0
-                            //               ? UpNextPage(
-                            //                   categoryId: detailData.categoryId
-                            //                       .toString(),
-                            //                   userId:
-                            //                       detailData.userId.toString(),
-                            //                   videoId: detailData.id.toString())
-                            //               : tabindex == 1
-                            //                   ? AboutPage(
-                            //                       description:
-                            //                           detailData.description)
-                            //                   : CommentsPage(
-                            //                       videoId:
-                            //                           detailData.id.toString(),
-                            //                     ),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               ),
             ),
           );
@@ -338,13 +416,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                       likeCount: islikeValue,
                       dislikeCount: isdislikeValue,
                       isdisLiked: isDisliked,
-                      callbackDate: (val) {
-                        if (mounted) {
-                          setState(() {
-                            likeValue = val.toString();
-                          });
-                        }
-                      },
                     ),
                     const SizedBox(width: 10),
                     const ShareWidget(title: "", imageUrl: "", text: ""),
@@ -900,4 +971,808 @@ buildLazyloadingbottom() {
       ),
     ),
   );
+}
+
+class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final String title;
+  final String day;
+  final String month;
+  final String year;
+  final String numberOfViews;
+  final String id;
+  final int isdislikeValue;
+  final int islikeValue;
+  final bool? isLiked;
+  final bool? isDisliked;
+  final String authToken;
+  final String userId;
+  final String currntuserId;
+  final String userImage;
+  final String username;
+  final int numberOfFollwers;
+  final String categoryId;
+  final String description;
+
+  _SliverPersistentHeaderDelegate(
+      this.title,
+      this.day,
+      this.month,
+      this.year,
+      this.numberOfViews,
+      this.id,
+      this.isdislikeValue,
+      this.islikeValue,
+      this.isLiked,
+      this.isDisliked,
+      this.authToken,
+      this.userId,
+      this.currntuserId,
+      this.userImage,
+      this.username,
+      this.numberOfFollwers,
+      this.categoryId,
+      this.description);
+  final OtherUserVideoController otherUserVideoController =
+      Get.put(OtherUserVideoController());
+  final OtherUserPlaylistController otherUserPlaylistController =
+      Get.put(OtherUserPlaylistController());
+
+  FollowerService followerService = FollowerService();
+  bool onetime = true;
+  String followtext = "FOLLOW";
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final percent = (shrinkOffset / (maxExtent - minExtent)).clamp(0.0, 1.0);
+    var followcheck = numberOfFollwers == 0 ? "Follwer" : "Follwers";
+
+    final height = maxExtent - (maxExtent - minExtent) * percent;
+    loginConfirmationDialog() async {
+      return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const NoUserLoginDialog();
+        },
+      );
+    }
+
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: 210,
+                                child: Text(
+                                  title,
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                      color: kTextsecondarytopColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "${day}th, $month $year",
+                                style: const TextStyle(
+                                  color: kTextsecondarybottomColor,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: const EdgeInsets.only(right: 20, top: 11),
+                  child: Text(
+                    "$numberOfViews Views",
+                    style: const TextStyle(
+                        color: kTextsecondarytopColor,
+                        fontSize: 13,
+                        fontFamily: kFuturaPTDemi),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 19),
+            child: Row(
+              children: [
+                LikeWidget(
+                  videoId: id,
+                  isLiked: isLiked!,
+                  likeCount: islikeValue,
+                  dislikeCount: isdislikeValue,
+                  isdisLiked: isDisliked!,
+                ),
+                const SizedBox(width: 10),
+                const ShareWidget(title: "", imageUrl: "", text: ""),
+                const SizedBox(width: 10),
+                PlaylistWidget(
+                  videoId: id,
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 15),
+          SizedBox(
+            width: Get.width - 25,
+            height: 1,
+            child: CustomPaint(
+              painter: DottedLinePainter(),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.only(left: 22),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (authToken != "") {
+                          if (currntuserId == userId) {
+                            Container();
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => OtherUserProfilePage(
+                                    userId: userId, followcheck: followtext),
+                              ),
+                            );
+                            otherUserVideoController.updateString(userId);
+                            otherUserPlaylistController.updateString(userId);
+                          }
+                        } else {
+                          loginConfirmationDialog();
+                        }
+                      },
+                      child: SizedBox(
+                        height: 42,
+                        width: 42,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            userImage,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                              "assets/images/blank_profile.png",
+                              fit: BoxFit.fill,
+                            ),
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return SizedBox(
+                                width: 17,
+                                height: 17,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: kWhiteColor,
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                username,
+                                style: const TextStyle(
+                                    color: kTextsecondarytopColor,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "$numberOfFollwers $followcheck",
+                                style: const TextStyle(
+                                  color: kTextsecondarybottomColor,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                currntuserId == userId
+                    ? Container()
+                    : authToken != ""
+                        ? Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (authToken != "") {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CheckOutPaymentPage(
+                                          videoId: id.toString(),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    loginConfirmationDialog();
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, right: 6, left: 6),
+                                  margin: const EdgeInsets.only(right: 5),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xD212D2D9),
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(25)),
+                                  // width: 150,
+                                  child: Row(
+                                    children: const [
+                                      Text(
+                                        'DONATE',
+                                        style: TextStyle(
+                                            color: Color(0xD212D2D9),
+                                            letterSpacing: 1.5,
+                                            fontSize: 10),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (authToken != "") {
+                                    followerService
+                                        .followAndUnfollow(userId)
+                                        .then((value) => {
+                                              if (value['success'])
+                                                {
+                                                  if (followtext == "FOLLOW")
+                                                    {
+                                                      onetime = false,
+                                                      followtext = "UNFOLLOW"
+                                                    }
+                                                  else
+                                                    {
+                                                      if (followtext ==
+                                                          "UNFOLLOW")
+                                                        {
+                                                          onetime = false,
+                                                          followtext = "FOLLOW"
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                  } else {
+                                    loginConfirmationDialog();
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, right: 6, left: 6),
+                                  margin: const EdgeInsets.only(right: 24),
+                                  decoration: BoxDecoration(
+                                      color: followtext == "FOLLOW"
+                                          ? kButtonColor
+                                          : kBackGroundColor,
+                                      border: Border.all(
+                                          width: 1,
+                                          color: followtext == "FOLLOW"
+                                              ? kButtonColor
+                                              : kButtonSecondaryColor),
+                                      borderRadius: BorderRadius.circular(25)),
+                                  child: Text(
+                                    followtext,
+                                    style: const TextStyle(
+                                        color: kWhiteColor,
+                                        letterSpacing: 1.5,
+                                        fontSize: 10),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container()
+              ],
+            ),
+          ),
+          const TabBar(
+            unselectedLabelColor: kButtonSecondaryColor,
+            labelColor: kButtonColor,
+            isScrollable: true,
+            indicatorColor: kButtonColor,
+            dividerColor: kAmberColor,
+            tabs: [
+              Tab(text: 'UP NEXT VIDEOS'),
+              Tab(text: 'ABOUT'),
+              Tab(text: 'COMMENTS'),
+            ],
+          ),
+          Expanded(
+            child: SizedBox(
+              height: Get.height,
+              child: TabBarView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: UpNextPage(
+                        categoryId: categoryId.toString(),
+                        userId: userId.toString(),
+                        videoId: id.toString()),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: AboutPage(description: description),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: CommentsPage(
+                      videoId: id.toString(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    // Scaffold(
+    //     body: SizedBox(
+    //   height: height,
+    //   child: NestedScrollView(
+    //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
+    //       SliverAppBar(
+    //         automaticallyImplyLeading: false,
+    //         backgroundColor: kBackGroundColor,
+    //         expandedHeight: Platform.isAndroid ? 170 : 145,
+    //         floating: false,
+    //         flexibleSpace: LayoutBuilder(
+    //             builder: (BuildContext context, BoxConstraints constraints) {
+    //           return FlexibleSpaceBar(
+    //             collapseMode: CollapseMode.parallax,
+    //             background: Scaffold(
+    //                 body: Column(
+    //               children: [
+    //                 Padding(
+    //                   padding: const EdgeInsets.symmetric(
+    //                       horizontal: 10, vertical: 10),
+    //                   child: Row(
+    //                     crossAxisAlignment: CrossAxisAlignment.start,
+    //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                     children: [
+    //                       Row(
+    //                         children: [
+    //                           Row(
+    //                             children: [
+    //                               Padding(
+    //                                 padding: const EdgeInsets.only(left: 8.0),
+    //                                 child: Column(
+    //                                   crossAxisAlignment:
+    //                                       CrossAxisAlignment.start,
+    //                                   children: [
+    //                                     const SizedBox(height: 10),
+    //                                     SizedBox(
+    //                                       width: 210,
+    //                                       child: Text(
+    //                                         title,
+    //                                         maxLines: 2,
+    //                                         style: const TextStyle(
+    //                                             color: kTextsecondarytopColor,
+    //                                             fontSize: 15,
+    //                                             fontWeight: FontWeight.w500),
+    //                                       ),
+    //                                     ),
+    //                                     const SizedBox(height: 5),
+    //                                     Text(
+    //                                       "${day}th, $month $year",
+    //                                       style: const TextStyle(
+    //                                         color: kTextsecondarybottomColor,
+    //                                         fontSize: 11,
+    //                                       ),
+    //                                     ),
+    //                                   ],
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       Container(
+    //                         margin: const EdgeInsets.only(right: 20, top: 11),
+    //                         child: Text(
+    //                           "$numberOfViews Views",
+    //                           style: const TextStyle(
+    //                               color: kTextsecondarytopColor,
+    //                               fontSize: 13,
+    //                               fontFamily: kFuturaPTDemi),
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 const SizedBox(height: 10),
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(left: 19),
+    //                   child: Row(
+    //                     children: [
+    //                       LikeWidget(
+    //                         videoId: id,
+    //                         isLiked: isLiked!,
+    //                         likeCount: islikeValue,
+    //                         dislikeCount: isdislikeValue,
+    //                         isdisLiked: isDisliked!,
+    //                       ),
+    //                       const SizedBox(width: 10),
+    //                       const ShareWidget(title: "", imageUrl: "", text: ""),
+    //                       const SizedBox(width: 10),
+    //                       PlaylistWidget(
+    //                         videoId: id,
+    //                       )
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 const SizedBox(height: 15),
+    //                 SizedBox(
+    //                   width: Get.width - 25,
+    //                   height: 1,
+    //                   child: CustomPaint(
+    //                     painter: DottedLinePainter(),
+    //                   ),
+    //                 ),
+    //                 const SizedBox(height: 15),
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(left: 22),
+    //                   child: Row(
+    //                     crossAxisAlignment: CrossAxisAlignment.start,
+    //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                     children: [
+    //                       Row(
+    //                         children: [
+    //                           GestureDetector(
+    //                             onTap: () {
+    //                               if (authToken != "") {
+    //                                 if (currntuserId == userId) {
+    //                                   Container();
+    //                                 } else {
+    //                                   Navigator.of(context).push(
+    //                                     MaterialPageRoute(
+    //                                       builder: (context) =>
+    //                                           OtherUserProfilePage(
+    //                                               userId: userId,
+    //                                               followcheck: followtext),
+    //                                     ),
+    //                                   );
+    //                                   otherUserVideoController
+    //                                       .updateString(userId);
+    //                                   otherUserPlaylistController
+    //                                       .updateString(userId);
+    //                                 }
+    //                               } else {
+    //                                 loginConfirmationDialog();
+    //                               }
+    //                             },
+    //                             child: SizedBox(
+    //                               height: 42,
+    //                               width: 42,
+    //                               child: ClipRRect(
+    //                                 borderRadius: BorderRadius.circular(20),
+    //                                 child: Image.network(
+    //                                   userImage,
+    //                                   fit: BoxFit.cover,
+    //                                   errorBuilder:
+    //                                       (context, error, stackTrace) =>
+    //                                           Image.asset(
+    //                                     "assets/images/blank_profile.png",
+    //                                     fit: BoxFit.fill,
+    //                                   ),
+    //                                   loadingBuilder: (BuildContext context,
+    //                                       Widget child,
+    //                                       ImageChunkEvent? loadingProgress) {
+    //                                     if (loadingProgress == null) {
+    //                                       return child;
+    //                                     }
+    //                                     return SizedBox(
+    //                                       width: 17,
+    //                                       height: 17,
+    //                                       child: Center(
+    //                                         child: CircularProgressIndicator(
+    //                                           color: kWhiteColor,
+    //                                           value: loadingProgress
+    //                                                       .expectedTotalBytes !=
+    //                                                   null
+    //                                               ? loadingProgress
+    //                                                       .cumulativeBytesLoaded /
+    //                                                   loadingProgress
+    //                                                       .expectedTotalBytes!
+    //                                               : null,
+    //                                         ),
+    //                                       ),
+    //                                     );
+    //                                   },
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           Row(
+    //                             children: [
+    //                               Padding(
+    //                                 padding: const EdgeInsets.only(left: 8.0),
+    //                                 child: Column(
+    //                                   crossAxisAlignment:
+    //                                       CrossAxisAlignment.start,
+    //                                   children: [
+    //                                     Text(
+    //                                       username,
+    //                                       style: const TextStyle(
+    //                                           color: kTextsecondarytopColor,
+    //                                           fontSize: 13,
+    //                                           fontWeight: FontWeight.w500),
+    //                                     ),
+    //                                     const SizedBox(height: 5),
+    //                                     Text(
+    //                                       "$numberOfFollwers $followcheck",
+    //                                       style: const TextStyle(
+    //                                         color: kTextsecondarybottomColor,
+    //                                         fontSize: 11,
+    //                                       ),
+    //                                     ),
+    //                                   ],
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       currntuserId == userId
+    //                           ? Container()
+    //                           : authToken != ""
+    //                               ? Row(
+    //                                   children: [
+    //                                     GestureDetector(
+    //                                       onTap: () {
+    //                                         if (authToken != "") {
+    //                                           Navigator.of(context).push(
+    //                                             MaterialPageRoute(
+    //                                               builder: (context) =>
+    //                                                   CheckOutPaymentPage(
+    //                                                 videoId: id.toString(),
+    //                                               ),
+    //                                             ),
+    //                                           );
+    //                                         } else {
+    //                                           loginConfirmationDialog();
+    //                                         }
+    //                                       },
+    //                                       child: Container(
+    //                                         padding: const EdgeInsets.only(
+    //                                             top: 10,
+    //                                             bottom: 10,
+    //                                             right: 6,
+    //                                             left: 6),
+    //                                         margin:
+    //                                             const EdgeInsets.only(right: 5),
+    //                                         decoration: BoxDecoration(
+    //                                             border: Border.all(
+    //                                                 color:
+    //                                                     const Color(0xD212D2D9),
+    //                                                 width: 1),
+    //                                             borderRadius:
+    //                                                 BorderRadius.circular(25)),
+    //                                         // width: 150,
+    //                                         child: Row(
+    //                                           children: const [
+    //                                             Text(
+    //                                               'DONATE',
+    //                                               style: TextStyle(
+    //                                                   color: Color(0xD212D2D9),
+    //                                                   letterSpacing: 1.5,
+    //                                                   fontSize: 10),
+    //                                             ),
+    //                                           ],
+    //                                         ),
+    //                                       ),
+    //                                     ),
+    //                                     GestureDetector(
+    //                                       onTap: () {
+    //                                         if (authToken != "") {
+    //                                           followerService
+    //                                               .followAndUnfollow(userId)
+    //                                               .then((value) => {
+    //                                                     if (value['success'])
+    //                                                       {
+    //                                                         if (followtext ==
+    //                                                             "FOLLOW")
+    //                                                           {
+    //                                                             onetime = false,
+    //                                                             followtext =
+    //                                                                 "UNFOLLOW"
+    //                                                           }
+    //                                                         else
+    //                                                           {
+    //                                                             if (followtext ==
+    //                                                                 "UNFOLLOW")
+    //                                                               {
+    //                                                                 onetime =
+    //                                                                     false,
+    //                                                                 followtext =
+    //                                                                     "FOLLOW"
+    //                                                               }
+    //                                                           }
+    //                                                       }
+    //                                                   });
+    //                                         } else {
+    //                                           loginConfirmationDialog();
+    //                                         }
+    //                                       },
+    //                                       child: Container(
+    //                                         padding: const EdgeInsets.only(
+    //                                             top: 10,
+    //                                             bottom: 10,
+    //                                             right: 6,
+    //                                             left: 6),
+    //                                         margin: const EdgeInsets.only(
+    //                                             right: 24),
+    //                                         decoration: BoxDecoration(
+    //                                             color: followtext == "FOLLOW"
+    //                                                 ? kButtonColor
+    //                                                 : kBackGroundColor,
+    //                                             border: Border.all(
+    //                                                 width: 1,
+    //                                                 color: followtext ==
+    //                                                         "FOLLOW"
+    //                                                     ? kButtonColor
+    //                                                     : kButtonSecondaryColor),
+    //                                             borderRadius:
+    //                                                 BorderRadius.circular(25)),
+    //                                         child: Text(
+    //                                           followtext,
+    //                                           style: const TextStyle(
+    //                                               color: kWhiteColor,
+    //                                               letterSpacing: 1.5,
+    //                                               fontSize: 10),
+    //                                         ),
+    //                                       ),
+    //                                     ),
+    //                                   ],
+    //                                 )
+    //                               : Container()
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ],
+    //             )),
+    //           );
+    //         }),
+    //       ),
+    //     ],
+    //     body: Scaffold(
+    //       appBar: AppBar(
+    //         backgroundColor: kBackGroundColor,
+    //         automaticallyImplyLeading: false,
+    //         toolbarHeight: 0,
+    //         bottom: const TabBar(
+    //           unselectedLabelColor: kButtonSecondaryColor,
+    //           labelColor: kButtonColor,
+    //           isScrollable: true,
+    //           indicatorColor: kButtonColor,
+    //           dividerColor: kAmberColor,
+    //           tabs: [
+    //             Tab(text: 'UP NEXT VIDEOS'),
+    //             Tab(text: 'ABOUT'),
+    //             Tab(text: 'COMMENTS'),
+    //           ],
+    //         ),
+    //       ),
+    //       body: TabBarView(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.only(top: 8.0),
+    //             child: UpNextPage(
+    //                 categoryId: categoryId.toString(),
+    //                 userId: userId.toString(),
+    //                 videoId: id.toString()),
+    //           ),
+    //           Padding(
+    //             padding: const EdgeInsets.only(top: 8.0),
+    //             child: AboutPage(description: description),
+    //           ),
+    //           Padding(
+    //             padding: const EdgeInsets.only(top: 8.0),
+    //             child: CommentsPage(
+    //               videoId: id.toString(),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // ));
+  }
+
+  @override
+  double get maxExtent => 500.0;
+
+  @override
+  double get minExtent => 200.0;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class CustomSliverPersistentHeaderDelegate
+    extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  CustomSliverPersistentHeaderDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
 }

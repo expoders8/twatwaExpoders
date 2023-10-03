@@ -19,12 +19,12 @@ class DiscoverVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -70,7 +70,7 @@ class DiscoverVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      if (apiController.shouldMakeApiCall()) {
+      if (networkController.isConnected.value) {
         fetchVideo();
       }
     }
@@ -93,12 +93,12 @@ class TrendingVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -144,7 +144,7 @@ class TrendingVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      if (apiController.shouldMakeApiCall()) {
+      if (networkController.isConnected.value) {
         fetchVideo();
       }
     }
@@ -162,11 +162,11 @@ class SearchVideoController extends GetxController {
   VideoService videoService = VideoService();
   var videoList = <GetAllVideoModel>[].obs;
   var searchQuery = ''.obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -250,12 +250,12 @@ class MyVideoController extends GetxController {
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
   final RxString selectedUserId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
     getUser();
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (selectedUserId.value != "") {
         fetchVideo();
       }
@@ -271,7 +271,7 @@ class MyVideoController extends GetxController {
     if (getUserData != null) {
       selectedUserId.value = getUserData['id'] ?? "";
     }
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
   }
@@ -303,7 +303,7 @@ class VideoOfTheDayController extends GetxController {
   VideoService videoService = VideoService();
   var videoList = <GetVideoOfTheDayData>[].obs;
   RxString currentUserId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
@@ -312,7 +312,7 @@ class VideoOfTheDayController extends GetxController {
       var getUserData = jsonDecode(data);
       currentUserId(getUserData['id'] ?? "");
     }
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideoOfTheDay();
     }
     super.onInit();
@@ -365,12 +365,12 @@ class JobsVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -416,7 +416,7 @@ class JobsVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      if (apiController.shouldMakeApiCall()) {
+      if (networkController.isConnected.value) {
         fetchVideo();
       }
     }
@@ -439,12 +439,11 @@ class EducationVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
-
+  final NetworkController networkController = Get.put(NetworkController());
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -490,7 +489,7 @@ class EducationVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      if (apiController.shouldMakeApiCall()) {
+      if (networkController.isConnected.value) {
         fetchVideo();
       }
     }
@@ -513,12 +512,12 @@ class TalentVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -564,7 +563,7 @@ class TalentVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      if (apiController.shouldMakeApiCall()) {
+      if (networkController.isConnected.value) {
         fetchVideo();
       }
     }
@@ -587,7 +586,7 @@ class UpNextVideoController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   final RxString selectedcategoryId = "".obs;
   final RxString checkVideoId = "".obs;
@@ -598,7 +597,7 @@ class UpNextVideoController extends GetxController {
 
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (selectedcategoryId.value != "") {
         fetchVideo();
       }
@@ -609,9 +608,7 @@ class UpNextVideoController extends GetxController {
 
   void updateString(String newValue) {
     selectedcategoryId.value = newValue;
-    if (apiController.shouldMakeApiCall()) {
-      fetchVideo();
-    }
+    fetchVideo();
   }
 
   void updateCheckVideoId(String newValue) {
@@ -651,9 +648,7 @@ class UpNextVideoController extends GetxController {
       videoDetailController.videoId(videoData.id.toString());
       commentsController.updateString(videoData.id.toString());
       selectedcategoryId.value = videoData.categoryId.toString();
-      if (apiController.shouldMakeApiCall()) {
-        fetchVideo();
-      }
+      fetchVideo();
       commentsController.fetchComment();
     }
     return "done";
@@ -670,9 +665,7 @@ class UpNextVideoController extends GetxController {
       videoDetailController.videoId(videoData.id.toString());
       commentsController.updateString(videoData.id.toString());
       selectedcategoryId.value = videoData.categoryId.toString();
-      if (apiController.shouldMakeApiCall()) {
-        fetchVideo();
-      }
+      fetchVideo();
       commentsController.fetchComment();
       return [
         videoData.videoThumbnailImagePath.toString(),
@@ -711,11 +704,11 @@ class PremiumShowVideoController extends GetxController {
   VideoService videoService = VideoService();
   final scrollController = ScrollController();
   RxString selectedVideoId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
   @override
   void onInit() {
     scrollController.addListener(_scrollListener);
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchVideo();
     }
     super.onInit();
@@ -761,7 +754,7 @@ class PremiumShowVideoController extends GetxController {
         !isLoading.value) {
       // limit += 10;
       loadedItems += limit.toInt();
-      if (apiController.shouldMakeApiCall()) {
+      if (networkController.isConnected.value) {
         fetchVideo();
       }
     }

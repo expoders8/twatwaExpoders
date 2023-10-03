@@ -15,10 +15,10 @@ class OtherUserVideoController extends GetxController {
   var isAddingMore = false.obs;
   VideoService videoService = VideoService();
   final RxString selectedOtherUserId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (selectedOtherUserId.value != "") {
         fetchVideo();
       }
@@ -62,11 +62,11 @@ class OtherUserPlaylistController extends GetxController {
   int loadedItems = 0;
   var isAddingMore = false.obs;
   final RxString selectedUserId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (selectedUserId.value != "") {
         fetchAllPlaylist();
       }

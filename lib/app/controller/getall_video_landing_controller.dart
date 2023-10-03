@@ -8,11 +8,11 @@ class GetAllVideoLandingController extends GetxController {
   var isLoading = true.obs;
   var videoList = <GetAllVideoLanding>[].obs;
   VideoService videoService = VideoService();
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       fetchAllLandingVideos();
     }
     super.onInit();

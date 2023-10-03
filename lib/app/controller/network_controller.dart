@@ -48,21 +48,3 @@ class NetworkController extends GetxController {
     }
   }
 }
-
-class ApiController extends GetxController {
-  var connectivityStatus = ConnectivityResult.none.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    Connectivity().onConnectivityChanged.listen((result) {
-      connectivityStatus.value = result;
-    });
-  }
-
-  bool shouldMakeApiCall() {
-    final connectivity = connectivityStatus.value;
-    return connectivity == ConnectivityResult.mobile ||
-        connectivity == ConnectivityResult.wifi;
-  }
-}

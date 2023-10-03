@@ -11,21 +11,19 @@ typedef StringCallback = void Function(String val);
 
 // ignore: must_be_immutable
 class LikeWidget extends StatefulWidget {
-  final StringCallback callbackDate;
   final bool isLiked;
   final bool isdisLiked;
   final String? videoId;
   late int? likeCount = 0;
   late int? dislikeCount = 0;
-  LikeWidget(
-      {Key? key,
-      required this.isLiked,
-      this.videoId,
-      this.likeCount,
-      this.dislikeCount,
-      required this.isdisLiked,
-      required this.callbackDate})
-      : super(key: key);
+  LikeWidget({
+    Key? key,
+    required this.isLiked,
+    this.videoId,
+    this.likeCount,
+    this.dislikeCount,
+    required this.isdisLiked,
+  }) : super(key: key);
 
   @override
   State<LikeWidget> createState() => _LikeWidgetState();

@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/comments_model.dart';
@@ -17,11 +14,11 @@ class CommentsController extends GetxController {
   var isAddingMore = false.obs;
   var selectedVideoId = "".obs;
   var selectedUserId = "".obs;
-  final ApiController apiController = Get.put(ApiController());
+  final NetworkController networkController = Get.put(NetworkController());
 
   @override
   void onInit() {
-    if (apiController.shouldMakeApiCall()) {
+    if (networkController.isConnected.value) {
       if (selectedVideoId.value != "") {
         fetchComment();
       }

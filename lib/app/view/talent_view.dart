@@ -166,8 +166,8 @@ class _TalentViewPageState extends State<TalentViewPage> {
                                                   errorBuilder: (context, error,
                                                           stackTrace) =>
                                                       Image.asset(
-                                                    "assets/Opentrend_light_applogo.jpeg",
-                                                    fit: BoxFit.fill,
+                                                    "assets/splash.png",
+                                                    fit: BoxFit.cover,
                                                   ),
                                                   loadingBuilder:
                                                       (BuildContext context,
