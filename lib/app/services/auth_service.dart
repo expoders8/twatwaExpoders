@@ -9,13 +9,12 @@ import '../../config/provider/snackbar_provider.dart';
 class AuthService {
   Future<LoginModel> login(String email, String password, fcmtoken) async {
     try {
-      var response = await http.post(
-          Uri.parse('$baseUrl/userapi/api/Auth/Login'),
+      var response = await http.post(Uri.parse('$baseUrl/api/Auth/Login'),
           body: json.encode(
               {"email": email, "password": password, "fcmToken": fcmtoken}),
           headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -41,20 +40,19 @@ class AuthService {
   Future<SignUpModel> signUp(String firstName, String lastName, String emailId,
       String password, String userName, String phoneNumber, fcmtoken) async {
     try {
-      var response =
-          await http.post(Uri.parse('$baseUrl/userapi/api/Auth/Register'),
-              body: json.encode({
-                "firstName": firstName,
-                "lastName": lastName,
-                "email": emailId,
-                "password": password,
-                "userName": userName,
-                "phoneNumber": phoneNumber,
-                "fcmToken": fcmtoken
-              }),
-              headers: {
+      var response = await http.post(Uri.parse('$baseUrl/api/Auth/Register'),
+          body: json.encode({
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": emailId,
+            "password": password,
+            "userName": userName,
+            "phoneNumber": phoneNumber,
+            "fcmToken": fcmtoken
+          }),
+          headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -80,10 +78,10 @@ class AuthService {
   verifyEmail(String token) async {
     try {
       var response = await http.get(
-          Uri.parse('$baseUrl/userapi/api/User/VerifyEmail?token=$token'),
+          Uri.parse('$baseUrl/api/User/VerifyEmail?token=$token'),
           headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -104,13 +102,13 @@ class AuthService {
   Future<ForgotPasswordModel> forgotPassowrd(String emailId) async {
     try {
       var response =
-          await http.post(Uri.parse('$baseUrl/userapi/api/Auth/ForgotPassword'),
+          await http.post(Uri.parse('$baseUrl/api/Auth/ForgotPassword'),
               body: json.encode({
                 "email": emailId,
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -138,9 +136,7 @@ class AuthService {
     String? fcmToken,
   ) async {
     try {
-      var response = await http.post(
-          Uri.parse(
-              'https://opentrend-api.azurewebsites.net/api/Auth/SocialLogin'),
+      var response = await http.post(Uri.parse('$baseUrl/api/Auth/SocialLogin'),
           body: json.encode({
             "firstName": firstName,
             "lastName": lastName,
@@ -152,7 +148,7 @@ class AuthService {
           }),
           headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -180,7 +176,7 @@ class AuthService {
     var token = box.read('authToken');
     try {
       var response =
-          await http.post(Uri.parse('$baseUrl/userapi/api/User/ChangePassword'),
+          await http.post(Uri.parse('$baseUrl/api/User/ChangePassword'),
               body: json.encode({
                 "userId": userId,
                 "oldPassword": oldPass,
@@ -190,7 +186,7 @@ class AuthService {
               headers: {
             "Authorization": "Bearer $token",
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -210,15 +206,15 @@ class AuthService {
 
   otpVerification(String phoneNumber, String otp) async {
     try {
-      var response = await http
-          .post(Uri.parse('$baseUrl/userapi/api/Auth/OTPVerification'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/Auth/OTPVerification'),
               body: json.encode({
                 "phoneNumber": phoneNumber,
                 "otp": otp,
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -239,14 +235,13 @@ class AuthService {
 
   otpSend(String phoneNumber) async {
     try {
-      var response =
-          await http.post(Uri.parse('$baseUrl/userapi/api/Auth/OTPSend'),
-              body: json.encode({
-                "phoneNumber": phoneNumber,
-              }),
-              headers: {
+      var response = await http.post(Uri.parse('$baseUrl/api/Auth/OTPSend'),
+          body: json.encode({
+            "phoneNumber": phoneNumber,
+          }),
+          headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);

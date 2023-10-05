@@ -15,7 +15,7 @@ class VideoService {
   Future<GetAllVideoModel> getAllVideo(VideoRequestModel getRequest) async {
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetVideos'),
+          await http.post(Uri.parse('$baseUrl/api/Video/GetVideos'),
               body: json.encode({
                 "userId": getRequest.userId,
                 "videoType": getRequest.videoType,
@@ -26,7 +26,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
+            // 'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -47,8 +47,8 @@ class VideoService {
   Future<GetVideoOfTheDayData> getAllVideoOfTheDaY(
       VideoOfTheDayRequestModel getRequest) async {
     try {
-      final response = await http
-          .post(Uri.parse('$baseUrl/videoapi/api/Video/GetVideoOfTheDay'),
+      final response =
+          await http.post(Uri.parse('$baseUrl/api/Video/GetVideoOfTheDay'),
               body: json.encode({
                 "videoId": getRequest.videoId,
                 "userId": getRequest.userId,
@@ -72,7 +72,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
+            // 'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -93,7 +93,7 @@ class VideoService {
   Future<GetVideoByIdModel> getByIdVideo(String id) async {
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetDetails'),
+          await http.post(Uri.parse('$baseUrl/api/Video/GetDetails'),
               body: json.encode({
                 "videoId": id,
                 "userId": null,
@@ -117,7 +117,7 @@ class VideoService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
+            // 'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -138,10 +138,10 @@ class VideoService {
   getMyAnalytics(String userId) async {
     try {
       final response = await http.get(
-          Uri.parse('$baseUrl/videoapi/api/Video/GetMyAnalytics/$userId'),
+          Uri.parse('$baseUrl/api/Video/GetMyAnalytics/$userId'),
           headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -167,7 +167,7 @@ class VideoService {
       var token = box.read('authToken');
       http.Response response;
       var request = http.MultipartRequest(
-          "POST", Uri.parse("$baseUrl/videoapi/api/Video/UploadVideo"))
+          "POST", Uri.parse("$baseUrl/api/Video/UploadVideo"))
         ..fields['Title'] = title
         ..fields['Description'] = description
         ..fields['UserId'] = userId
@@ -184,7 +184,7 @@ class VideoService {
       }
       request.headers.addAll({
         "Authorization": "Bearer $token",
-        'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
       });
       response = await http.Response.fromStream(await request.send());
 
@@ -208,13 +208,12 @@ class VideoService {
   videoView(String videoId) async {
     var token = box.read('authToken');
     try {
-      final response = await http.get(
-          Uri.parse('$baseUrl/videoapi/api/Video/View/$videoId'),
-          headers: {
-            'Content-type': 'application/json',
-            "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-          });
+      final response = await http
+          .get(Uri.parse('$baseUrl/api/Video/View/$videoId'), headers: {
+        'Content-type': 'application/json',
+        "Authorization": "Bearer $token",
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;
@@ -236,12 +235,11 @@ class VideoService {
 
   Future<GetAllVideoLanding> getAllVideoLanding() async {
     try {
-      final response = await http.get(
-          Uri.parse('$baseUrl/videoapi/api/Video/GetVideoLanding'),
-          headers: {
-            'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-          });
+      final response = await http
+          .get(Uri.parse('$baseUrl/api/Video/GetVideoLanding'), headers: {
+        'Content-type': 'application/json',
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return GetAllVideoLanding.fromJson(data);

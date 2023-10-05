@@ -17,7 +17,7 @@ class PlaylistService {
     try {
       var token = box.read('authToken');
       var response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/AddPlaylist'),
+          await http.post(Uri.parse('$baseUrl/api/Video/AddPlaylist'),
               body: json.encode({
                 "userId": userId,
                 "playlistName": playlistName,
@@ -28,7 +28,7 @@ class PlaylistService {
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -52,8 +52,8 @@ class PlaylistService {
   Future<PlaylistModel> getMyPlayLists(PlaylistRequestModel getRequest) async {
     try {
       var token = box.read('authToken');
-      var response = await http
-          .post(Uri.parse('$baseUrl/videoapi/api/Video/GetMyPlayLists'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/Video/GetMyPlayLists'),
               body: json.encode({
                 "videoId": getRequest.videoId,
                 "userId": getRequest.userId,
@@ -67,7 +67,7 @@ class PlaylistService {
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -96,8 +96,8 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http
-          .post(Uri.parse('$baseUrl/videoapi/api/Video/UpdatePlaylist'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/Video/UpdatePlaylist'),
               body: json.encode({
                 "playlistId": playlistId,
                 "userId": userId,
@@ -107,7 +107,7 @@ class PlaylistService {
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -135,8 +135,8 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http
-          .post(Uri.parse('$baseUrl/videoapi/api/Video/RemovePlaylist'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/Video/RemovePlaylist'),
               body: json.encode({
                 "playlistId": playlistId,
                 "userId": userId,
@@ -144,7 +144,7 @@ class PlaylistService {
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -171,15 +171,15 @@ class PlaylistService {
   ) async {
     try {
       var token = box.read('authToken');
-      var response = await http
-          .post(Uri.parse('$baseUrl/videoapi/api/Video/AddVideoToPlaylist'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/Video/AddVideoToPlaylist'),
               body: json.encode({
                 "data": playlistData,
               }),
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);

@@ -90,7 +90,7 @@ class _FollowingHomeViewState extends State<FollowingHomeView> {
                                   errorBuilder: (context, error, stackTrace) =>
                                       Image.asset(
                                     "assets/Opentrend_light_applogo.jpeg",
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.contain,
                                   ),
                                   loadingBuilder: (BuildContext context,
                                       Widget child,

@@ -10,7 +10,7 @@ class CommnetsService {
   Future<GetAllComments> getAllComments(CommentRequestModel getRequest) async {
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetComments'),
+          await http.post(Uri.parse('$baseUrl/api/Video/GetComments'),
               body: json.encode({
                 "videoId": getRequest.videoId,
                 "commentId": getRequest.commentId,
@@ -25,7 +25,7 @@ class CommnetsService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -46,7 +46,7 @@ class CommnetsService {
   Future<GetAllComments> getAllReply(videoId, userId, parentCommentId) async {
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetComments'),
+          await http.post(Uri.parse('$baseUrl/api/Video/GetComments'),
               body: json.encode({
                 "videoId": videoId,
                 "commentId": null,
@@ -61,7 +61,7 @@ class CommnetsService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -83,7 +83,7 @@ class CommnetsService {
     var token = box.read('authToken');
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/AddComment'),
+          await http.post(Uri.parse('$baseUrl/api/Video/AddComment'),
               body: json.encode({
                 "id": null,
                 "videoId": videoId,
@@ -94,7 +94,7 @@ class CommnetsService {
               headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -116,11 +116,11 @@ class CommnetsService {
     var token = box.read('authToken');
     try {
       final response = await http.post(
-          Uri.parse('$baseUrl/videoapi/api/Video/DeleteComment/$commentId'),
+          Uri.parse('$baseUrl/api/Video/DeleteComment/$commentId'),
           headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -142,11 +142,11 @@ class CommnetsService {
     var token = box.read('authToken');
     try {
       final response = await http.get(
-          Uri.parse('$baseUrl/videoapi/api/Video/LikeComment/$commentId'),
+          Uri.parse('$baseUrl/api/Video/LikeComment/$commentId'),
           headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);

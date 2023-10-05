@@ -19,32 +19,31 @@ class PaymentService {
       String cityName,
       String postalCode) async {
     try {
-      var response =
-          await http.post(Uri.parse('$baseUrl/paymentapi/api/Payment/Donate'),
-              body: json.encode({
-                "donationId": "f9dabbd7-6fbc-4019-ba29-962df352b735",
-                "toUserId": userId,
-                "amountDonated": amountDonated,
-                "cardToken": cardToken,
-                "paymentReferenceId": "",
-                "paymentMethod": "",
-                "videoId": videoId,
-                "addressLine1": addressLine1,
-                "addressLine2": addressLine2,
-                "countryId": countryId,
-                "stateId": stateId,
-                "cityName": cityName,
-                "postalCode": postalCode,
-                "paymentGateway": paymentMethod,
-                "createdOn": null,
-                "createdById": null,
-                "updatedOn": null,
-                "updatedById": null,
-                "isActive": true
-              }),
-              headers: {
+      var response = await http.post(Uri.parse('$baseUrl/api/Payment/Donate'),
+          body: json.encode({
+            "donationId": "f9dabbd7-6fbc-4019-ba29-962df352b735",
+            "toUserId": userId,
+            "amountDonated": amountDonated,
+            "cardToken": cardToken,
+            "paymentReferenceId": "",
+            "paymentMethod": "",
+            "videoId": videoId,
+            "addressLine1": addressLine1,
+            "addressLine2": addressLine2,
+            "countryId": countryId,
+            "stateId": stateId,
+            "cityName": cityName,
+            "postalCode": postalCode,
+            "paymentGateway": paymentMethod,
+            "createdOn": null,
+            "createdById": null,
+            "updatedOn": null,
+            "updatedById": null,
+            "isActive": true
+          }),
+          headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);

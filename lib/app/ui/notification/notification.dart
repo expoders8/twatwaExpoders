@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,6 +43,7 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         backgroundColor: kBackGroundColor,
         centerTitle: true,
+        toolbarHeight: Platform.isIOS ? 20 : 30,
         title: const Text(
           "Notification",
           style: TextStyle(color: kWhiteColor, fontSize: 19),
@@ -80,6 +83,8 @@ class _NotificationPageState extends State<NotificationPage> {
                     } else {
                       return TranslateUpAnimation(
                         child: ListView.builder(
+                          padding:
+                              EdgeInsets.only(top: Platform.isIOS ? 20 : 0),
                           scrollDirection: Axis.vertical,
                           itemCount: notificationController
                               .notificationList[0].data!.length,

@@ -90,7 +90,7 @@ class _TrandingHomeViewState extends State<TrandingHomeView> {
                                   errorBuilder: (context, error, stackTrace) =>
                                       Image.asset(
                                     "assets/Opentrend_light_applogo.jpeg",
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.contain,
                                   ),
                                   fit: BoxFit.cover,
                                 ),

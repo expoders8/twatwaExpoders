@@ -11,8 +11,8 @@ class FollowerService {
     var data = box.read('user');
     var getUserData = jsonDecode(data);
     try {
-      var response = await http
-          .post(Uri.parse('$baseUrl/userapi/api/User/GetFollowerFollowing'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/User/GetFollowerFollowing'),
               body: json.encode({
                 "followerId": null,
                 "followeeId": getUserData['id'],
@@ -25,7 +25,7 @@ class FollowerService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
@@ -46,8 +46,8 @@ class FollowerService {
   Future<GetFollower> getAllOtherUserFollower(
       String otherUserId, checkText) async {
     try {
-      var response = await http
-          .post(Uri.parse('$baseUrl/userapi/api/User/GetFollowerFollowing'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/User/GetFollowerFollowing'),
               body: json.encode({
                 "followerId": checkText == "following" ? otherUserId : null,
                 "followeeId": checkText == "" ? otherUserId : null,
@@ -60,7 +60,7 @@ class FollowerService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
@@ -82,8 +82,8 @@ class FollowerService {
     var data = box.read('user');
     var getUserData = jsonDecode(data);
     try {
-      var response = await http
-          .post(Uri.parse('$baseUrl/userapi/api/User/GetFollowerFollowing'),
+      var response =
+          await http.post(Uri.parse('$baseUrl/api/User/GetFollowerFollowing'),
               body: json.encode({
                 "followerId": getUserData['id'],
                 "followeeId": null,
@@ -96,7 +96,7 @@ class FollowerService {
               }),
               headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
@@ -120,13 +120,13 @@ class FollowerService {
     var getUserData = jsonDecode(data);
     try {
       var response = await http.post(
-          Uri.parse('$baseUrl/userapi/api/User/FollowUnFollow'),
+          Uri.parse('$baseUrl/api/User/FollowUnFollow'),
           body:
               json.encode({"followerId": getUserData['id'], "followeeId": id}),
           headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);

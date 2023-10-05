@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -56,7 +58,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
             );
           } else {
             return SizedBox(
-              height: Get.height + 50,
+              height: Platform.isIOS ? Get.height - 80 : Get.height + 50,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount:
@@ -160,7 +162,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                                               stackTrace) =>
                                                           Image.asset(
                                                         "assets/Opentrend_light_applogo.jpeg",
-                                                        fit: BoxFit.fill,
+                                                        fit: BoxFit.contain,
                                                       ),
                                                       fit: BoxFit.cover,
                                                     ),

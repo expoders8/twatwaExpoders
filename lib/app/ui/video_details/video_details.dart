@@ -56,6 +56,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
       currntuserId = "",
       paymentTime = "",
       authToken = "",
+      pickedfullscreen = "",
       upNextVideoPlaySize = "";
   double pickedSize = 0.0;
   int currentIndex = 0;
@@ -150,14 +151,20 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                 },
                 child: pickedSize <= 0.80
                     ? CustomScrollView(
+                        physics: pickedfullscreen == "true"
+                            ? const NeverScrollableScrollPhysics()
+                            : const AlwaysScrollableScrollPhysics(),
                         controller: _controller,
                         slivers: <Widget>[
                           SliverAppBar(
                             titleSpacing: 100,
                             backgroundColor: kBackGroundColor,
                             automaticallyImplyLeading: false,
-                            expandedHeight:
-                                upNextVideoPlaySize == "true" ? 250 : 550.0,
+                            expandedHeight: pickedfullscreen == "true"
+                                ? Get.height
+                                : upNextVideoPlaySize == "true"
+                                    ? 250
+                                    : 550.0,
                             floating: false,
                             pinned: true,
                             flexibleSpace: FlexibleSpaceBar(
@@ -173,6 +180,13 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                   if (mounted) {
                                     setState(() {
                                       pickedSize = double.parse(val);
+                                    });
+                                  }
+                                },
+                                callbackfullscreen: (val) {
+                                  if (mounted) {
+                                    setState(() {
+                                      pickedfullscreen = val;
                                     });
                                   }
                                 },
@@ -226,6 +240,13 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                 });
                               }
                             },
+                            callbackfullscreen: (val) {
+                              if (mounted) {
+                                setState(() {
+                                  pickedfullscreen = val;
+                                });
+                              }
+                            },
                             callbackPlay: (val1) {
                               if (mounted) {
                                 setState(() {
@@ -259,49 +280,54 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                     ),
                                   ];
                                 },
-                                body: Scaffold(
-                                  appBar: AppBar(
-                                    backgroundColor: kBackGroundColor,
-                                    automaticallyImplyLeading: false,
-                                    toolbarHeight: 0,
-                                    bottom: const TabBar(
-                                      unselectedLabelColor:
-                                          kButtonSecondaryColor,
-                                      labelColor: kButtonColor,
-                                      isScrollable: true,
-                                      indicatorColor: kButtonColor,
-                                      dividerColor: kAmberColor,
-                                      tabs: [
-                                        Tab(text: 'UP NEXT VIDEOS'),
-                                        Tab(text: 'ABOUT'),
-                                        Tab(text: 'COMMENTS'),
-                                      ],
-                                    ),
-                                  ),
-                                  body: TabBarView(
+                                body: DefaultTabController(
+                                  length: 3,
+                                  child: Column(
                                     children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: UpNextPage(
-                                            categoryId: detailData.categoryId
-                                                .toString(),
-                                            userId:
-                                                detailData.userId.toString(),
-                                            videoId: detailData.id.toString()),
+                                      TabBar(
+                                        unselectedLabelColor:
+                                            kButtonSecondaryColor,
+                                        labelColor: kButtonColor,
+                                        isScrollable: true,
+                                        indicatorColor: kButtonColor,
+                                        dividerColor: kAmberColor,
+                                        tabs: [
+                                          Tab(text: 'UP NEXT VIDEOS'),
+                                          Tab(text: 'ABOUT'),
+                                          Tab(text: 'COMMENTS'),
+                                        ],
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: AboutPage(
-                                            description:
-                                                detailData.description),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: CommentsPage(
-                                          videoId: detailData.id.toString(),
+                                      Expanded(
+                                        child: TabBarView(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: UpNextPage(
+                                                  categoryId: detailData
+                                                      .categoryId
+                                                      .toString(),
+                                                  userId: detailData.userId
+                                                      .toString(),
+                                                  videoId:
+                                                      detailData.id.toString()),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: AboutPage(
+                                                  description:
+                                                      detailData.description),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: CommentsPage(
+                                                videoId:
+                                                    detailData.id.toString(),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],

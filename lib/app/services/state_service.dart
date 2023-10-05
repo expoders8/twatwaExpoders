@@ -10,12 +10,11 @@ class StateService {
   static Future<List<StateDataModel>> getStates(
       String query, String countryId) async {
     try {
-      final response = await http.get(
-          Uri.parse('$baseUrl/lookupapi/api/Lookup/GetStates/$countryId'),
-          headers: {
-            'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-          });
+      final response = await http
+          .get(Uri.parse('$baseUrl/api/Lookup/GetStates/$countryId'), headers: {
+        'Content-type': 'application/json',
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         final List<dynamic> fetchCountry = data['data'];

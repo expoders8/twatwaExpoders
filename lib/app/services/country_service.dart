@@ -9,12 +9,11 @@ import '../models/country_model.dart';
 class CountryService {
   static Future<List<CountryDataModel>> getCountry(String query) async {
     try {
-      final response = await http.get(
-          Uri.parse('$baseUrl/lookupapi/api/Lookup/GetCountries'),
-          headers: {
-            'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-          });
+      final response = await http
+          .get(Uri.parse('$baseUrl/api/Lookup/GetCountries'), headers: {
+        'Content-type': 'application/json',
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         final List<dynamic> fetchCountry = data['data'];

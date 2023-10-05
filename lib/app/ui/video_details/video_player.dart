@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ class VideoPlayerScreen extends StatefulWidget {
   final String videoQualityDatas;
   final StringCallback callbackSize;
   final StringCallback callbackPlay;
+  final StringCallback callbackfullscreen;
   const VideoPlayerScreen({
     super.key,
     required this.videoUrl,
@@ -31,6 +33,7 @@ class VideoPlayerScreen extends StatefulWidget {
     required this.callbackPlay,
     required this.videoSize,
     required this.valueNotifier,
+    required this.callbackfullscreen,
   });
 
   @override
@@ -45,7 +48,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   double _sliderValue = 0.0;
   late VideoPlayerController _controller;
   bool isChecked = false,
-      showOverlay = true,
+      showOverlay = false,
       fullHeight = false,
       _isPlaying = false,
       upnextVidepPlay = false,
@@ -285,7 +288,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 ? Get.height
                 : _controller.value.aspectRatio <= 0.80
                     ? Get.height / 1.5
-                    : 250,
+                    : Platform.isIOS
+                        ? 290
+                        : 250,
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
@@ -341,8 +346,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                 ),
                               )
                         : Padding(
-                            padding:
-                                EdgeInsets.only(top: _isFullScreen ? 0 : 28.0),
+                            padding: EdgeInsets.only(
+                                top: _isFullScreen
+                                    ? 0
+                                    : Platform.isIOS
+                                        ? 40
+                                        : 28.0),
                             child: VideoPlayer(
                               _controller,
                             ),
@@ -358,13 +367,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     //         ))
                     : const Center(
                         child: Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                        child: CircularProgressIndicator(
-                          color: Colors.white60,
-                          backgroundColor: kButtonSecondaryColor,
-                          strokeWidth: 2,
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: CircularProgressIndicator(
+                            color: Colors.white60,
+                            backgroundColor: kButtonSecondaryColor,
+                            strokeWidth: 2,
+                          ),
                         ),
-                      )),
+                      ),
                 _buildControls()
               ],
             ),
@@ -374,16 +384,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   Widget _buildControls() {
     return GestureDetector(
       onTap: () {
-        // if (currentIndex == 1 ||
-        //     currentIndex == 2 ||
-        //     currentIndex == 3 ||
-        //     currentIndex == 4 ||
-        //     currentIndex == 5 ||
-        //     currentIndex == 6) {
-        //   setState(() {
-        //     fullHeight = true;
-        //   });
-        // }
         setState(() {
           showOverlay = !showOverlay;
         });
@@ -425,7 +425,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             ? 10
                             : 50
                         : 10,
-                    vertical: _isFullScreen ? 10 : 20),
+                    vertical: _isFullScreen
+                        ? Platform.isIOS
+                            ? 40
+                            : 10
+                        : Platform.isIOS
+                            ? 40
+                            : 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -483,7 +489,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   height: _isFullScreen
                       ? _controller.value.aspectRatio <= 0.80
                           ? 260
-                          : 60
+                          : Platform.isIOS
+                              ? 40
+                              : 60
                       : _controller.value.aspectRatio <= 0.80
                           ? currentIndex == 0
                               ? 170
@@ -645,7 +653,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                                       : currentIndex == 7
                                                           ? 50
                                                           : 190
-                          : 40),
+                          : Platform.isIOS
+                              ? 50
+                              : 40),
               Container(
                 padding:
                     EdgeInsets.symmetric(horizontal: _isFullScreen ? 30 : 10),
@@ -797,6 +807,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _enterpotraitFullScreen() {
+    widget.callbackfullscreen("true");
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -818,6 +829,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _exitFullScreen() {
+    widget.callbackfullscreen("false");
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     SystemChrome.setPreferredOrientations([

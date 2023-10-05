@@ -23,16 +23,15 @@ class VideoDetailController extends GetxController {
     var token = box.read('authToken');
     try {
       isLoading(true);
-      var response =
-          await http.post(Uri.parse('$baseUrl/videoapi/api/Video/GetDetails'),
-              body: json.encode({
-                "videoId": videoId.toString(),
-                "userId": token == null ? null : userId,
-              }),
-              headers: {
+      var response = await http.post(Uri.parse('$baseUrl/api/Video/GetDetails'),
+          body: json.encode({
+            "videoId": videoId.toString(),
+            "userId": token == null ? null : userId,
+          }),
+          headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var model = jsonDecode(response.body);

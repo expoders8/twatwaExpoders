@@ -11,13 +11,12 @@ class LikeStoryService {
   videoLike(videoId) async {
     var token = box.read('authToken');
     try {
-      final response = await http.get(
-          Uri.parse('$baseUrl/videoapi/api/Video/Like/$videoId'),
-          headers: {
-            'Content-type': 'application/json',
-            "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-          });
+      final response = await http
+          .get(Uri.parse('$baseUrl/api/Video/Like/$videoId'), headers: {
+        'Content-type': 'application/json',
+        "Authorization": "Bearer $token",
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;
@@ -40,13 +39,12 @@ class LikeStoryService {
   videoDisLike(videoId) async {
     var token = box.read('authToken');
     try {
-      final response = await http.get(
-          Uri.parse('$baseUrl/videoapi/api/Video/Dislike/$videoId'),
-          headers: {
-            'Content-type': 'application/json',
-            "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-          });
+      final response = await http
+          .get(Uri.parse('$baseUrl/api/Video/Dislike/$videoId'), headers: {
+        'Content-type': 'application/json',
+        "Authorization": "Bearer $token",
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+      });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;

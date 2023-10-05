@@ -19,7 +19,7 @@ class UserService {
       var token = box.read('authToken');
       http.Response response;
       var request = http.MultipartRequest(
-          "POST", Uri.parse("$baseUrl/userapi/api/User/UpdateProfile"))
+          "POST", Uri.parse("$baseUrl/api/User/UpdateProfile"))
         ..fields['userId'] = userId
         ..fields['firstName'] = firstName
         ..fields['lastName'] = lastName
@@ -32,7 +32,7 @@ class UserService {
       }
       request.headers.addAll({
         "Authorization": "Bearer $token",
-        'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
       });
       response = await http.Response.fromStream(await request.send());
 

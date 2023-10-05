@@ -9,11 +9,11 @@ class CategoryService {
   getAllCategory() async {
     try {
       var response = await http.post(
-          Uri.parse('$baseUrl/lookupapi/api/Lookup/GetCategories'),
+          Uri.parse('$baseUrl/api/Lookup/GetCategories'),
           body: json.encode({"categoryId": null, "searchText": ""}),
           headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);

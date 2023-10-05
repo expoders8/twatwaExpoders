@@ -21,8 +21,7 @@ class NotificationService {
     try {
       var token = box.read('authToken');
       var response = await http.post(
-          Uri.parse(
-              '$baseUrl/notificationapi/api/Notification/UpdateNotificationSetting'),
+          Uri.parse('$baseUrl/api/Notification/UpdateNotificationSetting'),
           body: json.encode({
             "id": id,
             "userId": userId,
@@ -42,7 +41,7 @@ class NotificationService {
           headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -66,20 +65,19 @@ class NotificationService {
       var token = box.read('authToken');
       var data = box.read('user');
       var getUserData = jsonDecode(data);
-      var response = await http.post(
-          Uri.parse(
-              '$baseUrl/notificationapi/api/Notification/GetUserNotifications'),
-          body: json.encode({
-            "userId": getUserData['id'],
-            "pageSize": 100,
-            "pageNumber": 1,
-            "searchText": "",
-            "sortBy": "",
-          }),
-          headers: {
+      var response = await http
+          .post(Uri.parse('$baseUrl/api/Notification/GetUserNotifications'),
+              body: json.encode({
+                "userId": getUserData['id'],
+                "pageSize": 100,
+                "pageNumber": 1,
+                "searchText": "",
+                "sortBy": "",
+              }),
+              headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
@@ -101,12 +99,11 @@ class NotificationService {
     var token = box.read('authToken');
     try {
       final response = await http.get(
-          Uri.parse(
-              '$baseUrl/notificationapi/api/Notification/GetNotificationSetting/$userId'),
+          Uri.parse('$baseUrl/api/Notification/GetNotificationSetting/$userId'),
           headers: {
             'Content-type': 'application/json',
             "Authorization": "Bearer $token",
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);

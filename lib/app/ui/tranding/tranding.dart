@@ -26,12 +26,9 @@ class _TrendingPageState extends State<TrendingPage> {
     return Scaffold(
         backgroundColor: kBackGroundColor,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(Platform.isAndroid ? 60 : 95),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40.0, left: 20, right: 5),
-            child: AppBarWidget(
-              title: widget.type.toString(),
-            ),
+          preferredSize: Size.fromHeight(Platform.isAndroid ? 60 : 60),
+          child: AppBarWidget(
+            title: widget.type.toString(),
           ),
         ),
         body: widget.type == "Discover"

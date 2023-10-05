@@ -85,170 +85,177 @@ class _ProfilePageState extends State<ProfilePage> {
           ];
         },
         body: Scaffold(
-            appBar: AppBar(
-              backgroundColor: kBackGroundColor,
-              automaticallyImplyLeading: false,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (profileScreen == "profileSettting") {
-                        setState(() {
-                          profileScreen = "profile";
-                        });
-                      } else {
-                        if (profileScreen == "profile") {
+          body: DefaultTabController(
+            length: 5,
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (profileScreen == "profileSettting") {
                           setState(() {
-                            profileScreen = "profileSettting";
+                            profileScreen = "profile";
                           });
+                        } else {
+                          if (profileScreen == "profile") {
+                            setState(() {
+                              profileScreen = "profileSettting";
+                            });
+                          }
                         }
-                      }
-                    },
-                    child: Container(
-                      width: 100,
-                      padding: const EdgeInsets.all(11),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border:
-                            Border.all(width: 1, color: kButtonSecondaryColor),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          profileScreen == "profile"
-                              ? SizedBox(
-                                  height: 13,
-                                  width: 13,
-                                  child: Image.asset(
-                                    "assets/icons/setting.png",
-                                    color: kButtonColor,
-                                    scale: 1,
-                                  ),
-                                )
-                              : Container(),
-                          profileScreen == "profile"
-                              ? const SizedBox(width: 8)
-                              : Container(),
-                          Text(
+                      },
+                      child: Container(
+                        width: 100,
+                        padding: const EdgeInsets.all(11),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                              width: 1, color: kButtonSecondaryColor),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
                             profileScreen == "profile"
-                                ? "PROFILE"
-                                : "My profile",
-                            style: const TextStyle(
-                                fontSize: 13, color: kButtonSecondaryColor),
-                          ),
+                                ? SizedBox(
+                                    height: 13,
+                                    width: 13,
+                                    child: Image.asset(
+                                      "assets/icons/setting.png",
+                                      color: kButtonColor,
+                                      scale: 1,
+                                    ),
+                                  )
+                                : Container(),
+                            profileScreen == "profile"
+                                ? const SizedBox(width: 8)
+                                : Container(),
+                            Text(
+                              profileScreen == "profile"
+                                  ? "PROFILE"
+                                  : "My profile",
+                              style: const TextStyle(
+                                  fontSize: 13, color: kButtonSecondaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: logoutConfirmationDialog,
+                      child: Container(
+                        width: 100,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                              width: 1, color: kButtonSecondaryColor),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.logout_outlined,
+                              color: kButtonSecondaryColor,
+                            ),
+                            SizedBox(width: 5),
+                            Text(
+                              "Logout",
+                              style: TextStyle(
+                                  fontSize: 13, color: kButtonSecondaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                profileScreen == "profile"
+                    ? const TabBar(
+                        unselectedLabelColor: kButtonSecondaryColor,
+                        labelColor: kButtonColor,
+                        isScrollable: true,
+                        indicatorColor: kButtonColor,
+                        dividerColor: kAmberColor,
+                        tabs: [
+                          Tab(text: 'My Videos'),
+                          Tab(text: 'My Playlist'),
+                          Tab(text: 'Analytics'),
+                          Tab(text: 'Followers'),
+                          Tab(text: 'Following'),
                         ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: logoutConfirmationDialog,
-                    child: Container(
-                      width: 100,
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border:
-                            Border.all(width: 1, color: kButtonSecondaryColor),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.logout_outlined,
-                            color: kButtonSecondaryColor,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "Logout",
-                            style: TextStyle(
-                                fontSize: 13, color: kButtonSecondaryColor),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              bottom: profileScreen == "profile"
-                  ? const TabBar(
-                      unselectedLabelColor: kButtonSecondaryColor,
-                      labelColor: kButtonColor,
-                      isScrollable: true,
-                      indicatorColor: kButtonColor,
-                      dividerColor: kAmberColor,
-                      tabs: [
-                        Tab(text: 'My Videos'),
-                        Tab(text: 'My Playlist'),
-                        Tab(text: 'Analytics'),
-                        Tab(text: 'Followers'),
-                        Tab(text: 'Following'),
-                      ],
-                    )
-                  : const TabBar(
-                      unselectedLabelColor: kButtonSecondaryColor,
-                      labelColor: kButtonColor,
-                      isScrollable: true,
-                      indicatorColor: kButtonColor,
-                      dividerColor: kAmberColor,
-                      tabs: [
-                        Tab(text: 'Profile'),
-                        Tab(text: 'Password'),
-                        Tab(text: 'Notifications'),
-                        Tab(text: 'Billing'),
-                      ],
-                    ),
-            ),
-            body: profileScreen == "profile"
-                ? const TabBarView(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: MyVideoPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: MyPlaylistPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: AnalyticsPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: FollowersPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: FollowingPage(),
-                      ),
-                    ],
-                  )
-                : const TabBarView(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: UpdateProfilePage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: ChangePasswordPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: NotificationSettingPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: FollowersPage(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: FollowingPage(),
                       )
-                    ],
-                  )),
+                    : const TabBar(
+                        unselectedLabelColor: kButtonSecondaryColor,
+                        labelColor: kButtonColor,
+                        isScrollable: true,
+                        indicatorColor: kButtonColor,
+                        dividerColor: kAmberColor,
+                        tabs: [
+                          Tab(text: 'Profile'),
+                          Tab(text: 'Password'),
+                          Tab(text: 'Notifications'),
+                          Tab(text: 'Billing'),
+                        ],
+                      ),
+                Expanded(
+                  child: profileScreen == "profile"
+                      ? const TabBarView(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: MyVideoPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: MyPlaylistPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: AnalyticsPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: FollowersPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: FollowingPage(),
+                            ),
+                          ],
+                        )
+                      : const TabBarView(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: UpdateProfilePage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: ChangePasswordPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: NotificationSettingPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: FollowersPage(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: FollowingPage(),
+                            )
+                          ],
+                        ),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
 
       // return Scaffold(
@@ -539,8 +546,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   children: [
                     Container(
-                      padding:
-                          const EdgeInsets.only(top: 28, left: 20, bottom: 0),
+                      padding: EdgeInsets.only(
+                          top: Platform.isIOS ? 35 : 28, left: 20, bottom: 0),
                       decoration: const BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
@@ -586,7 +593,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(right: 16, top: 50),
+                            margin: EdgeInsets.only(
+                                right: 16, top: Platform.isIOS ? 60 : 50),
                             height: 100,
                             width: 100,
                             child: ClipRRect(
@@ -638,7 +646,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 21.0),
+                      padding: EdgeInsets.only(top: Platform.isIOS ? 26 : 21.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

@@ -79,7 +79,8 @@ class _TabPageState extends State<TabPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        height: Platform.isIOS ? 97 : 68,
+        padding: EdgeInsets.only(top: Platform.isIOS ? 12 : 0),
+        height: Platform.isIOS ? 90 : 68,
         shape: const CircularNotchedRectangle(),
         color: const Color(0xFF22213C),
         notchMargin: 10,

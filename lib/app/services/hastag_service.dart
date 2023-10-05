@@ -10,11 +10,11 @@ class HashTagsService {
   getAllHastag(String id) async {
     try {
       var response = await http.post(
-          Uri.parse('$baseUrl/lookupapi/api/Lookup/GetHashTags'),
+          Uri.parse('$baseUrl/api/Lookup/GetHashTags'),
           body: json.encode({"categoryId": id, "searchText": ""}),
           headers: {
             'Content-type': 'application/json',
-            'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
           });
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
