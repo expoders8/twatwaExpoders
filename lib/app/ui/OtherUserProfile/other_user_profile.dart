@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/other_user_controller.dart';
-import '../../services/follower_service.dart';
 import '../../services/video_service.dart';
+import '../../services/follower_service.dart';
+import '../../controller/other_user_controller.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../OtherUserProfile/OtherUserVideo/other_user_video.dart';

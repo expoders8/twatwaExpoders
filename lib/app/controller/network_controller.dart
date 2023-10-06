@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../routes/app_pages.dart';
 import '../controller/video_controller.dart';
-import '../controller/playlist_controller.dart';
 import '../controller/getall_video_landing_controller.dart';
 
 class NetworkController extends GetxController {

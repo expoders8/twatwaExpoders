@@ -28,36 +28,17 @@ class _MyVideoPageState extends State<MyVideoPage> {
   final UpNextVideoController upNextVideoController =
       Get.put(UpNextVideoController());
   final CommentsController commentsController = Get.put(CommentsController());
-  String userId = "";
-  Timer? timer;
+  VideoService videoService = VideoService();
 
+  Timer? timer;
   // void _startTimer() {
   //   timer = Timer.periodic(const Duration(seconds: 5), (timer) {
   //     myVideoController.fetchMyVideo();
   //   });
   // }
 
-  Future getUser() async {
-    var data = box.read('user');
-    var getUserData = jsonDecode(data);
-
-    if (getUserData != null) {
-      setState(() {
-        userId = getUserData['id'] ?? "";
-      });
-    }
-  }
-
   Future<void> _pullRefresh() async {
     myVideoController.fetchVideo();
-  }
-
-  VideoService videoService = VideoService();
-
-  @override
-  void initState() {
-    getUser();
-    super.initState();
   }
 
   @override

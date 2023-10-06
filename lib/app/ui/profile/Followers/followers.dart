@@ -19,22 +19,6 @@ class FollowersPage extends StatefulWidget {
 
 class _FollowersPageState extends State<FollowersPage> {
   final FollowerController followerController = Get.put(FollowerController());
-  String userId = "";
-  @override
-  void initState() {
-    getUser();
-    super.initState();
-  }
-
-  Future getUser() async {
-    var data = box.read('user');
-    var getUserData = jsonDecode(data);
-    if (getUserData != null) {
-      setState(() {
-        userId = getUserData['id'] ?? "";
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

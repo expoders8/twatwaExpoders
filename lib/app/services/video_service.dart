@@ -90,51 +90,6 @@ class VideoService {
     }
   }
 
-  Future<GetVideoByIdModel> getByIdVideo(String id) async {
-    try {
-      final response =
-          await http.post(Uri.parse('$baseUrl/api/Video/GetDetails'),
-              body: json.encode({
-                "videoId": id,
-                "userId": null,
-                "userName": "",
-                "videoType": "",
-                "currentUserId": null,
-                "categoryId": null,
-                "thumbnailId": null,
-                "categoryName": "",
-                "playlistId": null,
-                "videoReferenceId": "",
-                "videoEncoderReference": "",
-                "visibleStatus": "",
-                "videoUploadStatus": "",
-                "requestType": "",
-                "hashTag": "",
-                "pageSize": 0,
-                "pageNumber": 0,
-                "searchText": "",
-                "sortBy": ""
-              }),
-              headers: {
-            'Content-type': 'application/json',
-            // 'Ocp-Apim-Subscription-Key': 'c5c0f404c1b243cbb7335bd9c550d0f4'
-          });
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        return GetVideoByIdModel.fromJson(data);
-      } else {
-        LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while fetch video, Please try after some time.");
-        return Future.error("Server Error");
-      }
-    } catch (e) {
-      LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
-      throw e.toString();
-    }
-  }
-
   getMyAnalytics(String userId) async {
     try {
       final response = await http.get(

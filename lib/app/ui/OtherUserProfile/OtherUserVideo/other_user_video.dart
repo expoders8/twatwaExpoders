@@ -1,17 +1,15 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter/material.dart';
 
-import '../../../../config/constant/color_constant.dart';
-import '../../../../config/constant/font_constant.dart';
-import '../../../controller/comments_controller.dart';
-import '../../../controller/other_user_controller.dart';
-import '../../../controller/video_controller.dart';
-import '../../../controller/video_detail_controller.dart';
 import '../../../routes/app_pages.dart';
-import '../../video_details/video_details.dart';
+import '../../../controller/video_controller.dart';
+import '../../../controller/comments_controller.dart';
+import '../../../../config/constant/font_constant.dart';
+import '../../../controller/other_user_controller.dart';
+import '../../../../config/constant/color_constant.dart';
+import '../../../controller/video_detail_controller.dart';
 
 class OtherUserVideoPage extends StatefulWidget {
   final String? userId;

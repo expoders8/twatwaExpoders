@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
-import '../../../config/constant/color_constant.dart';
 import '../../routes/app_pages.dart';
+import '../../../config/constant/color_constant.dart';
 
 class NoUserLoginDialog extends StatelessWidget {
   const NoUserLoginDialog({super.key});

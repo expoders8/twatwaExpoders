@@ -184,10 +184,8 @@ class _LikeWidgetState extends State<LikeWidget> {
                           scale: 1.5,
                         ),
                       ),
-                widget.likeCount != "0"
-                    ? const SizedBox(width: 5)
-                    : Container(),
-                widget.likeCount != "0"
+                widget.likeCount != 0 ? const SizedBox(width: 5) : Container(),
+                widget.likeCount != 0
                     ? Text(
                         widget.likeCount.toString(),
                         style: const TextStyle(
@@ -239,10 +237,10 @@ class _LikeWidgetState extends State<LikeWidget> {
                           scale: 1.5,
                         ),
                       ),
-                widget.dislikeCount != "0"
+                widget.dislikeCount != 0
                     ? const SizedBox(width: 5)
                     : Container(),
-                widget.dislikeCount != "0"
+                widget.dislikeCount != 0
                     ? Text(
                         widget.dislikeCount.toString(),
                         style: const TextStyle(

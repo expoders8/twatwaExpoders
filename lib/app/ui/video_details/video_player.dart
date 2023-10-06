@@ -356,15 +356,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               _controller,
                             ),
                           )
-                    // _isFullScreen
-                    //     ? VideoPlayer(
-                    //         _controller,
-                    //       )
-                    //     : AspectRatio(
-                    //         aspectRatio: _controller.value.aspectRatio,
-                    //         child: VideoPlayer(
-                    //           _controller,
-                    //         ))
                     : const Center(
                         child: Padding(
                           padding: EdgeInsets.only(top: 10.0),

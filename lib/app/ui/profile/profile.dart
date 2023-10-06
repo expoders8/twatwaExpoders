@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
       usertotalViews = 0,
       usertotalVideos = 0,
       usertotalFollowings = 0,
+      userAmount = 0,
       usertotalFollowers = 0;
   String profileScreen = "profile";
   String userName = "", userEmail = "", userImage = "", userId = '';
@@ -65,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   usertotalVideos = value['data']['totalVideos'] ?? 0;
                   usertotalFollowers = value['data']['totalFollowers'] ?? 0;
                   usertotalFollowings = value['data']['totalFollowings'] ?? 0;
+                  userAmount = value['data']['userAmount'] ?? 0;
                 })
               }
             else
@@ -77,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
-      length: 5, // Number of tabs
+      length: profileScreen == "profile" ? 5 : 4, // Number of tabs
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
           return <Widget>[
@@ -86,7 +88,8 @@ class _ProfilePageState extends State<ProfilePage> {
         },
         body: Scaffold(
           body: DefaultTabController(
-            length: 5,
+            initialIndex: 0,
+            length: profileScreen == "profile" ? 5 : 4,
             child: Column(
               children: [
                 const SizedBox(height: 20),
@@ -203,25 +206,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                 Expanded(
                   child: profileScreen == "profile"
-                      ? const TabBarView(
+                      ? TabBarView(
                           children: [
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: MyVideoPage(),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: MyPlaylistPage(),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 8.0),
-                              child: AnalyticsPage(),
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: AnalyticsPage(amount: userAmount),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: FollowersPage(),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: FollowingPage(),
                             ),
@@ -245,10 +248,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: EdgeInsets.only(top: 8.0),
                               child: FollowersPage(),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 8.0),
-                              child: FollowingPage(),
-                            )
                           ],
                         ),
                 )
@@ -257,203 +256,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-
-      // return Scaffold(
-      //   resizeToAvoidBottomInset: false,
-      //   backgroundColor: kBackGroundColor,
-      //   body: WillPopScope(
-      //     onWillPop: () {
-      //       Get.offAll(() => const TabPage());
-      //       return Future.value(false);
-      //     },
-      //     child: GestureDetector(
-      //       onTap: () {
-      //         FocusScope.of(context).requestFocus(FocusNode());
-      //       },
-      //       child: Column(
-      //         children: [
-      //           Expanded(
-      //             child: SizedBox(
-      //               height: Get.height,
-      //               child: NestedScrollView(
-      //                 headerSliverBuilder:
-      //                     (BuildContext context, bool innerBoxScrolled) {
-      //                   return <Widget>[
-      //                     createSilverAppBar1(),
-      //                   ];
-      //                 },
-      //                ,)
-      //                 // body: Container(
-      //                 //   color: kBackGroundColor,
-      //                 //   child: Column(
-      //                 //     children: [
-      //                 //       const SizedBox(height: 30),
-      //                 //       Center(
-      //                 //         child: Row(
-      //                 //           mainAxisAlignment: MainAxisAlignment.center,
-      //                 //           children: [
-      //                 //             GestureDetector(
-      //                 //               onTap: () {
-      //                 //                 if (profileScreen == "profileSettting") {
-      //                 //                   setState(() {
-      //                 //                     profileScreen = "profile";
-      //                 //                   });
-      //                 //                 } else {
-      //                 //                   if (profileScreen == "profile") {
-      //                 //                     setState(() {
-      //                 //                       profileScreen = "profileSettting";
-      //                 //                     });
-      //                 //                   }
-      //                 //                 }
-      //                 //               },
-      //                 //               child: Container(
-      //                 //                 width: 100,
-      //                 //                 padding: const EdgeInsets.all(11),
-      //                 //                 decoration: BoxDecoration(
-      //                 //                   borderRadius: BorderRadius.circular(30),
-      //                 //                   border: Border.all(
-      //                 //                       width: 1,
-      //                 //                       color: kButtonSecondaryColor),
-      //                 //                 ),
-      //                 //                 child: Row(
-      //                 //                   mainAxisAlignment:
-      //                 //                       MainAxisAlignment.center,
-      //                 //                   children: [
-      //                 //                     profileScreen == "profile"
-      //                 //                         ? SizedBox(
-      //                 //                             height: 13,
-      //                 //                             width: 13,
-      //                 //                             child: Image.asset(
-      //                 //                               "assets/icons/setting.png",
-      //                 //                               color: kButtonColor,
-      //                 //                               scale: 1,
-      //                 //                             ),
-      //                 //                           )
-      //                 //                         : Container(),
-      //                 //                     profileScreen == "profile"
-      //                 //                         ? const SizedBox(width: 8)
-      //                 //                         : Container(),
-      //                 //                     Text(
-      //                 //                       profileScreen == "profile"
-      //                 //                           ? "PROFILE"
-      //                 //                           : "My profile",
-      //                 //                       style: const TextStyle(
-      //                 //                           fontSize: 13,
-      //                 //                           color: kButtonSecondaryColor),
-      //                 //                     ),
-      //                 //                   ],
-      //                 //                 ),
-      //                 //               ),
-      //                 //             ),
-      //                 //             const SizedBox(width: 10),
-      //                 //             GestureDetector(
-      //                 //               onTap: logoutConfirmationDialog,
-      //                 //               child: Container(
-      //                 //                 width: 100,
-      //                 //                 padding: const EdgeInsets.all(6),
-      //                 //                 decoration: BoxDecoration(
-      //                 //                   borderRadius: BorderRadius.circular(30),
-      //                 //                   border: Border.all(
-      //                 //                       width: 1,
-      //                 //                       color: kButtonSecondaryColor),
-      //                 //                 ),
-      //                 //                 child: Row(
-      //                 //                   mainAxisAlignment:
-      //                 //                       MainAxisAlignment.center,
-      //                 //                   children: const [
-      //                 //                     Icon(
-      //                 //                       Icons.logout_outlined,
-      //                 //                       color: kButtonSecondaryColor,
-      //                 //                     ),
-      //                 //                     SizedBox(width: 5),
-      //                 //                     Text(
-      //                 //                       "Logout",
-      //                 //                       style: TextStyle(
-      //                 //                           fontSize: 13,
-      //                 //                           color: kButtonSecondaryColor),
-      //                 //                     ),
-      //                 //                   ],
-      //                 //                 ),
-      //                 //               ),
-      //                 //             ),
-      //                 //           ],
-      //                 //         ),
-      //                 //       ),
-      //                 //       const SizedBox(height: 20),
-      //                 //       profileScreen == "profile"
-      //                 //           ? SingleChildScrollView(
-      //                 //               scrollDirection: Axis.horizontal,
-      //                 //               child: Row(
-      //                 //                 mainAxisAlignment:
-      //                 //                     MainAxisAlignment.spaceAround,
-      //                 //                 children: [
-      //                 //                   buildTabSelection("My Videos", 120.0, 0),
-      //                 //                   buildTabSelection(
-      //                 //                       "My Playlist", 100.0, 1),
-      //                 //                   buildTabSelection("Analytics", 100.0, 2),
-      //                 //                   buildTabSelection("Followers", 100.0, 3),
-      //                 //                   buildTabSelection("Following", 100.0, 4),
-      //                 //                 ],
-      //                 //               ),
-      //                 //             )
-      //                 //           : SingleChildScrollView(
-      //                 //               scrollDirection: Axis.horizontal,
-      //                 //               child: Row(
-      //                 //                 mainAxisAlignment:
-      //                 //                     MainAxisAlignment.spaceAround,
-      //                 //                 children: [
-      //                 //                   buildTabSelection("Profile", 100.0, 0),
-      //                 //                   buildTabSelection("Password", 110.0, 1),
-      //                 //                   buildTabSelection(
-      //                 //                       "Notifications", 110.0, 2),
-      //                 //                   buildTabSelection("Billing", 90.0, 3),
-      //                 //                 ],
-      //                 //               ),
-      //                 //             ),
-      //                 //       const SizedBox(height: 5),
-      //                 //       profileScreen == "profile"
-      //                 //           ? Expanded(
-      //                 //               child: SizedBox(
-      //                 //                   height: Get.height,
-      //                 //                   child: tabindex == 0
-      //                 //                       ? const MyVideoPage()
-      //                 //                       : tabindex == 1
-      //                 //                           ? const MyPlaylistPage(
-      //                 //                               checkText: "my")
-      //                 //                           : tabindex == 2
-      //                 //                               ? const AnalyticsPage()
-      //                 //                               : tabindex == 3
-      //                 //                                   ? const FollowersPage()
-      //                 //                                   : tabindex == 4
-      //                 //                                       ? const FollowingPage()
-      //                 //                                       : Container()),
-      //                 //             )
-      //                 //           : Expanded(
-      //                 //               child: SizedBox(
-      //                 //                   height: Get.height,
-      //                 //                   child: tabindex == 0
-      //                 //                       ? const UpdateProfilePage()
-      //                 //                       : tabindex == 1
-      //                 //                           ? const ChangePasswordPage()
-      //                 //                           : tabindex == 2
-      //                 //                               ? const NotificationSettingPage()
-      //                 //                               : tabindex == 3
-      //                 //                                   ? const FollowersPage()
-      //                 //                                   : tabindex == 4
-      //                 //                                       ? const FollowingPage()
-      //                 //                                       : Container()),
-      //                 //             ),
-      //                 //     ],
-      //                 //   ),
-      //                 // ),
-      //               ),
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // );
     );
   }
 

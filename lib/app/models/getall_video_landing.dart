@@ -118,7 +118,7 @@ class DisocverVideo {
   bool? isLiked;
   bool? isDisliked;
   bool? hasFollowers;
-  Null? hashTags;
+  String? hashTags;
 
   DisocverVideo(
       {this.id,

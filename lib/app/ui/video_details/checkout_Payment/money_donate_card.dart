@@ -7,13 +7,9 @@ typedef StringCallback = void Function(String val);
 
 class MoneyDonateCard extends StatefulWidget {
   final StringCallback callbackAmount;
-  // final int donateItemQty;
-  // final int raisingItemQty;
   const MoneyDonateCard({
     Key? key,
     required this.callbackAmount,
-    // required this.donateItemQty,
-    // required this.raisingItemQty,
   }) : super(key: key);
 
   @override
@@ -22,8 +18,6 @@ class MoneyDonateCard extends StatefulWidget {
 
 class _MoneyDonateCardState extends State<MoneyDonateCard> {
   int _value = 0;
-  int donateQty = 0;
-  int raisedQty = 0;
   TextEditingController amountController = TextEditingController();
 
   @override
@@ -118,12 +112,6 @@ class _MoneyDonateCardState extends State<MoneyDonateCard> {
                       color: kWhiteColor,
                       fontSize: 14,
                     ),
-                    // enabledBorder: UnderlineInputBorder(
-                    //   borderSide: BorderSide(color: kIconColor),
-                    // ),
-                    // focusedBorder: UnderlineInputBorder(
-                    //   borderSide: BorderSide(color: kIconColor),
-                    // ),
                     border: UnderlineInputBorder(
                       borderSide: BorderSide(color: kButtonSecondaryColor),
                     ),

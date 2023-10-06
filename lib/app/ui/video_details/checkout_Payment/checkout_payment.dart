@@ -1,32 +1,29 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:intl/intl.dart';
-import 'package:opentrend/app/ui/video_details/checkout_Payment/payment_successful.dart';
-import 'package:opentrend/app/ui/video_details/checkout_Payment/paypal_screen.dart';
-
-import '../../../../config/constant/constant.dart';
-import '../../../../config/provider/loader_provider.dart';
-import '../../../../config/provider/snackbar_provider.dart';
-import '../../../services/payment_service.dart';
-import 'payment_type_saved_card.dart';
 
 import '../../../models/state_model.dart';
 import '../../../models/country_model.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../../services/state_service.dart';
+import '../../../services/payment_service.dart';
 import '../../../services/country_service.dart';
-import '../../../../config/constant/color_constant.dart';
 import '../../../../config/constant/font_constant.dart';
+import '../../../../config/constant/color_constant.dart';
+import '../../../../config/provider/loader_provider.dart';
+import '../../../../config/provider/snackbar_provider.dart';
+import '../../video_details/checkout_Payment/paypal_screen.dart';
 import '../../video_details/checkout_Payment/money_donate_card.dart';
+import '../../video_details/checkout_Payment/payment_successful.dart';
+import '../../video_details/checkout_Payment/payment_type_saved_card.dart';
 
 class CheckOutPaymentPage extends StatefulWidget {
   final String? videoId;
-  const CheckOutPaymentPage({super.key, this.videoId});
+  final String? userId;
+  const CheckOutPaymentPage({super.key, this.videoId, this.userId});
 
   @override
   State<CheckOutPaymentPage> createState() => _CheckOutPaymentPageState();
@@ -40,8 +37,7 @@ class _CheckOutPaymentPageState extends State<CheckOutPaymentPage> {
       validateStateId = false,
       validateCountryId = false;
 
-  String selectedOption = "",
-      pickedCountryId = "",
+  String pickedCountryId = "",
       pickedStateId = "",
       donationAmount = "5",
       cardId = "",
@@ -56,33 +52,6 @@ class _CheckOutPaymentPageState extends State<CheckOutPaymentPage> {
   TextEditingController stateSearchController = TextEditingController();
   CardFormEditController controller = CardFormEditController();
   PaymentService paymentService = PaymentService();
-
-  @override
-  void initState() {
-    getUser();
-    // getPublishableKeyFromApi();
-    super.initState();
-  }
-
-  // getPublishableKeyFromApi() async {
-  //   await getSettings().then((key) {
-  //     setState(() {
-  //       _publishableKey = key.data!.stripePublishableApiKey!;
-  //     });
-  //   });
-  //   Stripe.publishableKey =
-  //       "pk_test_51M7fqOIBiDmnktcQfgLl2nTgbz72Ugnd7CmQtg9SWWSvGfgsxoTWvHJz254jLdRSD8R9uDsZh0NgWaC7FHJ5xcVO00h8iBMb26";
-  //   await Stripe.instance.applySettings();
-  // }
-  Future getUser() async {
-    var data = box.read('user');
-    var getUserData = jsonDecode(data);
-    if (data != null) {
-      setState(() {
-        userId = getUserData['id'] ?? "";
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -527,7 +496,7 @@ class _CheckOutPaymentPageState extends State<CheckOutPaymentPage> {
               await paymentService
                   .donate(
                       widget.videoId.toString(),
-                      userId,
+                      widget.userId.toString(),
                       int.parse(donationAmount),
                       value.id,
                       "STRIPE",
@@ -570,7 +539,7 @@ class _CheckOutPaymentPageState extends State<CheckOutPaymentPage> {
                       await paymentService
                           .donate(
                               widget.videoId.toString(),
-                              userId,
+                              widget.userId.toString(),
                               int.parse(donationAmount),
                               number,
                               "PAYPAL",
@@ -614,7 +583,7 @@ class _CheckOutPaymentPageState extends State<CheckOutPaymentPage> {
               await paymentService
                   .donate(
                       widget.videoId.toString(),
-                      userId,
+                      widget.userId.toString(),
                       int.parse(donationAmount),
                       cardToken,
                       "stripe",

@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:vertical_card_pager/vertical_card_pager.dart';
 
-import '../../../config/constant/constant.dart';
 import '../home/tab_page.dart';
 import '../../../config/constant/color_constant.dart';
 
@@ -294,7 +291,7 @@ class _MenuPageState extends State<MenuPage> {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 4),
-              titles: ["", "", "", "", ""],
+              titles: const ["", "", "", "", ""],
               images: images,
               onPageChanged: (page) {},
               align: ALIGN.CENTER,
@@ -346,7 +343,6 @@ class _MenuPageState extends State<MenuPage> {
                   );
                 }
                 // box.write('menuIndex', jsonEncode(index));
-                print(index);
               },
             ),
           ),

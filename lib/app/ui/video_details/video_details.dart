@@ -89,7 +89,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
         currentIndex = newIndex;
       });
     }
-    print(currentIndex);
     updateValue(currentIndex);
   }
 
@@ -284,7 +283,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                   length: 3,
                                   child: Column(
                                     children: [
-                                      TabBar(
+                                      const TabBar(
                                         unselectedLabelColor:
                                             kButtonSecondaryColor,
                                         labelColor: kButtonColor,
@@ -572,8 +571,8 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 CheckOutPaymentPage(
-                                              videoId: id.toString(),
-                                            ),
+                                                    videoId: id.toString(),
+                                                    userId: userId.toString()),
                                           ),
                                         );
                                       } else {
@@ -1049,10 +1048,8 @@ class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final percent = (shrinkOffset / (maxExtent - minExtent)).clamp(0.0, 1.0);
     var followcheck = numberOfFollwers == 0 ? "Follwer" : "Follwers";
 
-    final height = maxExtent - (maxExtent - minExtent) * percent;
     loginConfirmationDialog() async {
       return await showDialog(
         context: context,
@@ -1062,328 +1059,324 @@ class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       );
     }
 
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 10),
-                              SizedBox(
-                                width: 210,
-                                child: Text(
-                                  title,
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                      color: kTextsecondarytopColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                "${day}th, $month $year",
-                                style: const TextStyle(
-                                  color: kTextsecondarybottomColor,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 20, top: 11),
-                  child: Text(
-                    "$numberOfViews Views",
-                    style: const TextStyle(
-                        color: kTextsecondarytopColor,
-                        fontSize: 13,
-                        fontFamily: kFuturaPTDemi),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 19),
-            child: Row(
-              children: [
-                LikeWidget(
-                  videoId: id,
-                  isLiked: isLiked!,
-                  likeCount: islikeValue,
-                  dislikeCount: isdislikeValue,
-                  isdisLiked: isDisliked!,
-                ),
-                const SizedBox(width: 10),
-                const ShareWidget(title: "", imageUrl: "", text: ""),
-                const SizedBox(width: 10),
-                PlaylistWidget(
-                  videoId: id,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 15),
-          SizedBox(
-            width: Get.width - 25,
-            height: 1,
-            child: CustomPaint(
-              painter: DottedLinePainter(),
-            ),
-          ),
-          const SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.only(left: 22),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (authToken != "") {
-                          if (currntuserId == userId) {
-                            Container();
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => OtherUserProfilePage(
-                                    userId: userId, followcheck: followtext),
-                              ),
-                            );
-                            otherUserVideoController.updateString(userId);
-                            otherUserPlaylistController.updateString(userId);
-                          }
-                        } else {
-                          loginConfirmationDialog();
-                        }
-                      },
-                      child: SizedBox(
-                        height: 42,
-                        width: 42,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            userImage,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
-                              "assets/images/blank_profile.png",
-                              fit: BoxFit.fill,
-                            ),
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return SizedBox(
-                                width: 17,
-                                height: 17,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: kWhiteColor,
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                username,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: 210,
+                              child: Text(
+                                title,
+                                maxLines: 2,
                                 style: const TextStyle(
                                     color: kTextsecondarytopColor,
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w500),
                               ),
-                              const SizedBox(height: 5),
-                              Text(
-                                "$numberOfFollwers $followcheck",
-                                style: const TextStyle(
-                                  color: kTextsecondarybottomColor,
-                                  fontSize: 11,
-                                ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "${day}th, $month $year",
+                              style: const TextStyle(
+                                color: kTextsecondarybottomColor,
+                                fontSize: 11,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                currntuserId == userId
-                    ? Container()
-                    : authToken != ""
-                        ? Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (authToken != "") {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CheckOutPaymentPage(
-                                          videoId: id.toString(),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    loginConfirmationDialog();
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, right: 6, left: 6),
-                                  margin: const EdgeInsets.only(right: 5),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color(0xD212D2D9),
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(25)),
-                                  // width: 150,
-                                  child: Row(
-                                    children: const [
-                                      Text(
-                                        'DONATE',
-                                        style: TextStyle(
-                                            color: Color(0xD212D2D9),
-                                            letterSpacing: 1.5,
-                                            fontSize: 10),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (authToken != "") {
-                                    followerService
-                                        .followAndUnfollow(userId)
-                                        .then((value) => {
-                                              if (value['success'])
-                                                {
-                                                  if (followtext == "FOLLOW")
-                                                    {
-                                                      onetime = false,
-                                                      followtext = "UNFOLLOW"
-                                                    }
-                                                  else
-                                                    {
-                                                      if (followtext ==
-                                                          "UNFOLLOW")
-                                                        {
-                                                          onetime = false,
-                                                          followtext = "FOLLOW"
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                  } else {
-                                    loginConfirmationDialog();
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, right: 6, left: 6),
-                                  margin: const EdgeInsets.only(right: 24),
-                                  decoration: BoxDecoration(
-                                      color: followtext == "FOLLOW"
-                                          ? kButtonColor
-                                          : kBackGroundColor,
-                                      border: Border.all(
-                                          width: 1,
-                                          color: followtext == "FOLLOW"
-                                              ? kButtonColor
-                                              : kButtonSecondaryColor),
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: Text(
-                                    followtext,
-                                    style: const TextStyle(
-                                        color: kWhiteColor,
-                                        letterSpacing: 1.5,
-                                        fontSize: 10),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Container()
-              ],
-            ),
-          ),
-          const TabBar(
-            unselectedLabelColor: kButtonSecondaryColor,
-            labelColor: kButtonColor,
-            isScrollable: true,
-            indicatorColor: kButtonColor,
-            dividerColor: kAmberColor,
-            tabs: [
-              Tab(text: 'UP NEXT VIDEOS'),
-              Tab(text: 'ABOUT'),
-              Tab(text: 'COMMENTS'),
-            ],
-          ),
-          Expanded(
-            child: SizedBox(
-              height: Get.height,
-              child: TabBarView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: UpNextPage(
-                        categoryId: categoryId.toString(),
-                        userId: userId.toString(),
-                        videoId: id.toString()),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: AboutPage(description: description),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: CommentsPage(
-                      videoId: id.toString(),
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              Container(
+                margin: const EdgeInsets.only(right: 20, top: 11),
+                child: Text(
+                  "$numberOfViews Views",
+                  style: const TextStyle(
+                      color: kTextsecondarytopColor,
+                      fontSize: 13,
+                      fontFamily: kFuturaPTDemi),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 19),
+          child: Row(
+            children: [
+              LikeWidget(
+                videoId: id,
+                isLiked: isLiked!,
+                likeCount: islikeValue,
+                dislikeCount: isdislikeValue,
+                isdisLiked: isDisliked!,
+              ),
+              const SizedBox(width: 10),
+              const ShareWidget(title: "", imageUrl: "", text: ""),
+              const SizedBox(width: 10),
+              PlaylistWidget(
+                videoId: id,
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+        SizedBox(
+          width: Get.width - 25,
+          height: 1,
+          child: CustomPaint(
+            painter: DottedLinePainter(),
+          ),
+        ),
+        const SizedBox(height: 15),
+        Padding(
+          padding: const EdgeInsets.only(left: 22),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (authToken != "") {
+                        if (currntuserId == userId) {
+                          Container();
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => OtherUserProfilePage(
+                                  userId: userId, followcheck: followtext),
+                            ),
+                          );
+                          otherUserVideoController.updateString(userId);
+                          otherUserPlaylistController.updateString(userId);
+                        }
+                      } else {
+                        loginConfirmationDialog();
+                      }
+                    },
+                    child: SizedBox(
+                      height: 42,
+                      width: 42,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                          userImage,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset(
+                            "assets/images/blank_profile.png",
+                            fit: BoxFit.fill,
+                          ),
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return SizedBox(
+                              width: 17,
+                              height: 17,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: kWhiteColor,
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              username,
+                              style: const TextStyle(
+                                  color: kTextsecondarytopColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "$numberOfFollwers $followcheck",
+                              style: const TextStyle(
+                                color: kTextsecondarybottomColor,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              currntuserId == userId
+                  ? Container()
+                  : authToken != ""
+                      ? Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (authToken != "") {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => CheckOutPaymentPage(
+                                        videoId: id.toString(),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  loginConfirmationDialog();
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    top: 10, bottom: 10, right: 6, left: 6),
+                                margin: const EdgeInsets.only(right: 5),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xD212D2D9),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(25)),
+                                // width: 150,
+                                child: Row(
+                                  children: const [
+                                    Text(
+                                      'DONATE',
+                                      style: TextStyle(
+                                          color: Color(0xD212D2D9),
+                                          letterSpacing: 1.5,
+                                          fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                if (authToken != "") {
+                                  followerService
+                                      .followAndUnfollow(userId)
+                                      .then((value) => {
+                                            if (value['success'])
+                                              {
+                                                if (followtext == "FOLLOW")
+                                                  {
+                                                    onetime = false,
+                                                    followtext = "UNFOLLOW"
+                                                  }
+                                                else
+                                                  {
+                                                    if (followtext ==
+                                                        "UNFOLLOW")
+                                                      {
+                                                        onetime = false,
+                                                        followtext = "FOLLOW"
+                                                      }
+                                                  }
+                                              }
+                                          });
+                                } else {
+                                  loginConfirmationDialog();
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    top: 10, bottom: 10, right: 6, left: 6),
+                                margin: const EdgeInsets.only(right: 24),
+                                decoration: BoxDecoration(
+                                    color: followtext == "FOLLOW"
+                                        ? kButtonColor
+                                        : kBackGroundColor,
+                                    border: Border.all(
+                                        width: 1,
+                                        color: followtext == "FOLLOW"
+                                            ? kButtonColor
+                                            : kButtonSecondaryColor),
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Text(
+                                  followtext,
+                                  style: const TextStyle(
+                                      color: kWhiteColor,
+                                      letterSpacing: 1.5,
+                                      fontSize: 10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container()
+            ],
+          ),
+        ),
+        const TabBar(
+          unselectedLabelColor: kButtonSecondaryColor,
+          labelColor: kButtonColor,
+          isScrollable: true,
+          indicatorColor: kButtonColor,
+          dividerColor: kAmberColor,
+          tabs: [
+            Tab(text: 'UP NEXT VIDEOS'),
+            Tab(text: 'ABOUT'),
+            Tab(text: 'COMMENTS'),
+          ],
+        ),
+        Expanded(
+          child: SizedBox(
+            height: Get.height,
+            child: TabBarView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: UpNextPage(
+                      categoryId: categoryId.toString(),
+                      userId: userId.toString(),
+                      videoId: id.toString()),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: AboutPage(description: description),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: CommentsPage(
+                    videoId: id.toString(),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
     // Scaffold(
     //     body: SizedBox(

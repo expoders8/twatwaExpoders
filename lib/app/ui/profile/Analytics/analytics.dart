@@ -1,23 +1,43 @@
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:opentrend/app/ui/profile/Analytics/user_top_tranding.dart';
+import 'package:flutter/material.dart';
 
-import '../../../../config/provider/dotted_line_provider.dart';
-import '../../../models/user_list_model.dart';
+import '../../../services/payment_service.dart';
+import '../../../../config/constant/constant.dart';
+import '../../profile/Analytics/user_top_tranding.dart';
 import '../../../../config/constant/color_constant.dart';
+import '../../../../config/provider/loader_provider.dart';
+import '../../../../config/provider/snackbar_provider.dart';
+import '../../../../config/provider/dotted_line_provider.dart';
 
 enum Menu { lastweek, lastyear, today, lastmonth }
 
 class AnalyticsPage extends StatefulWidget {
-  const AnalyticsPage({super.key});
+  final int amount;
+  const AnalyticsPage({super.key, required this.amount});
 
   @override
   State<AnalyticsPage> createState() => _AnalyticsPageState();
 }
 
 class _AnalyticsPageState extends State<AnalyticsPage> {
-  String selecttext = "Today";
+  PaymentService paymentService = PaymentService();
+  String selecttext = "Today", userId = "";
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  Future getUser() async {
+    var data = box.read('user');
+    var getUserData = jsonDecode(data);
+    if (getUserData != null) {
+      setState(() {
+        userId = getUserData['id'] ?? "";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +209,60 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             //     ),
             //   ),
             // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Balance",
+                      style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          String.fromCharCodes(Runes('\$')),
+                          style: const TextStyle(
+                            color: kTextSecondaryColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          widget.amount.toString(),
+                          style: const TextStyle(
+                            color: kTextSecondaryColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                widget.amount == 0
+                    ? Container()
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.all(8),
+                        ),
+                        onPressed: withdrawAmout,
+                        child: const Text(
+                          "Withdraw",
+                          style: TextStyle(
+                              color: kWhiteColor,
+                              letterSpacing: 1,
+                              fontSize: 13),
+                        ),
+                      )
+              ],
+            ),
+
+            const SizedBox(height: 20),
             const Text(
               "Top videos",
               style: TextStyle(
@@ -210,5 +284,25 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         ),
       ),
     );
+  }
+
+  withdrawAmout() async {
+    LoaderX.show(context, 70.0);
+    await paymentService
+        .userWithdrawAmount(userId, widget.amount.toString())
+        .then((value) => {
+              if (value["success"])
+                {
+                  LoaderX.hide(),
+                  // Get.offAll(() => const ProfilePage(initialtabIndex: 2)),
+                  SnackbarUtils.showSnackbar(value["message"].toString(), "")
+                }
+              else
+                {
+                  LoaderX.hide(),
+                  SnackbarUtils.showErrorSnackbar(
+                      "Failed to withdrawAmount", value["message"].toString())
+                }
+            });
   }
 }

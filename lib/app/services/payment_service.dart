@@ -60,4 +60,39 @@ class PaymentService {
       throw e.toString();
     }
   }
+
+  userWithdrawAmount(
+    String userId,
+    String amount,
+  ) async {
+    try {
+      var token = box.read('authToken');
+      var response = await http.post(
+          Uri.parse('$baseUrl/api/Payment/UaserWithdrawAmount'),
+          body: json.encode({
+            "id": null,
+            "userId": userId,
+            "amount": amount,
+            "status": "pending"
+          }),
+          headers: {
+            'Content-type': 'application/json',
+            "Authorization": "Bearer $token",
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
+      if (response.statusCode == 200) {
+        var decodedUser = jsonDecode(response.body);
+        return decodedUser;
+      } else {
+        LoaderX.hide();
+        SnackbarUtils.showErrorSnackbar("Server Error",
+            "Error while withdrawAmount, Please try after some time.");
+        return Future.error("Server Error");
+      }
+    } catch (e) {
+      LoaderX.hide();
+      SnackbarUtils.showErrorSnackbar("Failed to withdrawAmount", e.toString());
+      throw e.toString();
+    }
+  }
 }

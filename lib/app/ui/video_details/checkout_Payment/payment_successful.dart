@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../../../config/constant/color_constant.dart';
 import '../../home/tab_page.dart';
+import '../../../../config/constant/color_constant.dart';
 
 class MoneyPaymentSuccessfulPage extends StatefulWidget {
   final String pickedDate;

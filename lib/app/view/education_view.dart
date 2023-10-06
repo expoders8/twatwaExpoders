@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -94,9 +95,13 @@ class _EducationViewPageState extends State<EducationViewPage> {
                 return Column(
                   children: [
                     SizedBox(
-                      height: videoController.isAddingMore.value
-                          ? Get.height - 230
-                          : Get.height - 180,
+                      height: Platform.isAndroid
+                          ? videoController.isAddingMore.value
+                              ? Get.height - 230
+                              : Get.height - 180
+                          : videoController.isAddingMore.value
+                              ? Get.height - 290
+                              : Get.height - 220,
                       child: RefreshIndicator(
                         onRefresh: _pullRefresh,
                         child: TranslateUpAnimation(

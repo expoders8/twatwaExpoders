@@ -80,12 +80,9 @@ class _FavouritePageState extends State<FavouritePage> {
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(Platform.isAndroid ? 60 : 95),
-        child: const Padding(
-          padding: EdgeInsets.only(top: 40.0, left: 20, right: 5),
-          child: AppBarWidget(
-            title: 'Favourite',
-          ),
+        preferredSize: Size.fromHeight(Platform.isAndroid ? 60 : 60),
+        child: const AppBarWidget(
+          title: 'Favourite',
         ),
       ),
       body: authToken != ""

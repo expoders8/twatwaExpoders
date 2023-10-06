@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:opentrend/app/ui/video_details/video_details.dart';
 
+import '../../video_details/video_details.dart';
 import '../../../controller/video_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';

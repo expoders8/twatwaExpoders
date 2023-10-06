@@ -30,23 +30,6 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
       Get.put(UpNextVideoController());
   final CommentsController commentsController = Get.put(CommentsController());
   PlaylistService playlistService = PlaylistService();
-  String userId = "";
-  @override
-  void initState() {
-    getUser();
-
-    super.initState();
-  }
-
-  Future getUser() async {
-    var data = box.read('user');
-    var getUserData = jsonDecode(data);
-    if (getUserData != null) {
-      setState(() {
-        userId = getUserData['id'] ?? "";
-      });
-    }
-  }
 
   Future<void> _pullRefresh() async {
     playlistController.fetchAllPlaylist();

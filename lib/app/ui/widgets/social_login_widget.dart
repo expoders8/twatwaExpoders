@@ -84,6 +84,7 @@ class _SocialLoginPageState extends State<SocialLoginPage> {
         );
       }
     } catch (error) {
+      LoaderX.hide();
       SnackbarUtils.showErrorSnackbar("Failed to Login", error.toString());
       throw error.toString();
     }

@@ -47,104 +47,107 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: kBackGroundColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {
-                widget.title == "Favourite"
-                    ? Container()
-                    : Get.toNamed(Routes.menuPage);
-              },
-              child: Row(
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10, left: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  widget.title == "Favourite"
+                      ? Container()
+                      : Get.toNamed(Routes.menuPage);
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                          color: kWhiteColor,
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 5),
+                      height: 20.71,
+                      width: 30.02,
+                      child: Image.asset(
+                        "assets/icons/dropdown.png",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
                 children: [
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                        color: kWhiteColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                  IconButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.menuVideoListPage);
+                    },
+                    icon: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: Image.asset(
+                        "assets/icons/search.png",
+                      ),
+                    ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 5),
-                    height: 20.71,
-                    width: 30.02,
-                    child: Image.asset(
-                      "assets/icons/dropdown.png",
+                  GestureDetector(
+                    onTap: () {
+                      authToken == ""
+                          ? Get.toNamed(Routes.loginPage)
+                          : Get.toNamed(Routes.profilePage);
+                    },
+                    child: SizedBox(
+                      height: 42,
+                      width: 42,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5.0),
+                        child: authToken == ""
+                            ? Image.asset(
+                                "assets/images/blank_profile.png",
+                                scale: 9,
+                              )
+                            : Image.network(
+                                userImage.toString(),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                  "assets/images/blank_profile.png",
+                                  fit: BoxFit.fill,
+                                ),
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: kWhiteColor,
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.menuVideoListPage);
-                  },
-                  icon: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      "assets/icons/search.png",
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    authToken == ""
-                        ? Get.toNamed(Routes.loginPage)
-                        : Get.toNamed(Routes.profilePage);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 16),
-                    height: 42,
-                    width: 42,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5.0),
-                      child: authToken == ""
-                          ? Image.asset(
-                              "assets/images/blank_profile.png",
-                            )
-                          : Image.network(
-                              userImage.toString(),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Image.asset(
-                                "assets/images/blank_profile.png",
-                                fit: BoxFit.fill,
-                              ),
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: kWhiteColor,
-                                      value:
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                             "Discover",
                             style: TextStyle(
                                 color: kWhiteColor,
-                                fontSize: 23,
+                                fontSize: 21,
                                 fontWeight: FontWeight.bold),
                           ),
                           Container(
@@ -262,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 15, left: 20),
+                            padding: const EdgeInsets.only(top: 9, left: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                                         "Discover",
                                         style: TextStyle(
                                             color: kWhiteColor,
-                                            fontSize: 23,
+                                            fontSize: 21,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Container(
