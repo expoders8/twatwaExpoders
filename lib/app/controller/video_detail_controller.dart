@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/video_model.dart';
 import '../services/video_service.dart';
 import '../../config/constant/constant.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 
 class VideoDetailController extends GetxController {
   var isLoading = true.obs;
@@ -21,12 +22,14 @@ class VideoDetailController extends GetxController {
 
   void fetchStoryDetail(String? videoIddata, userId) async {
     var token = box.read('authToken');
+    String? deviceId = await PlatformDeviceId.getDeviceId;
     try {
       isLoading(true);
       var response = await http.post(Uri.parse('$baseUrl/api/Video/GetDetails'),
           body: json.encode({
             "videoId": videoId.toString(),
             "userId": token == null ? null : userId,
+            "deviceId": deviceId
           }),
           headers: {
             'Content-type': 'application/json',

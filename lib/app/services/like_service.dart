@@ -5,18 +5,21 @@ import 'package:http/http.dart' as http;
 import '../../config/constant/constant.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import '../ui/auth/login/login.dart';
 
 class LikeStoryService {
   videoLike(videoId) async {
     var token = box.read('authToken');
+    String? deviceId = await PlatformDeviceId.getDeviceId;
     try {
-      final response = await http
-          .get(Uri.parse('$baseUrl/api/Video/Like/$videoId'), headers: {
-        'Content-type': 'application/json',
-        "Authorization": "Bearer $token",
-        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-      });
+      final response = await http.get(
+          Uri.parse('$baseUrl/api/Video/Like/$videoId/$deviceId'),
+          headers: {
+            'Content-type': 'application/json',
+            "Authorization": "Bearer $token",
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;
@@ -38,13 +41,15 @@ class LikeStoryService {
 
   videoDisLike(videoId) async {
     var token = box.read('authToken');
+    String? deviceId = await PlatformDeviceId.getDeviceId;
     try {
-      final response = await http
-          .get(Uri.parse('$baseUrl/api/Video/Dislike/$videoId'), headers: {
-        'Content-type': 'application/json',
-        "Authorization": "Bearer $token",
-        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-      });
+      final response = await http.get(
+          Uri.parse('$baseUrl/api/Video/Dislike/$videoId/$deviceId'),
+          headers: {
+            'Content-type': 'application/json',
+            "Authorization": "Bearer $token",
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;

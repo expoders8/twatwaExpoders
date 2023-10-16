@@ -9,6 +9,7 @@ import '../../config/constant/constant.dart';
 import '../controller/hastage_controller.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import '../ui/auth/login/login.dart';
 
 class VideoService {
@@ -162,13 +163,15 @@ class VideoService {
 
   videoView(String videoId) async {
     var token = box.read('authToken');
+    String? deviceId = await PlatformDeviceId.getDeviceId;
     try {
-      final response = await http
-          .get(Uri.parse('$baseUrl/api/Video/View/$videoId'), headers: {
-        'Content-type': 'application/json',
-        "Authorization": "Bearer $token",
-        // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
-      });
+      final response = await http.get(
+          Uri.parse('$baseUrl/api/Video/View/$videoId/$deviceId'),
+          headers: {
+            'Content-type': 'application/json',
+            "Authorization": "Bearer $token",
+            // 'Ocp-Apim-Subscription-Key': ocpApimSubscriptionKey
+          });
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         return data;

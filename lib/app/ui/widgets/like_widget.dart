@@ -151,8 +151,9 @@ class _LikeWidgetState extends State<LikeWidget> {
             authToken == "" ? loginConfirmationDialog() : _toggleIsLikedState();
           },
           child: Container(
-            height: 35,
-            padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 8),
+            // height: 35,0
+            padding: EdgeInsets.symmetric(
+                horizontal: widget.likeCount != 0 ? 19.0 : 25.0, vertical: 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),
@@ -204,8 +205,8 @@ class _LikeWidgetState extends State<LikeWidget> {
                 : _toggleIsDisLikedState();
           },
           child: Container(
-            height: 35,
-            padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 8),
+            padding: EdgeInsets.symmetric(
+                horizontal: widget.likeCount != 0 ? 19.0 : 25.0, vertical: 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),

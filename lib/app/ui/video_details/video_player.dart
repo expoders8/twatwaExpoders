@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -67,6 +66,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
+    videoPlayerController(widget.videoUrl.toString());
     var getURL = Get.parameters['value'];
     if (getURL == "false") {
       _exitFullScreen();
@@ -75,7 +75,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       showOverlay = false;
       _isPlaying = true;
     });
-    videoPlayerController(widget.videoUrl.toString());
   }
 
   videoPlayerController(String url) async {
@@ -103,10 +102,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         if (videoquality) {
           if (tsecond != "00") {
             if (onetimecall) {
-              setState(() {
-                videoAutotonext();
-                upnextVidepPlay = true;
-              });
+              videotonext();
             }
           }
         }
@@ -140,236 +136,240 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return upnextVidepPlay
-        ? Container(
-            padding: const EdgeInsets.all(10),
-            width: Get.width,
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Suggested video",
-                      style: TextStyle(
-                          color: kTextsecondarytopColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            upnextVidepPlay = false;
-                            rePlayVideo = true;
-                            onetimecall = false;
-                            _controller.pause();
-                          });
-                          widget.callbackPlay(upnextVidepPlay.toString());
-                        },
-                        icon: const Icon(
-                          Icons.cancel_outlined,
-                          color: kTextsecondarytopColor,
-                        ))
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        videoThumbhnilImage,
-                        height: 100,
-                        width: 150,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Image.asset(
-                          "assets/Opentrend_light_applogo.jpeg",
-                          fit: BoxFit.fill,
-                        ),
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return SizedBox(
-                            width: 17,
-                            height: 17,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: kWhiteColor,
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 10),
-                      child: Column(
-                        children: [
-                          Text(
-                            videotitle,
-                            style: const TextStyle(
-                                color: kTextsecondarytopColor,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            videoDescription,
-                            style: const TextStyle(
-                                color: kTextsecondarytopColor,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    CupertinoButton(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 55, vertical: 10),
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(30),
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(
-                              color: kTextsecondarytopColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            upnextVidepPlay = false;
-                            rePlayVideo = true;
-                            onetimecall = false;
-                            _controller.pause();
-                          });
-                          widget.callbackPlay(upnextVidepPlay.toString());
-                        }),
-                    const SizedBox(width: 10),
-                    CupertinoButton(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 45, vertical: 12),
-                        color: Colors.white.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(30),
-                        onPressed: videotonext,
-                        child: const Text(
-                          "Play now",
-                          style: TextStyle(
-                              color: kPrimaryColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ))
-                  ],
-                ),
-              ],
-            ),
-          )
-        : Container(
-            color: kBackGroundColor,
-            width: Get.width,
-            height: _isFullScreen
-                ? Get.height
-                : _controller.value.aspectRatio <= 0.80
-                    ? Get.height / 1.5
-                    : Platform.isIOS
-                        ? 290
-                        : 250,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                _controller.value.isInitialized
-                    ? _controller.value.aspectRatio <= 0.80
-                        ? _isFullScreen
-                            ? VideoPlayer(
-                                _controller,
-                              )
-                            : SizedBox(
-                                width: currentIndex == 0
-                                    ? Get.width - 23
-                                    : currentIndex == 1
-                                        ? Get.width - 30
-                                        : currentIndex == 2
-                                            ? Get.width - 60
-                                            : currentIndex == 3
-                                                ? Get.width - 80
-                                                : currentIndex == 4
-                                                    ? Get.width - 110
-                                                    : currentIndex == 5
-                                                        ? Get.width - 160
-                                                        : currentIndex == 6
-                                                            ? Get.width - 170
-                                                            : currentIndex == 7
-                                                                ? Get.width -
-                                                                    190
-                                                                : Get.width -
-                                                                    23,
-                                height: currentIndex == 0
-                                    ? Get.height
-                                    : currentIndex == 1
-                                        ? Get.height - 100
-                                        : currentIndex == 2
-                                            ? Get.height - 100
-                                            : currentIndex == 3
-                                                ? Get.height - 200
-                                                : currentIndex == 4
-                                                    ? Get.height - 250
-                                                    : currentIndex == 5
-                                                        ? Get.height - 340
-                                                        : currentIndex == 6
-                                                            ? Get.height - 380
-                                                            : currentIndex == 7
-                                                                ? Get.height -
-                                                                    400
-                                                                : Get.height,
-                                child: AspectRatio(
-                                  aspectRatio: _controller.value.aspectRatio,
-                                  child: VideoPlayer(
-                                    _controller,
-                                  ),
-                                ),
-                              )
-                        : Padding(
-                            padding: EdgeInsets.only(
-                                top: _isFullScreen
-                                    ? 0
-                                    : Platform.isIOS
-                                        ? 40
-                                        : 28.0),
-                            child: VideoPlayer(
+    return Center(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onDoubleTap: _handleDoubleTap,
+        child: Container(
+          color: kBackGroundColor,
+          width: Get.width,
+          height: _isFullScreen
+              ? Get.height
+              : _controller.value.aspectRatio <= 0.80
+                  ? Get.height / 1.5
+                  : Platform.isIOS
+                      ? 290
+                      : 250,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              _controller.value.isInitialized
+                  ? _controller.value.aspectRatio <= 0.80
+                      ? _isFullScreen
+                          ? VideoPlayer(
                               _controller,
-                            ),
-                          )
-                    : const Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: CircularProgressIndicator(
-                            color: Colors.white60,
-                            backgroundColor: kButtonSecondaryColor,
-                            strokeWidth: 2,
+                            )
+                          : SizedBox(
+                              width: currentIndex == 0
+                                  ? Get.width - 23
+                                  : currentIndex == 1
+                                      ? Get.width - 30
+                                      : currentIndex == 2
+                                          ? Get.width - 60
+                                          : currentIndex == 3
+                                              ? Get.width - 80
+                                              : currentIndex == 4
+                                                  ? Get.width - 110
+                                                  : currentIndex == 5
+                                                      ? Get.width - 160
+                                                      : currentIndex == 6
+                                                          ? Get.width - 170
+                                                          : currentIndex == 7
+                                                              ? Get.width - 190
+                                                              : Get.width - 23,
+                              height: currentIndex == 0
+                                  ? Get.height
+                                  : currentIndex == 1
+                                      ? Get.height - 100
+                                      : currentIndex == 2
+                                          ? Get.height - 100
+                                          : currentIndex == 3
+                                              ? Get.height - 200
+                                              : currentIndex == 4
+                                                  ? Get.height - 250
+                                                  : currentIndex == 5
+                                                      ? Get.height - 340
+                                                      : currentIndex == 6
+                                                          ? Get.height - 380
+                                                          : currentIndex == 7
+                                                              ? Get.height - 400
+                                                              : Get.height,
+                              child: AspectRatio(
+                                aspectRatio: _controller.value.aspectRatio,
+                                child: VideoPlayer(
+                                  _controller,
+                                ),
+                              ),
+                            )
+                      : Padding(
+                          padding: EdgeInsets.only(
+                              top: _isFullScreen
+                                  ? 0
+                                  : Platform.isIOS
+                                      ? 40
+                                      : 28.0),
+                          child: VideoPlayer(
+                            _controller,
                           ),
+                        )
+                  : const Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: CircularProgressIndicator(
+                          color: Colors.white60,
+                          backgroundColor: kButtonSecondaryColor,
+                          strokeWidth: 2,
                         ),
                       ),
-                _buildControls()
-              ],
-            ),
-          );
+                    ),
+              _buildControls()
+            ],
+          ),
+        ),
+      ),
+    );
+    // upnextVidepPlay
+    // ? Container(
+    //     padding: const EdgeInsets.all(10),
+    //     width: Get.width,
+    //     height: 250,
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       children: [
+    //         const SizedBox(height: 20),
+    //         Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+    //             const Text(
+    //               "Suggested video",
+    //               style: TextStyle(
+    //                   color: kTextsecondarytopColor,
+    //                   fontSize: 15,
+    //                   fontWeight: FontWeight.w500),
+    //             ),
+    //             IconButton(
+    //                 onPressed: () {
+    //                   setState(() {
+    //                     upnextVidepPlay = false;
+    //                     rePlayVideo = true;
+    //                     onetimecall = false;
+    //                     _controller.pause();
+    //                   });
+    //                   widget.callbackPlay(upnextVidepPlay.toString());
+    //                 },
+    //                 icon: const Icon(
+    //                   Icons.cancel_outlined,
+    //                   color: kTextsecondarytopColor,
+    //                 ))
+    //           ],
+    //         ),
+    //         const SizedBox(height: 5),
+    //         Row(
+    //           mainAxisAlignment: MainAxisAlignment.start,
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             ClipRRect(
+    //               borderRadius: BorderRadius.circular(10),
+    //               child: Image.network(
+    //                 videoThumbhnilImage,
+    //                 height: 100,
+    //                 width: 150,
+    //                 errorBuilder: (context, error, stackTrace) =>
+    //                     Image.asset(
+    //                   "assets/Opentrend_light_applogo.jpeg",
+    //                   fit: BoxFit.fill,
+    //                 ),
+    //                 loadingBuilder: (BuildContext context, Widget child,
+    //                     ImageChunkEvent? loadingProgress) {
+    //                   if (loadingProgress == null) {
+    //                     return child;
+    //                   }
+    //                   return SizedBox(
+    //                     width: 17,
+    //                     height: 17,
+    //                     child: Center(
+    //                       child: CircularProgressIndicator(
+    //                         color: kWhiteColor,
+    //                         value: loadingProgress.expectedTotalBytes !=
+    //                                 null
+    //                             ? loadingProgress.cumulativeBytesLoaded /
+    //                                 loadingProgress.expectedTotalBytes!
+    //                             : null,
+    //                       ),
+    //                     ),
+    //                   );
+    //                 },
+    //                 fit: BoxFit.cover,
+    //               ),
+    //             ),
+    //             Padding(
+    //               padding: const EdgeInsets.only(top: 8.0, left: 10),
+    //               child: Column(
+    //                 children: [
+    //                   Text(
+    //                     videotitle,
+    //                     style: const TextStyle(
+    //                         color: kTextsecondarytopColor,
+    //                         fontSize: 15,
+    //                         fontWeight: FontWeight.w500),
+    //                   ),
+    //                   Text(
+    //                     videoDescription,
+    //                     style: const TextStyle(
+    //                         color: kTextsecondarytopColor,
+    //                         fontSize: 15,
+    //                         fontWeight: FontWeight.w500),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //         const SizedBox(height: 10),
+    //         Row(
+    //           children: [
+    //             CupertinoButton(
+    //                 padding: const EdgeInsets.symmetric(
+    //                     horizontal: 55, vertical: 10),
+    //                 color: Colors.white.withOpacity(0.2),
+    //                 borderRadius: BorderRadius.circular(30),
+    //                 child: const Text(
+    //                   "Cancel",
+    //                   style: TextStyle(
+    //                       color: kTextsecondarytopColor,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w500),
+    //                 ),
+    //                 onPressed: () {
+    //                   setState(() {
+    //                     upnextVidepPlay = false;
+    //                     rePlayVideo = true;
+    //                     onetimecall = false;
+    //                     _controller.pause();
+    //                   });
+    //                   widget.callbackPlay(upnextVidepPlay.toString());
+    //                 }),
+    //             const SizedBox(width: 10),
+    //             CupertinoButton(
+    //                 padding: const EdgeInsets.symmetric(
+    //                     horizontal: 45, vertical: 12),
+    //                 color: Colors.white.withOpacity(0.7),
+    //                 borderRadius: BorderRadius.circular(30),
+    //                 onPressed: videotonext,
+    //                 child: const Text(
+    //                   "Play now",
+    //                   style: TextStyle(
+    //                       color: kPrimaryColor,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w500),
+    //                 ))
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   )
+    // :
   }
 
   Widget _buildControls() {
@@ -744,19 +744,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     }
   }
 
-  videoAutotonext() {
-    widget.callbackPlay(upnextVidepPlay.toString());
-    videoController.fetcheAutoSkipVideo(widget.videoid).then((value) => {
-          if (value[0] != "")
-            {
-              setState(() {
-                videoThumbhnilImage = value[0];
-                videotitle = value[1];
-                videoDescription = value[2];
-              })
-            }
-        });
-  }
+  // videoAutotonext() {
+  //   widget.callbackPlay(upnextVidepPlay.toString());
+  //   videoController.fetcheAutoSkipVideo(widget.videoid).then((value) => {
+  //         if (value[0] != "")
+  //           {
+  //             setState(() {
+  //               videoThumbhnilImage = value[0];
+  //               videotitle = value[1];
+  //               videoDescription = value[2];
+  //             })
+  //           }
+  //       });
+  // }
 
   videotonext() {
     videoController.fetcheSkipVideo(widget.videoid).then((value) => {
@@ -803,6 +803,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+  }
+
+  void _handleDoubleTap() {
+    final currentPosition = _controller.value.position.inSeconds;
+    final duration = _controller.value.duration.inSeconds;
+
+    final newPosition = currentPosition + 5;
+
+    if (newPosition < duration) {
+      _controller.seekTo(Duration(seconds: newPosition));
+    } else {
+      _controller.seekTo(_controller.value.duration);
+    }
   }
 
   void _enterFullScreen() {
