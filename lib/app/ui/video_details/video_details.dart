@@ -48,13 +48,11 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   }
 
   FollowerService followerService = FollowerService();
-  int tabindex = 0, dishblevalue = 0, selectvideoQualityIndex = 6;
-  String qualityname = "",
-      followtext = "FOLLOW",
+  int tabindex = 0;
+  String followtext = "FOLLOW",
       likeValue = "",
       url = "",
       currntuserId = "",
-      paymentTime = "",
       authToken = "",
       pickedfullscreen = "",
       upNextVideoPlaySize = "";
@@ -62,7 +60,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
   int currentIndex = 0;
   VideoService videoService = VideoService();
   final ScrollController _controller = ScrollController();
-  bool isChecked = false, showOverlay = true, click = false, onetime = true;
+  bool onetime = true;
   @override
   void initState() {
     super.initState();

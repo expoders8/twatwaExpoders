@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../../routes/app_pages.dart';
 import '../../home/tab_page.dart';
 import '../../widgets/numeric_pad.dart';
 import '../../../services/auth_service.dart';
@@ -11,8 +12,10 @@ import '../../../../config/provider/loader_provider.dart';
 import '../../../../config/provider/snackbar_provider.dart';
 
 class OtpScreen extends StatefulWidget {
+  final String phonenumber;
   const OtpScreen({
     super.key,
+    required this.phonenumber,
   });
 
   @override
@@ -20,13 +23,29 @@ class OtpScreen extends StatefulWidget {
 }
 
 class OtpScreenState extends State<OtpScreen> {
-  String code = "", userPhone = "";
+  String code = "";
   String otpValidateMessage = "";
   int secondsRemaining = 20;
   bool enableResend = false;
   Timer? timer;
   bool screentimevalue = true;
   AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (secondsRemaining != 0) {
+        setState(() {
+          secondsRemaining--;
+        });
+      } else {
+        setState(() {
+          enableResend = true;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -36,7 +55,7 @@ class OtpScreenState extends State<OtpScreen> {
 
   otpVerification(code) async {
     LoaderX.show(context, 70.0);
-    await authService.otpVerification(userPhone, code).then(
+    await authService.otpVerification(widget.phonenumber, code).then(
       (value) async {
         if (value["success"]) {
           LoaderX.hide();
@@ -55,12 +74,16 @@ class OtpScreenState extends State<OtpScreen> {
     setState(() {
       screentimevalue = false;
     });
-    await authService.otpSend(userPhone).then(
+    await authService.otpSend(widget.phonenumber).then(
       (value) async {
         if (value["success"]) {
           LoaderX.hide();
           code.isNotEmpty ? code = "" : null;
-          screenCountTime();
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (context) =>
+                    OtpScreen(phonenumber: widget.phonenumber)),
+          );
           SnackbarUtils.showSnackbar("Otp send succesfully", "");
         } else {
           LoaderX.hide();
@@ -72,48 +95,27 @@ class OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  screenCountTime() {
-    setState(() {
-      secondsRemaining = 20;
-    });
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (secondsRemaining != 0) {
-        setState(() {
-          secondsRemaining--;
-          screentimevalue = false;
-        });
-      } else {
-        setState(() {
-          screentimevalue = true;
-          enableResend = true;
-        });
-      }
-    });
-    // timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    //   setState(() {
-    //     if (secondsRemaining > 0) {
-    //       secondsRemaining--;
-    //     } else {
-    //       timer.cancel();
-    //     }
-    //   });
-    // });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    var getPhoneno = Get.parameters['phoneno'];
-    setState(() {
-      userPhone = getPhoneno.toString();
-    });
-  }
+  // screenCountTime() {
+  //   timer = Timer.periodic(const Duration(seconds: 1), (_) {
+  //     if (secondsRemaining != 0) {
+  //       setState(() {
+  //         secondsRemaining--;
+  //         screentimevalue = false;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         screentimevalue = true;
+  //         enableResend = true;
+  //       });
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.of(context).pop();
+        Get.toNamed(Routes.signUpPage);
         return Future.value(false);
       },
       child: Scaffold(
@@ -229,19 +231,26 @@ class OtpScreenState extends State<OtpScreen> {
                           const SizedBox(
                             width: 8,
                           ),
-                          GestureDetector(
-                            onTap: sendOtp,
-                            child: Text(
-                              "RESEND",
-                              style: TextStyle(
-                                color: screentimevalue
-                                    ? const Color.fromARGB(255, 252, 35, 86)
-                                    : kTextSecondaryColor,
-                                fontFamily: kFuturaPTBook,
-                                fontSize: 15,
-                              ),
-                            ),
-                          )
+                          secondsRemaining == 0
+                              ? GestureDetector(
+                                  onTap: sendOtp,
+                                  child: const Text(
+                                    "RESEND",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 252, 35, 86),
+                                      fontFamily: kFuturaPTBook,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                )
+                              : const Text(
+                                  "RESEND",
+                                  style: TextStyle(
+                                    color: kTextSecondaryColor,
+                                    fontFamily: kFuturaPTBook,
+                                    fontSize: 15,
+                                  ),
+                                ),
                         ],
                       ),
                     ),

@@ -46,9 +46,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       Get.put(VideoDetailController());
   double _sliderValue = 0.0;
   late VideoPlayerController _controller;
-  bool isChecked = false,
-      showOverlay = false,
-      fullHeight = false,
+  bool showOverlay = false,
       _isPlaying = false,
       upnextVidepPlay = false,
       onetimecall = true,
@@ -485,7 +483,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               : 60
                       : _controller.value.aspectRatio <= 0.80
                           ? currentIndex == 0
-                              ? 170
+                              ? 140
                               : currentIndex == 1
                                   ? 150
                                   : currentIndex == 2
@@ -628,9 +626,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           : 100
                       : _controller.value.aspectRatio <= 0.80
                           ? currentIndex == 0
-                              ? 190
+                              ? 160
                               : currentIndex == 1
-                                  ? 160
+                                  ? 140
                                   : currentIndex == 2
                                       ? 140
                                       : currentIndex == 3
@@ -640,7 +638,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                               : currentIndex == 5
                                                   ? 75
                                                   : currentIndex == 6
-                                                      ? 70
+                                                      ? 50
                                                       : currentIndex == 7
                                                           ? 50
                                                           : 190

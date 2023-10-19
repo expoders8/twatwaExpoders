@@ -7,7 +7,6 @@ abstract class Routes {
   static const tabPage = _Paths.tabPage;
   static const menuPage = _Paths.menuPage;
   static const loginPage = _Paths.loginPage;
-  static const otpScreen = _Paths.otpScreen;
   static const signUpPage = _Paths.signUpPage;
   static const profilePage = _Paths.profilePage;
   static const uploadVideoPage = _Paths.uploadVideoPage;
@@ -28,7 +27,6 @@ abstract class _Paths {
   static const tabPage = '/tabPage';
   static const menuPage = '/menuPage';
   static const loginPage = '/loginPage';
-  static const otpScreen = '/otpScreen';
   static const signUpPage = '/signUpPage';
   static const profilePage = '/profilePage';
   static const uploadVideoPage = '/uploadVideoPage';

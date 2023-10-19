@@ -4,15 +4,14 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../config/animation/translate_up_animation.dart';
-import '../../controller/comments_controller.dart';
-import '../../controller/video_controller.dart';
 import '../home/tab_page.dart';
 import '../widgets/appbar.dart';
 import '../../routes/app_pages.dart';
 import '../../services/playlist_service.dart';
 import '../widgets/no_user_login_screen.dart';
 import '../../../config/constant/constant.dart';
+import '../../controller/video_controller.dart';
+import '../../controller/comments_controller.dart';
 import '../../controller/playlist_controller.dart';
 import '../favourite/create_and_edit_playlist.dart';
 import '../../../config/constant/font_constant.dart';
@@ -21,6 +20,7 @@ import '../../controller/video_detail_controller.dart';
 import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../../../config/provider/dotted_line_provider.dart';
+import '../../../config/animation/translate_up_animation.dart';
 
 class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});
@@ -39,7 +39,7 @@ class _FavouritePageState extends State<FavouritePage> {
 
   PlaylistService playlistService = PlaylistService();
   String userId = "", authToken = "";
-  bool isLoading = true, firsttimeload = true;
+  bool isLoading = true;
   @override
   void initState() {
     var authTokenValue = box.read('authToken');
@@ -61,11 +61,13 @@ class _FavouritePageState extends State<FavouritePage> {
 
   Future getUser() async {
     var data = box.read('user');
-    var getUserData = jsonDecode(data);
-    if (getUserData != null) {
-      setState(() {
-        userId = getUserData['id'] ?? "";
-      });
+    if (data != null) {
+      var getUserData = jsonDecode(data);
+      if (getUserData != null) {
+        setState(() {
+          userId = getUserData['id'] ?? "";
+        });
+      }
     }
   }
 

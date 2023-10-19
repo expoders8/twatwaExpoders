@@ -72,13 +72,10 @@ class PlaylistService {
       if (response.statusCode == 200) {
         var decodedUser = jsonDecode(response.body);
         return PlaylistModel.fromJson(decodedUser);
-      } else if (response.statusCode == 401) {
-        authError();
-        return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while Playlist, Please try after some time.");
+        // SnackbarUtils.showErrorSnackbar("Server Error",
+        //     "Error while Playlist, Please try after some time.");
         return Future.error("Server Error");
       }
     } catch (e) {

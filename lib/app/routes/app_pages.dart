@@ -39,10 +39,6 @@ class AppPages {
       page: () => const ForgotPasswordPage(),
     ),
     GetPage(
-      name: _Paths.otpScreen,
-      page: () => const OtpScreen(),
-    ),
-    GetPage(
       name: _Paths.tabPage,
       page: () => const TabPage(),
     ),

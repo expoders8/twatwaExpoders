@@ -1,16 +1,17 @@
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '.env';
-import 'app/controller/network_controller.dart';
 import 'app/routes/app_pages.dart';
+import 'config/constant/constant.dart';
 import 'config/provider/theme_provider.dart';
+import 'app/controller/network_controller.dart';
 import 'app/controller/dependency_injection .dart';
 
 void main() async {
@@ -18,8 +19,14 @@ void main() async {
   Stripe.publishableKey = stripePublishableKey;
   await Firebase.initializeApp();
   await GetStorage.init();
+  final getStorage = GetStorage();
   DependencyInjection.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  if (getStorage.read('firstTimeLaunch') != true) {
+    getStorage.erase();
+    box.erase();
+    getStorage.write('firstTimeLaunch', true);
+  }
   return runApp(
     ChangeNotifierProvider<ThemeProvider>(
       child: const MyApp(),

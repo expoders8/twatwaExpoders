@@ -195,9 +195,12 @@ class _SearchVideoListPageState extends State<SearchVideoListPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
+                                              width: Get.width - 100,
                                               margin: const EdgeInsets.only(
                                                   right: 0),
                                               child: Text(
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                                 data.title.toString(),
                                                 style: const TextStyle(
                                                     color:

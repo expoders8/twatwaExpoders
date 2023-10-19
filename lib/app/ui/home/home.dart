@@ -54,15 +54,16 @@ class _HomePageState extends State<HomePage> {
 
   Future getUser() async {
     var data = box.read('user');
-    var getUserData = jsonDecode(data);
-    var token = box.read('authToken');
-
     if (data != null) {
-      setState(() {
-        authToken = token ?? "";
-        userImage = getUserData['profilePhoto'] ?? "";
-        userId = getUserData['id'] ?? "";
-      });
+      var getUserData = jsonDecode(data);
+      var token = box.read('authToken');
+      if (data != null) {
+        setState(() {
+          authToken = token ?? "";
+          userImage = getUserData['profilePhoto'] ?? "";
+          userId = getUserData['id'] ?? "";
+        });
+      }
     }
   }
 

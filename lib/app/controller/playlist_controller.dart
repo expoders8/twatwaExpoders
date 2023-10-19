@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:opentrend/app/controller/network_controller.dart';
 
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';
 import '../../config/constant/constant.dart';
+import '../controller/network_controller.dart';
 
 class PlaylistController extends GetxController {
   var isLoading = true.obs;
@@ -31,13 +31,15 @@ class PlaylistController extends GetxController {
 
   Future getUser() async {
     var data = box.read('user');
-    var getUserData = jsonDecode(data);
+    if (data != null) {
+      var getUserData = jsonDecode(data);
 
-    if (getUserData != null) {
-      selectedUserId.value = getUserData['id'] ?? "";
-    }
-    if (networkController.isConnected.value) {
-      fetchAllPlaylist();
+      if (getUserData != null) {
+        selectedUserId.value = getUserData['id'] ?? "";
+      }
+      if (networkController.isConnected.value) {
+        fetchAllPlaylist();
+      }
     }
   }
 

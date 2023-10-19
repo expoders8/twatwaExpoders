@@ -13,6 +13,7 @@ import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
 import '../../../../config/provider/snackbar_provider.dart';
+import '../otp/otp.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -448,10 +449,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       "Failed to SignUp", value.message.toString());
                 }
               });
-              var userPhone = {
-                "phoneno": value.data!.userPhone.toString(),
-              };
-              Get.toNamed(Routes.otpScreen, parameters: userPhone);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      OtpScreen(phonenumber: value.data!.userPhone.toString()),
+                ),
+              );
               LoaderX.hide();
             } else {
               LoaderX.hide();

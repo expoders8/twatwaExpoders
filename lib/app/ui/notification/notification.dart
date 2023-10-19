@@ -1,17 +1,16 @@
 import 'dart:io';
-
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter/material.dart';
 
-import '../../../config/animation/translate_up_animation.dart';
+import '../widgets/no_user_login_screen.dart';
 import '../../../config/constant/constant.dart';
-import '../../../config/provider/dotted_line_provider.dart';
 import '../../controller/notification_controller.dart';
 import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
-import '../widgets/no_user_login_screen.dart';
+import '../../../config/provider/dotted_line_provider.dart';
+import '../../../config/animation/translate_up_animation.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
