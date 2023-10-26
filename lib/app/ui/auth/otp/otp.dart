@@ -13,9 +13,11 @@ import '../../../../config/provider/snackbar_provider.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phonenumber;
+  final String selectScreenNavigation;
   const OtpScreen({
     super.key,
     required this.phonenumber,
+    required this.selectScreenNavigation,
   });
 
   @override
@@ -81,8 +83,9 @@ class OtpScreenState extends State<OtpScreen> {
           code.isNotEmpty ? code = "" : null;
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-                builder: (context) =>
-                    OtpScreen(phonenumber: widget.phonenumber)),
+                builder: (context) => OtpScreen(
+                    phonenumber: widget.phonenumber,
+                    selectScreenNavigation: "Otp")),
           );
           SnackbarUtils.showSnackbar("Otp send succesfully", "");
         } else {
@@ -115,7 +118,11 @@ class OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Get.toNamed(Routes.signUpPage);
+        if (widget.selectScreenNavigation == "Login") {
+          Get.toNamed(Routes.loginPage);
+        } else {
+          Get.toNamed(Routes.signUpPage);
+        }
         return Future.value(false);
       },
       child: Scaffold(

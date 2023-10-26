@@ -238,12 +238,23 @@ class _LoginPageState extends State<LoginPage> {
             .then(
           (value) async {
             if (value.success == true) {
-              LoaderX.hide();
-              Get.offAll(() => const TabPage());
+              if (value.data!.isPhoneVerified!) {
+                LoaderX.hide();
+                Get.offAll(() => const TabPage());
+              } else if (!value.data!.isPhoneVerified!) {
+                LoaderX.hide();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => OtpScreen(
+                        phonenumber: value.data!.userPhone.toString(),
+                        selectScreenNavigation: "Login"),
+                  ),
+                );
+              }
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(
-                  "Failed to SignUp", value.message.toString());
+                  "Failed to Login", value.message.toString());
             }
             return null;
           },

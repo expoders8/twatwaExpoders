@@ -53,7 +53,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       rePlayVideo = false,
       localValue = true,
       videoquality = true,
-      _isFullScreen = false;
+      _isFullScreen = false,
+      isBuffering = false;
   double aspectRatio = 0.0;
   int currentIndex = 0;
   List<bool> buttonStates = List.generate(10, (index) => false);
@@ -64,7 +65,44 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController(widget.videoUrl.toString());
+    Future.delayed(const Duration(milliseconds: 180), () async {
+      showOverlay = false;
+      _isPlaying = true;
+    });
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+      ..initialize().then((_) {
+        setState(() {
+          _controller.play();
+          aspectRatio = _controller.value.aspectRatio;
+          widget.callbackSize(aspectRatio.toString());
+        });
+      });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {});
+    _controller.addListener(() {
+      if (_controller.value.isPlaying) {
+        setState(() {
+          _sliderValue = _controller.value.position.inMilliseconds.toDouble();
+        });
+      }
+      if (_controller.value.position == _controller.value.duration) {
+        if (videoquality) {
+          if (tsecond != "00") {
+            if (onetimecall) {
+              videotonext();
+            }
+          }
+        }
+      }
+      setState(() {
+        currentIndex = widget.videoSize;
+      });
+    });
+    _controller.play();
+    Future.delayed(const Duration(milliseconds: 180), () async {
+      showOverlay = false;
+      _isPlaying = true;
+    });
     var getURL = Get.parameters['value'];
     if (getURL == "false") {
       _exitFullScreen();
@@ -110,6 +148,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       });
     });
     _controller.play();
+    Future.delayed(const Duration(milliseconds: 180), () async {
+      showOverlay = false;
+      _isPlaying = true;
+    });
   }
 
   @override
@@ -220,6 +262,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ),
                       ),
                     ),
+              if (isBuffering)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: CircularProgressIndicator(
+                      color: Colors.white60,
+                      backgroundColor: kButtonSecondaryColor,
+                      strokeWidth: 2,
+                    ),
+                  ),
+                ),
               _buildControls()
             ],
           ),

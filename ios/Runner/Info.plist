@@ -36,10 +36,16 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Need to upload image</string>
 		<key>NSCameraUsageDescription</key>
-		<string>Need to upload image</string>
+		<string>Opengiving would like to use your camera for photo upload feature in story creation
+			and profile picture upload.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Opengiving would like to save photos to your photo gallery for access photos to
+			upload in campaing creation feature and profile picture upload.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to your photos to enable you to upload and share images within the
+			app. For instance, you can select photos from your library to create posts and share
+			them with your friends.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>This application needs to access your microphone</string>
 		<key>NSSpeechRecognitionUsageDescription</key>

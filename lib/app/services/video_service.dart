@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../controller/network_controller.dart';
 import '../models/video_model.dart';
 import '../models/getall_video_landing.dart';
 import '../../config/constant/constant.dart';
@@ -13,6 +14,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import '../ui/auth/login/login.dart';
 
 class VideoService {
+  final NetworkController networkController = Get.put(NetworkController());
   Future<GetAllVideoModel> getAllVideo(VideoRequestModel getRequest) async {
     try {
       final response =
@@ -34,13 +36,17 @@ class VideoService {
         return GetAllVideoModel.fromJson(data);
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while fetch video, Please try after some time.");
+        if (networkController.isConnected.value) {
+          SnackbarUtils.showErrorSnackbar("Server Error",
+              "Error while fetch video, Please try after some time.");
+        }
         return Future.error("Server Error");
       }
     } catch (e) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
+      if (networkController.isConnected.value) {
+        SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
+      }
       throw e.toString();
     }
   }
@@ -80,13 +86,17 @@ class VideoService {
         return GetVideoOfTheDayData.fromJson(data['data']);
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while fetch video, Please try after some time.");
+        if (networkController.isConnected.value) {
+          SnackbarUtils.showErrorSnackbar("Server Error",
+              "Error while fetch video, Please try after some time.");
+        }
         return Future.error("Server Error");
       }
     } catch (e) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
+      // if (networkController.isConnected.value) {
+      //   SnackbarUtils.showErrorSnackbar("Failed to fetch video", e.toString());
+      // }
       throw e.toString();
     }
   }
@@ -104,13 +114,17 @@ class VideoService {
         return data;
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while Analytics, Please try after some time.");
+        if (networkController.isConnected.value) {
+          SnackbarUtils.showErrorSnackbar("Server Error",
+              "Error while Analytics, Please try after some time.");
+        }
         return Future.error("Server Error");
       }
     } catch (e) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to Analytics", e.toString());
+      if (networkController.isConnected.value) {
+        SnackbarUtils.showErrorSnackbar("Failed to Analytics", e.toString());
+      }
       throw e.toString();
     }
   }
@@ -156,7 +170,9 @@ class VideoService {
       }
     } catch (error) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to update", error.toString());
+      if (networkController.isConnected.value) {
+        SnackbarUtils.showErrorSnackbar("Failed to update", error.toString());
+      }
       return Future.error(error);
     }
   }
@@ -180,13 +196,17 @@ class VideoService {
         return Future.error("Authentication Error");
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while Video View, Please try after some time.");
+        if (networkController.isConnected.value) {
+          SnackbarUtils.showErrorSnackbar("Server Error",
+              "Error while Video View, Please try after some time.");
+        }
         return Future.error("Server Error");
       }
     } catch (e) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to Video View", e.toString());
+      if (networkController.isConnected.value) {
+        SnackbarUtils.showErrorSnackbar("Failed to Video View", e.toString());
+      }
       throw e.toString();
     }
   }
@@ -203,13 +223,10 @@ class VideoService {
         return GetAllVideoLanding.fromJson(data);
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while Video View, Please try after some time.");
         return Future.error("Server Error");
       }
     } catch (e) {
       LoaderX.hide();
-      SnackbarUtils.showErrorSnackbar("Failed to Video View", e.toString());
       throw e.toString();
     }
   }

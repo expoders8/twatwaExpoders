@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+import '../home/tab_page.dart';
 import '../profile/profile.dart';
 import '../widgets/custom_textfield.dart';
 import '../../services/user_service.dart';
@@ -37,6 +39,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  final _googleSignIn = GoogleSignIn();
 
   @override
   void initState() {
@@ -226,23 +229,99 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   validationMsg: 'Please enter email',
                 ),
                 const SizedBox(height: 50),
-                SizedBox(
-                  width: Get.width,
-                  child: CupertinoButton(
-                    color: kButtonColor,
-                    borderRadius: BorderRadius.circular(25),
-                    onPressed: _onEditProfile,
-                    child: const Text(
-                      'Update',
-                      style: TextStyle(
-                          color: kWhiteColor, letterSpacing: 2, fontSize: 15),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: Platform.isIOS ? Get.width / 2.3 : Get.width - 45,
+                      child: CupertinoButton(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        color: kButtonColor,
+                        borderRadius: BorderRadius.circular(25),
+                        onPressed: _onEditProfile,
+                        child: const Text(
+                          'Update',
+                          style: TextStyle(
+                              color: kWhiteColor,
+                              letterSpacing: 1,
+                              fontSize: 15),
+                        ),
+                      ),
                     ),
-                  ),
+                    Platform.isIOS ? const SizedBox(width: 6) : Container(),
+                    Platform.isIOS
+                        ? SizedBox(
+                            width: Get.width / 2.3,
+                            child: CupertinoButton(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              color: kButtonColor,
+                              borderRadius: BorderRadius.circular(25),
+                              onPressed: userAccountDelete,
+                              child: const Text(
+                                'Delete Account',
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    letterSpacing: 1,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  userAccountDelete() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Alert !"),
+        elevation: 5,
+        titleTextStyle: const TextStyle(fontSize: 18, color: kRedColor),
+        content: const Text("Are you sure want to Delete \nAccount?"),
+        contentPadding: const EdgeInsets.only(left: 25, top: 10),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              LoaderX.show(context, 70.0);
+              await userService.userAccountDelete().then(
+                (value) {
+                  if (value["success"]) {
+                    _googleSignIn.disconnect();
+                    Navigator.of(context).pop();
+                    box.remove('user');
+                    box.remove('authToken');
+                    Get.offAll(() => const TabPage());
+                  } else {
+                    LoaderX.hide();
+                    SnackbarUtils.showErrorSnackbar(
+                        "Failed to userDelete", value["message"]);
+                  }
+                },
+              );
+            },
+            child: const Text(
+              'Yes',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              'No',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+        ],
       ),
     );
   }

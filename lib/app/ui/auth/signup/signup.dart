@@ -452,8 +452,9 @@ class _SignUpPageState extends State<SignUpPage> {
               // ignore: use_build_context_synchronously
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      OtpScreen(phonenumber: value.data!.userPhone.toString()),
+                  builder: (context) => OtpScreen(
+                      phonenumber: value.data!.userPhone.toString(),
+                      selectScreenNavigation: "SignUp"),
                 ),
               );
               LoaderX.hide();

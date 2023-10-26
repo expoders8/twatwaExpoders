@@ -64,7 +64,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             // if (!regExp.hasMatch(value.toString())) {
             //   return "Please enter valid username";
             // }
-            if (!RegExp(r"^[A-Za-z@][A-Za-z0-9._-]{5,15}$").hasMatch(value)) {
+            if (!RegExp(r'^[a-zA-Z]+_+[0-9]+$').hasMatch(value)) {
               return 'Please enter valid username';
             }
           }

@@ -24,6 +24,8 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (getStorage.read('firstTimeLaunch') != true) {
     getStorage.erase();
+    box.remove('user');
+    box.remove('authToken');
     box.erase();
     getStorage.write('firstTimeLaunch', true);
   }
