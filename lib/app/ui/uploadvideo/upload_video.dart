@@ -10,6 +10,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../../view/hastage.dart';
 import '../widgets/custom_textfield.dart';
 import '../../services/video_service.dart';
+import '../widgets/no_user_login_screen.dart';
 import '../../../config/constant/constant.dart';
 import '../../controller/hastage_controller.dart';
 import '../uploadVideo/success_video_uploaded.dart';
@@ -18,7 +19,6 @@ import '../../../config/constant/color_constant.dart';
 import '../../../config/provider/loader_provider.dart';
 import '../../../config/provider/snackbar_provider.dart';
 import '../../../config/provider/imagepicker_provider.dart';
-import '../widgets/no_user_login_screen.dart';
 
 class UploadVideoPage extends StatefulWidget {
   const UploadVideoPage({

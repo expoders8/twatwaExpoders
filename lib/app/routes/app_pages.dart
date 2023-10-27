@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 import '../ui/menu/menu.dart';
-import '../ui/auth/otp/otp.dart';
 import '../ui/home/tab_page.dart';
 import '../ui/profile/profile.dart';
 import '../ui/auth/login/login.dart';

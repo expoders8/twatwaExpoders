@@ -12,7 +12,6 @@ import '../../../../config/constant/font_constant.dart';
 import '../../../../config/constant/color_constant.dart';
 import '../../../../config/provider/loader_provider.dart';
 import '../../../../config/provider/snackbar_provider.dart';
-import '../otp/otp.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -238,19 +237,21 @@ class _LoginPageState extends State<LoginPage> {
             .then(
           (value) async {
             if (value.success == true) {
-              if (value.data!.isPhoneVerified!) {
-                LoaderX.hide();
-                Get.offAll(() => const TabPage());
-              } else if (!value.data!.isPhoneVerified!) {
-                LoaderX.hide();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => OtpScreen(
-                        phonenumber: value.data!.userPhone.toString(),
-                        selectScreenNavigation: "Login"),
-                  ),
-                );
-              }
+              LoaderX.hide();
+              Get.offAll(() => const TabPage());
+              // if (value.data!.isPhoneVerified!) {
+              //   LoaderX.hide();
+              //   Get.offAll(() => const TabPage());
+              // } else if (!value.data!.isPhoneVerified!) {
+              //   LoaderX.hide();
+              //   Navigator.of(context).push(
+              //     MaterialPageRoute(
+              //       builder: (context) => OtpScreen(
+              //           phonenumber: value.data!.userPhone.toString(),
+              //           selectScreenNavigation: "Login"),
+              //     ),
+              //   );
+              // }
             } else {
               LoaderX.hide();
               SnackbarUtils.showErrorSnackbar(

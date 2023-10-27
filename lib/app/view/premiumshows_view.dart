@@ -1,20 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter/material.dart';
 
-import '../../config/animation/translate_up_animation.dart';
-import '../controller/other_user_controller.dart';
 import '../routes/app_pages.dart';
 import '../../config/constant/constant.dart';
 import '../controller/video_controller.dart';
 import '../controller/comments_controller.dart';
+import '../controller/other_user_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../ui/OtherUserProfile/other_user_profile.dart';
+import '../../config/animation/translate_up_animation.dart';
 
 // ignore: camel_case_types
 class PremiumShowsViewPage extends StatefulWidget {

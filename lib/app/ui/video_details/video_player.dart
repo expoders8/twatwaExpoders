@@ -1,15 +1,15 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:opentrend/app/ui/video_details/video_details.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:opentrend/app/ui/video_details/video_details.dart';
 
-import '../../../config/constant/color_constant.dart';
+import '../../controller/video_controller.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
-import '../../controller/video_controller.dart';
+import '../../../config/constant/color_constant.dart';
 import '../../controller/video_detail_controller.dart';
 
 typedef StringCallback = void Function(String val);

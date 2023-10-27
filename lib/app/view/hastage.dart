@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-import '../../../config/constant/color_constant.dart';
 import '../controller/hastage_controller.dart';
+import '../../../config/constant/color_constant.dart';
 
 class HasTageView extends StatefulWidget {
   const HasTageView({super.key});

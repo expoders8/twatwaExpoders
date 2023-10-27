@@ -86,6 +86,8 @@ class PlaylistDataModel {
       json['videos'].forEach((v) {
         videos!.add(Videos.fromJson(v));
       });
+    } else {
+      videos = [];
     }
   }
 
@@ -102,9 +104,8 @@ class PlaylistDataModel {
     data['updatedOn'] = updatedOn;
     data['updatedById'] = updatedById;
     data['video_Ids'] = videoIds;
-    if (videos != null) {
-      data['videos'] = videos!.map((v) => v.toJson()).toList();
-    }
+    data['videos'] =
+        videos != null ? videos!.map((v) => v.toJson()).toList() : [];
     return data;
   }
 }

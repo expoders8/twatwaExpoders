@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../controller/video_controller.dart';
 import '../routes/app_pages.dart';
+import '../controller/video_controller.dart';
 import '../controller/comments_controller.dart';
 import '../controller/video_detail_controller.dart';
 import '../../../../config/constant/font_constant.dart';
