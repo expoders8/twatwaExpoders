@@ -111,91 +111,43 @@ class PlaylistDataModel {
 
 class Videos {
   String? id;
-  String? videoReferenceId;
   String? title;
-  String? description;
   String? userId;
-  String? userName;
-  String? userProfileImage;
   String? categoryId;
-  String? categoryName;
-  int? numberOfLikes;
-  int? numberOfDislikes;
   int? numberOfViews;
-  int? numberOfFollowers;
-  String? videoStreamingUrl;
-  String? createdOn;
-  String? qualityJson;
   double? videoDurationInSeconds;
   String? videoThumbnailImagePath;
-  bool? isLiked;
-  bool? isDisliked;
-  bool? hasFollowers;
 
   Videos({
     this.id,
-    this.videoReferenceId,
     this.title,
-    this.description,
     this.userId,
-    this.userName,
     this.categoryId,
-    this.categoryName,
-    this.numberOfLikes,
-    this.numberOfDislikes,
-    this.numberOfViews,
-    this.videoStreamingUrl,
-    this.createdOn,
-    this.qualityJson,
     this.videoDurationInSeconds,
     this.videoThumbnailImagePath,
-    this.isLiked,
-    this.isDisliked,
   });
 
   Videos.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    videoReferenceId = json['videoReferenceId'];
     title = json['title'];
-    description = json['description'];
     userId = json['userId'];
-    userName = json['userName'];
     categoryId = json['categoryId'];
-    categoryName = json['categoryName'];
-    numberOfLikes = json['numberOfLikes'];
-    numberOfDislikes = json['numberOfDislikes'];
     numberOfViews = json['numberOfViews'];
-    videoStreamingUrl = json['videoStreamingUrl'];
-    createdOn = json['createdOn'];
-    qualityJson = json['qualityJson'];
     videoDurationInSeconds = json['videoDurationInSeconds'] == 0
         ? 0.00
         : json['videoDurationInSeconds'];
     videoThumbnailImagePath = json['videoThumbnailImagePath'];
-    isLiked = json['isLiked'];
-    isDisliked = json['isDisliked'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['videoReferenceId'] = videoReferenceId;
     data['title'] = title;
-    data['description'] = description;
     data['userId'] = userId;
-    data['userName'] = userName;
     data['categoryId'] = categoryId;
-    data['categoryName'] = categoryName;
-    data['numberOfLikes'] = numberOfLikes;
-    data['numberOfDislikes'] = numberOfDislikes;
     data['numberOfViews'] = numberOfViews;
-    data['videoStreamingUrl'] = videoStreamingUrl;
-    data['createdOn'] = createdOn;
-    data['qualityJson'] = qualityJson;
     data['videoDurationInSeconds'] = videoDurationInSeconds;
     data['videoThumbnailImagePath'] = videoThumbnailImagePath;
-    data['isLiked'] = isLiked;
-    data['isDisliked'] = isDisliked;
 
     return data;
   }
