@@ -12,7 +12,7 @@ import 'app/routes/app_pages.dart';
 import 'config/constant/constant.dart';
 import 'config/provider/theme_provider.dart';
 import 'app/controller/network_controller.dart';
-import 'app/controller/dependency_injection .dart';
+import 'app/controller/dependency_injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -42,12 +42,13 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         backgroundColor: kBackGroundColor,
         centerTitle: true,
-        toolbarHeight: Platform.isIOS ? 20 : 30,
+        toolbarHeight: Platform.isIOS ? 20 : 60,
         title: const Text(
           "Notification",
           style: TextStyle(color: kWhiteColor, fontSize: 19),
         ),
         elevation: 1,
+        automaticallyImplyLeading: false,
       ),
       body: authToken != ""
           ? RefreshIndicator(

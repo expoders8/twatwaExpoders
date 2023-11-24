@@ -177,105 +177,101 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onDoubleTap: _handleDoubleTap,
-        child: Container(
-          color: kBackGroundColor,
-          width: Get.width,
-          height: _isFullScreen
-              ? Get.height
-              : _controller.value.aspectRatio <= 0.80
-                  ? Get.height / 1.5
-                  : Platform.isIOS
-                      ? 290
-                      : 250,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              _controller.value.isInitialized
-                  ? _controller.value.aspectRatio <= 0.80
-                      ? _isFullScreen
-                          ? VideoPlayer(
-                              _controller,
-                            )
-                          : SizedBox(
-                              width: currentIndex == 0
-                                  ? Get.width - 23
-                                  : currentIndex == 1
-                                      ? Get.width - 30
-                                      : currentIndex == 2
-                                          ? Get.width - 60
-                                          : currentIndex == 3
-                                              ? Get.width - 80
-                                              : currentIndex == 4
-                                                  ? Get.width - 110
-                                                  : currentIndex == 5
-                                                      ? Get.width - 160
-                                                      : currentIndex == 6
-                                                          ? Get.width - 170
-                                                          : currentIndex == 7
-                                                              ? Get.width - 190
-                                                              : Get.width - 23,
-                              height: currentIndex == 0
-                                  ? Get.height
-                                  : currentIndex == 1
-                                      ? Get.height - 100
-                                      : currentIndex == 2
-                                          ? Get.height - 100
-                                          : currentIndex == 3
-                                              ? Get.height - 200
-                                              : currentIndex == 4
-                                                  ? Get.height - 250
-                                                  : currentIndex == 5
-                                                      ? Get.height - 340
-                                                      : currentIndex == 6
-                                                          ? Get.height - 380
-                                                          : currentIndex == 7
-                                                              ? Get.height - 400
-                                                              : Get.height,
-                              child: AspectRatio(
-                                aspectRatio: _controller.value.aspectRatio,
-                                child: VideoPlayer(
-                                  _controller,
-                                ),
-                              ),
-                            )
-                      : Padding(
-                          padding: EdgeInsets.only(
-                              top: _isFullScreen
-                                  ? 0
-                                  : Platform.isIOS
-                                      ? 40
-                                      : 28.0),
-                          child: VideoPlayer(
+      child: Container(
+        color: kBackGroundColor,
+        width: Get.width,
+        height: _isFullScreen
+            ? Get.height
+            : _controller.value.aspectRatio <= 0.80
+                ? Get.height / 1.5
+                : Platform.isIOS
+                    ? 290
+                    : 250,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            _controller.value.isInitialized
+                ? _controller.value.aspectRatio <= 0.80
+                    ? _isFullScreen
+                        ? VideoPlayer(
                             _controller,
-                          ),
-                        )
-                  : const Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                        child: CircularProgressIndicator(
-                          color: Colors.white60,
-                          backgroundColor: kButtonSecondaryColor,
-                          strokeWidth: 2,
+                          )
+                        : SizedBox(
+                            width: currentIndex == 0
+                                ? Get.width - 23
+                                : currentIndex == 1
+                                    ? Get.width - 30
+                                    : currentIndex == 2
+                                        ? Get.width - 60
+                                        : currentIndex == 3
+                                            ? Get.width - 80
+                                            : currentIndex == 4
+                                                ? Get.width - 110
+                                                : currentIndex == 5
+                                                    ? Get.width - 160
+                                                    : currentIndex == 6
+                                                        ? Get.width - 170
+                                                        : currentIndex == 7
+                                                            ? Get.width - 190
+                                                            : Get.width - 23,
+                            height: currentIndex == 0
+                                ? Get.height
+                                : currentIndex == 1
+                                    ? Get.height - 100
+                                    : currentIndex == 2
+                                        ? Get.height - 100
+                                        : currentIndex == 3
+                                            ? Get.height - 200
+                                            : currentIndex == 4
+                                                ? Get.height - 250
+                                                : currentIndex == 5
+                                                    ? Get.height - 340
+                                                    : currentIndex == 6
+                                                        ? Get.height - 380
+                                                        : currentIndex == 7
+                                                            ? Get.height - 400
+                                                            : Get.height,
+                            child: AspectRatio(
+                              aspectRatio: _controller.value.aspectRatio,
+                              child: VideoPlayer(
+                                _controller,
+                              ),
+                            ),
+                          )
+                    : Padding(
+                        padding: EdgeInsets.only(
+                            top: _isFullScreen
+                                ? 0
+                                : Platform.isIOS
+                                    ? 40
+                                    : 28.0),
+                        child: VideoPlayer(
+                          _controller,
                         ),
+                      )
+                : const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: CircularProgressIndicator(
+                        color: Colors.white60,
+                        backgroundColor: kButtonSecondaryColor,
+                        strokeWidth: 2,
                       ),
                     ),
-              if (isBuffering)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: CircularProgressIndicator(
-                      color: Colors.white60,
-                      backgroundColor: kButtonSecondaryColor,
-                      strokeWidth: 2,
-                    ),
+                  ),
+            if (isBuffering)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: CircularProgressIndicator(
+                    color: Colors.white60,
+                    backgroundColor: kButtonSecondaryColor,
+                    strokeWidth: 2,
                   ),
                 ),
-              _buildControls()
-            ],
-          ),
+              ),
+            _buildControls()
+          ],
         ),
       ),
     );
@@ -857,15 +853,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _handleDoubleTap() {
-    final currentPosition = _controller.value.position.inSeconds;
-    final duration = _controller.value.duration.inSeconds;
+    // final currentPosition = _controller.value.position.inSeconds;
+    // final duration = _controller.value.duration.inSeconds;
 
-    final newPosition = currentPosition + 5;
+    // final newPosition = currentPosition + 5;
 
-    if (newPosition < duration) {
-      _controller.seekTo(Duration(seconds: newPosition));
+    // if (newPosition < duration) {
+    //   _controller.seekTo(Duration(seconds: newPosition));
+    // } else {
+    //   _controller.seekTo(_controller.value.duration);
+    // }
+    final screenWidth = MediaQuery.of(context).size.width;
+    final tapPosition = _controller.value.position.inMilliseconds /
+        _controller.value.duration.inMilliseconds;
+    if (tapPosition * screenWidth < screenWidth / 2) {
+      // Double-click on the left side of the video
+      seekBackward();
+    }
+  }
+
+  void seekBackward() {
+    if (_controller.value.position.inSeconds > 5) {
+      _controller
+          .seekTo(Duration(seconds: _controller.value.position.inSeconds - 5));
     } else {
-      _controller.seekTo(_controller.value.duration);
+      _controller.seekTo(Duration(seconds: 0));
     }
   }
 

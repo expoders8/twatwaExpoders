@@ -51,7 +51,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                         child: SizedBox(
                           width: Get.width - 80,
                           child: const Text(
-                            "Video not Found",
+                            "Playlist not Found",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: kWhiteColor,
@@ -125,7 +125,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                                                     padding: EdgeInsets.only(
                                                         top: 50.0, right: 15),
                                                     child: Text(
-                                                      "Video not Found",
+                                                      "Playlist not Found",
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
@@ -152,7 +152,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                                                     if (data.videos == []) {
                                                       return const Center(
                                                         child: Text(
-                                                          "No Video found",
+                                                          "No Playlist found",
                                                           style: TextStyle(
                                                               color:
                                                                   kWhiteColor,
@@ -308,7 +308,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                                   } else {
                                     return const Center(
                                       child: Text(
-                                        "Video not Found",
+                                        "Playlist not Found",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: kWhiteColor,
@@ -333,7 +333,7 @@ class _OtherUserPlaylistPageState extends State<OtherUserPlaylistPage> {
                   } else {
                     return const Center(
                       child: Text(
-                        "Video not Found",
+                        "Playlist not Found",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: kWhiteColor,
