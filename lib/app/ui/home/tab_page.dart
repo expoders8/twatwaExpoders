@@ -93,7 +93,7 @@ class _TabPageState extends State<TabPage> {
                 : MainAxisAlignment.spaceBetween,
             children: <Widget>[
               SizedBox(
-                width: size.width > 500 ? 300 : 190,
+                width: size.width > 500 ? 300 : 170,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: size.width > 500
@@ -122,7 +122,7 @@ class _TabPageState extends State<TabPage> {
                             scale: size.width > 500 ? 19 : 22,
                             color: currentTab == 0
                                 ? kWhiteColor
-                                : Color.fromRGBO(121, 122, 142, 1),
+                                : const Color.fromRGBO(121, 122, 142, 1),
                           ),
                           SizedBox(height: size.width > 500 ? 10 : 6),
                           Text(

@@ -154,7 +154,8 @@ class _LikeWidgetState extends State<LikeWidget> {
           child: Container(
             // height: 35,0
             padding: EdgeInsets.symmetric(
-                horizontal: 25.0, vertical: size.width > 500 ? 10 : 8),
+                horizontal: size.width > 500 ? 28 : 20.0,
+                vertical: size.width > 500 ? 10 : 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),
@@ -208,7 +209,7 @@ class _LikeWidgetState extends State<LikeWidget> {
           },
           child: Container(
             padding: EdgeInsets.symmetric(
-                horizontal: size.width > 500 ? 28 : 25.0,
+                horizontal: size.width > 500 ? 28 : 20.0,
                 vertical: size.width > 500 ? 10 : 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),

@@ -19,15 +19,13 @@ void main() async {
   Stripe.publishableKey = stripePublishableKey;
   await Firebase.initializeApp();
   await GetStorage.init();
-  final getStorage = GetStorage();
   DependencyInjection.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  if (getStorage.read('firstTimeLaunch') != true) {
-    getStorage.erase();
+  if (box.read('firstTimeLaunch') != true) {
+    box.erase();
     box.remove('user');
     box.remove('authToken');
-    box.erase();
-    getStorage.write('firstTimeLaunch', true);
+    box.write('firstTimeLaunch', true);
   }
   return runApp(
     ChangeNotifierProvider<ThemeProvider>(
