@@ -176,6 +176,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Center(
       child: Container(
         color: kBackGroundColor,
@@ -183,9 +184,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         height: _isFullScreen
             ? Get.height
             : _controller.value.aspectRatio <= 0.80
-                ? Get.height / 1.5
+                ? size.width > 500
+                    ? Get.height / 1
+                    : Get.height / 1.5
                 : Platform.isIOS
-                    ? 290
+                    ? size.width > 500
+                        ? 450
+                        : 290
                     : 250,
         child: Stack(
           alignment: Alignment.topCenter,
@@ -420,6 +425,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   Widget _buildControls() {
+    Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -468,7 +474,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             ? 40
                             : 10
                         : Platform.isIOS
-                            ? 40
+                            ? size.width > 500
+                                ? 40
+                                : 20
                             : 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -489,8 +497,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         }
                       },
                       icon: SizedBox(
-                        height: 16,
-                        width: 26,
+                        height: size.width > 500 ? 24 : 16,
+                        width: size.width > 500 ? 34 : 26,
                         child: Image.asset(
                           "assets/icons/back_white.png",
                           fit: BoxFit.cover,
@@ -512,8 +520,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         }
                       },
                       icon: SizedBox(
-                        height: 23,
-                        width: 23,
+                        height: size.width > 500 ? 30 : 23,
+                        width: size.width > 500 ? 30 : 23,
                         child: Image.asset(
                           "assets/icons/setting.png",
                           fit: BoxFit.cover,
@@ -548,7 +556,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                                       : currentIndex == 7
                                                           ? 10
                                                           : 170
-                          : 0),
+                          : size.width > 500
+                              ? 60
+                              : 0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -569,8 +579,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       }
                     },
                     icon: SizedBox(
-                      height: 25,
-                      width: 25,
+                      height: size.width > 500 ? 35 : 25,
+                      width: size.width > 500 ? 35 : 25,
                       child: Image.asset(
                         "assets/icons/previousNext.png",
                         fit: BoxFit.cover,
@@ -579,7 +589,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: _isFullScreen ? 60 : 33),
+                  SizedBox(
+                      width: _isFullScreen
+                          ? 60
+                          : size.width > 500
+                              ? 65
+                              : 33),
                   rePlayVideo
                       ? IconButton(
                           onPressed: () {
@@ -631,8 +646,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             }
                           },
                           icon: SizedBox(
-                            width: 40,
-                            height: 40,
+                            width: size.width > 500 ? 50 : 40,
+                            height: size.width > 500 ? 50 : 40,
                             child: Image.asset(
                               _isPlaying
                                   ? "assets/icons/vdeoPause.png"
@@ -642,7 +657,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             ),
                           ),
                         ),
-                  SizedBox(width: _isFullScreen ? 60 : 30),
+                  SizedBox(
+                      width: _isFullScreen
+                          ? 60
+                          : size.width > 500
+                              ? 65
+                              : 30),
                   IconButton(
                     onPressed: () {
                       if (showOverlay) {
@@ -658,8 +678,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       }
                     },
                     icon: SizedBox(
-                      height: 25,
-                      width: 25,
+                      height: size.width > 500 ? 35 : 25,
+                      width: size.width > 500 ? 35 : 25,
                       child: Image.asset(
                         "assets/icons/nextVideo.png",
                         fit: BoxFit.cover,
@@ -692,7 +712,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                                           ? 50
                                                           : 190
                           : Platform.isIOS
-                              ? 50
+                              ? size.width > 500
+                                  ? 120
+                                  : 50
                               : 40),
               Container(
                 padding:

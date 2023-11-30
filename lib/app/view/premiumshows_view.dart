@@ -62,6 +62,7 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       body: Obx(
@@ -165,7 +166,9 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                             children: [
                                               SizedBox(
                                                 width: Get.width,
-                                                height: 200,
+                                                height: size.width > 500
+                                                    ? 350
+                                                    : 200,
                                                 child: Image.network(
                                                   data.videoThumbnailImagePath
                                                       .toString(),
@@ -217,13 +220,18 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               4)),
-                                                  padding:
-                                                      const EdgeInsets.all(4),
+                                                  padding: EdgeInsets.all(
+                                                      size.width > 500
+                                                          ? 10
+                                                          : 4),
                                                   child: Text(
                                                     "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color: kWhiteColor,
-                                                        fontSize: 12),
+                                                        fontSize:
+                                                            size.width > 500
+                                                                ? 18
+                                                                : 12),
                                                   ),
                                                 ),
                                               )
@@ -254,10 +262,13 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                                       maxLines: 2,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color:
                                                               kTextsecondarytopColor,
-                                                          fontSize: 14,
+                                                          fontSize:
+                                                              size.width > 500
+                                                                  ? 19
+                                                                  : 14,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
@@ -265,10 +276,13 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                                   const SizedBox(height: 5),
                                                   Text(
                                                     "${data.numberOfViews.toString()} views",
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color:
                                                             kTextsecondarybottomColor,
-                                                        fontSize: 12),
+                                                        fontSize:
+                                                            size.width > 500
+                                                                ? 16
+                                                                : 12),
                                                   ),
                                                 ],
                                               ),
@@ -285,17 +299,23 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                                             .start,
                                                     children: [
                                                       SizedBox(
-                                                        width: 100,
+                                                        width: size.width > 500
+                                                            ? 150
+                                                            : 100,
                                                         child: Text(
                                                           maxLines: 1,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           data.userName
                                                               .toString(),
-                                                          style: const TextStyle(
+                                                          style: TextStyle(
                                                               color:
                                                                   kTextsecondarytopColor,
-                                                              fontSize: 13,
+                                                              fontSize:
+                                                                  size.width >
+                                                                          500
+                                                                      ? 16
+                                                                      : 13,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500),
@@ -304,16 +324,22 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                                       const SizedBox(height: 5),
                                                       Text(
                                                         "${data.numberOfFollowers} $numberOffollowcheck",
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                           color:
                                                               kTextsecondarybottomColor,
-                                                          fontSize: 11,
+                                                          fontSize:
+                                                              size.width > 500
+                                                                  ? 15
+                                                                  : 11,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
-                                                const SizedBox(width: 5),
+                                                SizedBox(
+                                                    width: size.width > 500
+                                                        ? 10
+                                                        : 5),
                                                 GestureDetector(
                                                   onTap: () {
                                                     userId == data.userId
@@ -339,8 +365,12 @@ class _PremiumShowsViewPageState extends State<PremiumShowsViewPage> {
                                                             .toString());
                                                   },
                                                   child: SizedBox(
-                                                    height: 37,
-                                                    width: 37,
+                                                    height: size.width > 500
+                                                        ? 41
+                                                        : 37,
+                                                    width: size.width > 500
+                                                        ? 41
+                                                        : 37,
                                                     child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(

@@ -79,6 +79,7 @@ class _FavouritePageState extends State<FavouritePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
@@ -147,20 +148,30 @@ class _FavouritePageState extends State<FavouritePage> {
                                                 Row(
                                                   children: [
                                                     SizedBox(
-                                                      width: 20,
-                                                      height: 20,
+                                                      width: size.width > 500
+                                                          ? 26
+                                                          : 20,
+                                                      height: size.width > 500
+                                                          ? 26
+                                                          : 20,
                                                       child: Image.asset(
                                                         "assets/icons/following.png",
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 5),
+                                                    SizedBox(
+                                                        width: size.width > 500
+                                                            ? 10
+                                                            : 5),
                                                     Text(
                                                       data.playlistName
                                                           .toString(),
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color:
                                                               kTextsecondarytopColor,
-                                                          fontSize: 14,
+                                                          fontSize:
+                                                              size.width > 500
+                                                                  ? 22
+                                                                  : 14,
                                                           fontFamily:
                                                               kFuturaPTDemi),
                                                     ),
@@ -180,8 +191,12 @@ class _FavouritePageState extends State<FavouritePage> {
                                                     margin:
                                                         const EdgeInsets.only(
                                                             right: 25, top: 3),
-                                                    width: 18,
-                                                    height: 18,
+                                                    width: size.width > 500
+                                                        ? 24
+                                                        : 18,
+                                                    height: size.width > 500
+                                                        ? 24
+                                                        : 18,
                                                     child: Image.asset(
                                                       "assets/icons/dots.png",
                                                     ),
@@ -212,7 +227,9 @@ class _FavouritePageState extends State<FavouritePage> {
                                                   ),
                                                 )
                                               : SizedBox(
-                                                  height: 170,
+                                                  height: size.width > 500
+                                                      ? 300
+                                                      : 170,
                                                   child: ListView.builder(
                                                     scrollDirection:
                                                         Axis.horizontal,
@@ -276,10 +293,14 @@ class _FavouritePageState extends State<FavouritePage> {
                                                                 child: Stack(
                                                                   children: [
                                                                     SizedBox(
-                                                                      width:
-                                                                          150,
-                                                                      height:
-                                                                          100,
+                                                                      width: size.width >
+                                                                              500
+                                                                          ? 250
+                                                                          : 150,
+                                                                      height: size.width >
+                                                                              500
+                                                                          ? 200
+                                                                          : 100,
                                                                       child: Image
                                                                           .network(
                                                                         data.videoThumbnailImagePath
@@ -309,14 +330,16 @@ class _FavouritePageState extends State<FavouritePage> {
                                                                                 0),
                                                                             borderRadius:
                                                                                 BorderRadius.circular(4)),
-                                                                        padding:
-                                                                            const EdgeInsets.all(4),
+                                                                        padding: EdgeInsets.all(size.width >
+                                                                                500
+                                                                            ? 10
+                                                                            : 4),
                                                                         child:
                                                                             Text(
                                                                           "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
-                                                                          style: const TextStyle(
+                                                                          style: TextStyle(
                                                                               color: kWhiteColor,
-                                                                              fontSize: 12),
+                                                                              fontSize: size.width > 500 ? 16 : 12),
                                                                         ),
                                                                       ),
                                                                     )
@@ -348,11 +371,12 @@ class _FavouritePageState extends State<FavouritePage> {
                                                                             2,
                                                                         overflow:
                                                                             TextOverflow.ellipsis,
-                                                                        style: const TextStyle(
+                                                                        style: TextStyle(
                                                                             color:
                                                                                 kTextsecondarytopColor,
-                                                                            fontSize:
-                                                                                14,
+                                                                            fontSize: size.width > 500
+                                                                                ? 18
+                                                                                : 14,
                                                                             fontWeight:
                                                                                 FontWeight.w500),
                                                                       ),
@@ -362,11 +386,12 @@ class _FavouritePageState extends State<FavouritePage> {
                                                                             5),
                                                                     Text(
                                                                       "${data.numberOfViews.toString()} views",
-                                                                      style: const TextStyle(
+                                                                      style: TextStyle(
                                                                           color:
                                                                               kTextsecondarybottomColor,
-                                                                          fontSize:
-                                                                              12),
+                                                                          fontSize: size.width > 500
+                                                                              ? 16
+                                                                              : 12),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -423,17 +448,19 @@ class _FavouritePageState extends State<FavouritePage> {
                     );
                   },
                   child: Container(
-                    width: 200,
+                    width: size.width > 500 ? 300 : 200,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(width: 0.9, color: kButtonColor)),
-                    child: const Center(
+                        border: Border.all(
+                            width: size.width > 500 ? 1.5 : 0.9,
+                            color: kButtonColor)),
+                    child: Center(
                       child: Text(
                         "Create playlist",
                         style: TextStyle(
                             color: kTextsecondarytopColor,
-                            fontSize: 16,
+                            fontSize: size.width > 500 ? 26 : 16,
                             fontFamily: kFuturaPTDemi),
                       ),
                     ),
@@ -470,6 +497,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 : 0;
 
     FocusScope.of(context).requestFocus(FocusNode());
+    Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<dynamic>(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -513,12 +541,13 @@ class _FavouritePageState extends State<FavouritePage> {
                             ),
                           );
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.only(top: 18.0, bottom: 9),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 18.0, bottom: 9),
                           child: Text(
                             "Edit",
                             style: TextStyle(
-                                color: kTextsecondarytopColor, fontSize: 16),
+                                color: kTextsecondarytopColor,
+                                fontSize: size.width > 500 ? 18 : 16),
                           ),
                         ),
                       ),
@@ -526,7 +555,7 @@ class _FavouritePageState extends State<FavouritePage> {
                         padding: const EdgeInsets.only(top: 12.0, bottom: 0),
                         child: SizedBox(
                           width: Get.width - 25,
-                          height: 20,
+                          height: size.width > 500 ? 22 : 20,
                           child: CustomPaint(
                             painter: DottedLinePainter(),
                           ),

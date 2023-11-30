@@ -18,6 +18,7 @@ class ShareWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () async {
         LoaderX.show(context, 70.0);
@@ -52,7 +53,9 @@ class ShareWidget extends StatelessWidget {
         LoaderX.hide();
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 8),
+        padding: EdgeInsets.symmetric(
+            horizontal: size.width > 500 ? 33 : 25.0,
+            vertical: size.width > 500 ? 10 : 8),
         decoration: BoxDecoration(
             border: Border.all(color: kButtonSecondaryColor, width: 1),
             borderRadius: BorderRadius.circular(50),
@@ -68,8 +71,8 @@ class ShareWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: 18,
-              height: 17,
+              width: size.width > 500 ? 23 : 18,
+              height: size.width > 500 ? 22 : 17,
               child: Image.asset(
                 "assets/icons/Share.png",
                 scale: 1.5,

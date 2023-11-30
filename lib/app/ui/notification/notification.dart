@@ -38,11 +38,16 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kBackGroundColor,
         centerTitle: true,
-        toolbarHeight: Platform.isIOS ? 20 : 60,
+        toolbarHeight: size.width > 500
+            ? 90
+            : Platform.isIOS
+                ? 20
+                : 60,
         title: const Text(
           "Notification",
           style: TextStyle(color: kWhiteColor, fontSize: 19),
@@ -130,11 +135,12 @@ class _NotificationPageState extends State<NotificationPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: 42,
-                                              width: 42,
+                                              height:
+                                                  size.width > 500 ? 65 : 42,
+                                              width: size.width > 500 ? 65 : 42,
                                               child: ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(20),
+                                                    BorderRadius.circular(30),
                                                 child: Image.network(
                                                   data.userProfilePhoto
                                                       .toString(),
@@ -177,7 +183,9 @@ class _NotificationPageState extends State<NotificationPage> {
                                               ),
                                             ),
                                             SizedBox(
-                                              width: 250,
+                                              width: size.width > 500
+                                                  ? Get.width - 200
+                                                  : 250,
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 8.0),
@@ -194,7 +202,11 @@ class _NotificationPageState extends State<NotificationPage> {
                                                       child: Row(
                                                         children: [
                                                           SizedBox(
-                                                            width: 208,
+                                                            width: size.width >
+                                                                    500
+                                                                ? Get.width -
+                                                                    300
+                                                                : 208,
                                                             child: Text(
                                                               data.notificationTitle
                                                                   .toString(),
@@ -202,10 +214,14 @@ class _NotificationPageState extends State<NotificationPage> {
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                   color:
                                                                       kTextsecondarybottomColor,
-                                                                  fontSize: 13,
+                                                                  fontSize:
+                                                                      size.width >
+                                                                              500
+                                                                          ? 18
+                                                                          : 13,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500),
@@ -215,12 +231,15 @@ class _NotificationPageState extends State<NotificationPage> {
                                                       ),
                                                     ),
                                                     const SizedBox(height: 10),
-                                                    const Text(
+                                                    Text(
                                                       "2 Follwer",
                                                       style: TextStyle(
                                                         color:
                                                             kTextsecondarybottomColor,
-                                                        fontSize: 11,
+                                                        fontSize:
+                                                            size.width > 500
+                                                                ? 15
+                                                                : 11,
                                                       ),
                                                     ),
                                                   ],

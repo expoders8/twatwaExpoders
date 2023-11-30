@@ -65,6 +65,7 @@ class _TabPageState extends State<TabPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: PageStorage(
         bucket: bucket,
@@ -87,148 +88,162 @@ class _TabPageState extends State<TabPage> {
         child: SizedBox(
           height: 60,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: size.width > 500
+                ? MainAxisAlignment.spaceAround
+                : MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  MaterialButton(
-                    minWidth: 40,
-                    onPressed: () {
-                      setState(() {
-                        currentScreen = const HomePage();
-                        currentTab = 0;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        // Icon(
-                        //   Icons.dashboard,
-                        //   color: controller.tabIndex.value == 0
-                        //       ? Colors.blue
-                        //       : Colors.grey,
-                        // ),
-                        Image.asset(
-                          "assets/icons/home.png",
-                          scale: 22,
-                          color: currentTab == 0
-                              ? kWhiteColor
-                              : const Color(0xFF797A8E),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Home',
-                          style: TextStyle(
-                            fontSize: 12,
+              SizedBox(
+                width: size.width > 500 ? 300 : 190,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: size.width > 500
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.start,
+                  children: <Widget>[
+                    MaterialButton(
+                      minWidth: 40,
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const HomePage();
+                          currentTab = 0;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          // Icon(
+                          //   Icons.dashboard,
+                          //   color: controller.tabIndex.value == 0
+                          //       ? Colors.blue
+                          //       : Colors.grey,
+                          // ),
+                          Image.asset(
+                            "assets/icons/home.png",
+                            scale: size.width > 500 ? 19 : 22,
                             color: currentTab == 0
                                 ? kWhiteColor
-                                : const Color(0xFF797A8E),
+                                : Color.fromRGBO(121, 122, 142, 1),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: size.width > 500 ? 10 : 6),
+                          Text(
+                            'Home',
+                            style: TextStyle(
+                              fontSize: size.width > 500 ? 14 : 12,
+                              color: currentTab == 0
+                                  ? kWhiteColor
+                                  : const Color(0xFF797A8E),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  MaterialButton(
-                    minWidth: 40,
-                    onPressed: () {
-                      setState(() {
-                        currentScreen = const TrendingPage();
-                        currentTab = 1;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/icons/tranding.png",
-                          scale: 22,
-                          color: currentTab == 1
-                              ? kWhiteColor
-                              : const Color(0xFF797A8E),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          ' Tranding',
-                          style: TextStyle(
-                            fontSize: 12,
+                    MaterialButton(
+                      minWidth: 40,
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const TrendingPage();
+                          currentTab = 1;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/icons/tranding.png",
+                            scale: size.width > 500 ? 19 : 22,
                             color: currentTab == 1
                                 ? kWhiteColor
                                 : const Color(0xFF797A8E),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                          SizedBox(height: size.width > 500 ? 10 : 6),
+                          Text(
+                            ' Tranding',
+                            style: TextStyle(
+                              fontSize: size.width > 500 ? 14 : 12,
+                              color: currentTab == 1
+                                  ? kWhiteColor
+                                  : const Color(0xFF797A8E),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  MaterialButton(
-                    padding: const EdgeInsets.only(left: 12),
-                    minWidth: 50,
-                    onPressed: () {
-                      setState(() {
-                        currentScreen = const NotificationPage();
-                        currentTab = 2;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/icons/notification.png",
-                          scale: 22,
-                          color: currentTab == 2
-                              ? kWhiteColor
-                              : const Color(0xFF797A8E),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Notification',
-                          style: TextStyle(
-                            fontSize: 12,
+              SizedBox(
+                width: size.width > 500 ? 300 : 190,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: size.width > 500
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.end,
+                  children: <Widget>[
+                    MaterialButton(
+                      padding: const EdgeInsets.only(left: 12),
+                      minWidth: 50,
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const NotificationPage();
+                          currentTab = 2;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/icons/notification.png",
+                            scale: size.width > 500 ? 19 : 22,
                             color: currentTab == 2
                                 ? kWhiteColor
                                 : const Color(0xFF797A8E),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: size.width > 500 ? 10 : 6),
+                          Text(
+                            'Notification',
+                            style: TextStyle(
+                              fontSize: size.width > 500 ? 14 : 12,
+                              color: currentTab == 2
+                                  ? kWhiteColor
+                                  : const Color(0xFF797A8E),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  MaterialButton(
-                    minWidth: 30,
-                    onPressed: () {
-                      setState(() {
-                        currentScreen = const FavouritePage();
-                        currentTab = 3;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/icons/favourite.png",
-                          scale: 22,
-                          color: currentTab == 3
-                              ? kWhiteColor
-                              : const Color(0xFF797A8E),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Favourite',
-                          style: TextStyle(
-                            fontSize: 12,
+                    MaterialButton(
+                      minWidth: 30,
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const FavouritePage();
+                          currentTab = 3;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/icons/favourite.png",
+                            scale: size.width > 500 ? 19 : 22,
                             color: currentTab == 3
                                 ? kWhiteColor
                                 : const Color(0xFF797A8E),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                          SizedBox(height: size.width > 500 ? 10 : 6),
+                          Text(
+                            'Favourite',
+                            style: TextStyle(
+                              fontSize: size.width > 500 ? 14 : 12,
+                              color: currentTab == 3
+                                  ? kWhiteColor
+                                  : const Color(0xFF797A8E),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),

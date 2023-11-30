@@ -35,6 +35,7 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
         children: [
@@ -88,18 +89,20 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                     child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 20,
-                                          height: 20,
+                                          width: size.width > 500 ? 26 : 20,
+                                          height: size.width > 500 ? 26 : 20,
                                           child: Image.asset(
                                             "assets/icons/following.png",
                                           ),
                                         ),
-                                        const SizedBox(width: 5),
+                                        SizedBox(
+                                            width: size.width > 500 ? 10 : 5),
                                         Text(
                                           data.playlistName.toString(),
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               color: kTextsecondarytopColor,
-                                              fontSize: 14,
+                                              fontSize:
+                                                  size.width > 500 ? 18 : 14,
                                               fontFamily: kFuturaPTDemi),
                                         ),
                                       ],
@@ -126,7 +129,7 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                           ),
                                         )
                                       : SizedBox(
-                                          height: 170,
+                                          height: size.width > 500 ? 300 : 170,
                                           child: ListView.builder(
                                             scrollDirection: Axis.horizontal,
                                             itemCount: data.videos!.length,
@@ -181,8 +184,16 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                                         child: Stack(
                                                           children: [
                                                             SizedBox(
-                                                              width: 150,
-                                                              height: 100,
+                                                              width:
+                                                                  size.width >
+                                                                          500
+                                                                      ? 250
+                                                                      : 150,
+                                                              height:
+                                                                  size.width >
+                                                                          500
+                                                                      ? 200
+                                                                      : 100,
                                                               child:
                                                                   Image.network(
                                                                 data.videoThumbnailImagePath
@@ -213,16 +224,20 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             4)),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(4),
+                                                                padding: EdgeInsets.all(
+                                                                    size.width >
+                                                                            500
+                                                                        ? 10
+                                                                        : 4),
                                                                 child: Text(
                                                                   "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
-                                                                  style: const TextStyle(
+                                                                  style: TextStyle(
                                                                       color:
                                                                           kWhiteColor,
-                                                                      fontSize:
-                                                                          12),
+                                                                      fontSize: size.width >
+                                                                              500
+                                                                          ? 16
+                                                                          : 12),
                                                                 ),
                                                               ),
                                                             )
@@ -250,11 +265,14 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                     color:
                                                                         kTextsecondarytopColor,
                                                                     fontSize:
-                                                                        14,
+                                                                        size.width >
+                                                                                500
+                                                                            ? 18
+                                                                            : 14,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500),
@@ -264,10 +282,14 @@ class _MyPlaylistPageState extends State<MyPlaylistPage> {
                                                                 height: 5),
                                                             Text(
                                                               "${data.numberOfViews.toString()} views",
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                   color:
                                                                       kTextsecondarybottomColor,
-                                                                  fontSize: 12),
+                                                                  fontSize:
+                                                                      size.width >
+                                                                              500
+                                                                          ? 16
+                                                                          : 12),
                                                             ),
                                                           ],
                                                         ),

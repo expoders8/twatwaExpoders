@@ -28,6 +28,7 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Obx(() {
       if (videoController.isLoading.value) {
         return SingleChildScrollView(
@@ -83,8 +84,8 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                           child: Stack(
                             children: [
                               SizedBox(
-                                width: 150,
-                                height: 100,
+                                width: size.width > 500 ? 250 : 150,
+                                height: size.width > 500 ? 200 : 100,
                                 child: Image.network(
                                   data.videoThumbnailImagePath.toString(),
                                   errorBuilder: (context, error, stackTrace) =>
@@ -126,7 +127,8 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                                   decoration: BoxDecoration(
                                       color: const Color.fromARGB(135, 0, 0, 0),
                                       borderRadius: BorderRadius.circular(4)),
-                                  padding: const EdgeInsets.all(4),
+                                  padding:
+                                      EdgeInsets.all(size.width > 500 ? 10 : 4),
                                   child: Text(
                                     "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
                                     style: const TextStyle(
@@ -149,18 +151,18 @@ class _DescoverHomeViewState extends State<DescoverHomeView> {
                                   data.title.toString(),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: kTextsecondarytopColor,
-                                      fontSize: 14,
+                                      fontSize: size.width > 500 ? 18 : 14,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
                               const SizedBox(height: 5),
                               Text(
                                 "${data.numberOfViews.toString()} views",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: kTextsecondarybottomColor,
-                                    fontSize: 12),
+                                    fontSize: size.width > 500 ? 16 : 12),
                               ),
                             ],
                           ),

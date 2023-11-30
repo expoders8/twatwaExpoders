@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<key>ASAuthorizationScope</key>
+		<array>
+			<string>email</string>
+			<string>fullName</string>
+		</array>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<true />
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
@@ -9,10 +16,9 @@
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
-		<string>com.app.opentrend</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
-
 		<key>CFBundleName</key>
 		<string>OpenTrend</string>
 		<key>CFBundlePackageType</key>
@@ -21,39 +27,53 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.781774163103-111og9vt8acupskcqc9227u2oame7e3v</string>
+				</array>
+			</dict>
+		</array>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>http</string>
+			<string>https</string>
+		</array>
 		<key>LSRequiresIPhoneOS</key>
 		<true />
-
-		<key>UILaunchStoryboardName</key>
-		<string>LaunchScreen</string>
-		<key>UIMainStoryboardFile</key>
-		<string>Main</string>
-		<key>UISupportedInterfaceOrientations</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
-		</array>
 		<key>NSCameraUsageDescription</key>
-		<string>Opengiving would like to use your camera for photo upload feature in story creation
+		<string>OpenTrend would like to use your camera for photo upload feature in story creation
 			and profile picture upload.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>This application needs to access your microphone</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>Opengiving would like to save photos to your photo gallery for access photos to
+		<string>OpenTrend would like to save photos to your photo gallery for access photos to
 			upload in campaing creation feature and profile picture upload.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>We need access to your photos to enable you to upload and share images within the
 			app. For instance, you can select photos from your library to create posts and share
 			them with your friends.</string>
-		<key>NSMicrophoneUsageDescription</key>
-		<string>This application needs to access your microphone</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
 		<string>This application needs the speech recognition permission</string>
-		<key>LSApplicationQueriesSchemes</key>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true />
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UIStatusBarHidden</key>
+		<true />
+		<key>UISupportedInterfaceOrientations</key>
 		<array>
-			<string>http</string>
-			<string>https</string>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
@@ -64,12 +84,5 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false />
-		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true />
-		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true />
-		<key>UIStatusBarHidden</key>
-		<true />
-
 	</dict>
 </plist>

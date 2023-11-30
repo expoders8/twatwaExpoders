@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(body: Obx(() {
       if (videoOfTheDayController.isLoading.value) {
         return SingleChildScrollView(
@@ -374,13 +375,13 @@ class _HomePageState extends State<HomePage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.only(left: 20),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
                                 child: Text(
                                   "Video of the day",
                                   style: TextStyle(
                                     color: kWhiteColor,
-                                    fontSize: 15,
+                                    fontSize: size.width > 500 ? 18 : 15,
                                   ),
                                 ),
                               ),
@@ -389,9 +390,9 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Text(
                                   videoOfTheDayData.title.toString(),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: kWhiteColor,
-                                    fontSize: 24,
+                                    fontSize: size.width > 500 ? 28 : 24,
                                   ),
                                 ),
                               ),
@@ -412,9 +413,10 @@ class _HomePageState extends State<HomePage> {
                                             child: Text(
                                               videoOfTheDayData.description
                                                   .toString(),
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 color: Colors.white70,
-                                                fontSize: 12,
+                                                fontSize:
+                                                    size.width > 500 ? 16 : 12,
                                               ),
                                             ),
                                           ),
@@ -466,12 +468,16 @@ class _HomePageState extends State<HomePage> {
                                                     }
                                                   },
                                                   child: SizedBox(
-                                                    height: 42,
-                                                    width: 42,
+                                                    height: size.width > 500
+                                                        ? 50
+                                                        : 42,
+                                                    width: size.width > 500
+                                                        ? 50
+                                                        : 42,
                                                     child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              20),
+                                                              24),
                                                       child: Image.network(
                                                         videoOfTheDayData
                                                             .userProfileImage
@@ -533,10 +539,14 @@ class _HomePageState extends State<HomePage> {
                                                             videoOfTheDayData
                                                                 .userName
                                                                 .toString(),
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                                 color:
                                                                     kTextsecondarytopColor,
-                                                                fontSize: 13,
+                                                                fontSize:
+                                                                    size.width >
+                                                                            500
+                                                                        ? 17
+                                                                        : 13,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500),
@@ -545,11 +555,14 @@ class _HomePageState extends State<HomePage> {
                                                               height: 5),
                                                           Text(
                                                             "${videoOfTheDayData.numberOfFollowers} $followcheck",
-                                                            style:
-                                                                const TextStyle(
+                                                            style: TextStyle(
                                                               color:
                                                                   kTextsecondarybottomColor,
-                                                              fontSize: 11,
+                                                              fontSize:
+                                                                  size.width >
+                                                                          500
+                                                                      ? 15
+                                                                      : 11,
                                                             ),
                                                           ),
                                                         ],
@@ -564,10 +577,12 @@ class _HomePageState extends State<HomePage> {
                                                   right: 20, top: 9),
                                               child: Text(
                                                 "${videoOfTheDayData.numberOfViews} Views",
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     color:
                                                         kTextsecondarytopColor,
-                                                    fontSize: 13,
+                                                    fontSize: size.width > 500
+                                                        ? 18
+                                                        : 13,
                                                     fontFamily: kFuturaPTDemi),
                                               ),
                                             ),
@@ -665,27 +680,29 @@ class _HomePageState extends State<HomePage> {
                                     child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 20,
-                                          height: 20,
+                                          width: size.width > 500 ? 21 : 20,
+                                          height: size.width > 500 ? 21 : 20,
                                           child: Image.asset(
                                             "assets/icons/searchDescover.png",
                                           ),
                                         ),
-                                        const SizedBox(width: 5),
-                                        const Text(
+                                        SizedBox(
+                                            width: size.width > 500 ? 10 : 5),
+                                        Text(
                                           "DESCOVER",
                                           style: TextStyle(
                                               color: kTextsecondarytopColor,
-                                              fontSize: 13,
+                                              fontSize:
+                                                  size.width > 500 ? 18 : 13,
                                               fontFamily: kFuturaPTDemi),
                                         ),
                                       ],
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  const SizedBox(
-                                    height: 180,
-                                    child: DescoverHomeView(),
+                                  SizedBox(
+                                    height: size.width > 500 ? 300 : 180,
+                                    child: const DescoverHomeView(),
                                   ),
                                 ],
                               ),
@@ -697,27 +714,29 @@ class _HomePageState extends State<HomePage> {
                                     child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 20,
-                                          height: 20,
+                                          width: size.width > 500 ? 21 : 20,
+                                          height: size.width > 500 ? 21 : 20,
                                           child: Image.asset(
                                             "assets/icons/selectranding.png",
                                           ),
                                         ),
-                                        const SizedBox(width: 5),
-                                        const Text(
+                                        SizedBox(
+                                            width: size.width > 500 ? 10 : 5),
+                                        Text(
                                           "Trending",
                                           style: TextStyle(
                                               color: kTextsecondarytopColor,
-                                              fontSize: 13,
+                                              fontSize:
+                                                  size.width > 500 ? 18 : 13,
                                               fontFamily: kFuturaPTDemi),
                                         ),
                                       ],
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  const SizedBox(
-                                    height: 180,
-                                    child: TrandingHomeView(),
+                                  SizedBox(
+                                    height: size.width > 500 ? 300 : 180,
+                                    child: const TrandingHomeView(),
                                   ),
                                 ],
                               ),
@@ -728,27 +747,29 @@ class _HomePageState extends State<HomePage> {
                                     child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 20,
-                                          height: 20,
+                                          width: size.width > 500 ? 21 : 20,
+                                          height: size.width > 500 ? 21 : 20,
                                           child: Image.asset(
                                             "assets/icons/following.png",
                                           ),
                                         ),
-                                        const SizedBox(width: 5),
-                                        const Text(
+                                        SizedBox(
+                                            width: size.width > 500 ? 10 : 5),
+                                        Text(
                                           "Following",
                                           style: TextStyle(
                                               color: kTextsecondarytopColor,
-                                              fontSize: 13,
+                                              fontSize:
+                                                  size.width > 500 ? 18 : 13,
                                               fontFamily: kFuturaPTDemi),
                                         ),
                                       ],
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  const SizedBox(
-                                    height: 180,
-                                    child: FollowingHomeView(),
+                                  SizedBox(
+                                    height: size.width > 500 ? 300 : 180,
+                                    child: const FollowingHomeView(),
                                   ),
                                 ],
                               ),

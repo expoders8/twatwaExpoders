@@ -144,6 +144,7 @@ class _LikeWidgetState extends State<LikeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Row(
       children: [
         GestureDetector(
@@ -153,7 +154,7 @@ class _LikeWidgetState extends State<LikeWidget> {
           child: Container(
             // height: 35,0
             padding: EdgeInsets.symmetric(
-                horizontal: widget.likeCount != 0 ? 19.0 : 25.0, vertical: 8),
+                horizontal: 25.0, vertical: size.width > 500 ? 10 : 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),
@@ -170,16 +171,16 @@ class _LikeWidgetState extends State<LikeWidget> {
               children: [
                 isLikedState
                     ? SizedBox(
-                        width: 18,
-                        height: 17,
+                        width: size.width > 500 ? 23 : 18,
+                        height: size.width > 500 ? 22 : 17,
                         child: Image.asset(
                           "assets/icons/Like.png",
                           scale: 1.5,
                         ),
                       )
                     : SizedBox(
-                        width: 18,
-                        height: 17,
+                        width: size.width > 500 ? 23 : 18,
+                        height: size.width > 500 ? 22 : 17,
                         child: Image.asset(
                           "assets/icons/unLike.png",
                           scale: 1.5,
@@ -189,8 +190,9 @@ class _LikeWidgetState extends State<LikeWidget> {
                 widget.likeCount != 0
                     ? Text(
                         widget.likeCount.toString(),
-                        style: const TextStyle(
-                            fontSize: 16, color: kButtonSecondaryColor),
+                        style: TextStyle(
+                            fontSize: size.width > 500 ? 19 : 16,
+                            color: kButtonSecondaryColor),
                       )
                     : Container()
               ],
@@ -206,7 +208,8 @@ class _LikeWidgetState extends State<LikeWidget> {
           },
           child: Container(
             padding: EdgeInsets.symmetric(
-                horizontal: widget.likeCount != 0 ? 19.0 : 25.0, vertical: 8),
+                horizontal: size.width > 500 ? 28 : 25.0,
+                vertical: size.width > 500 ? 10 : 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),
@@ -223,16 +226,16 @@ class _LikeWidgetState extends State<LikeWidget> {
               children: [
                 isdisLikedState
                     ? SizedBox(
-                        width: 18,
-                        height: 17,
+                        width: size.width > 500 ? 23 : 18,
+                        height: size.width > 500 ? 22 : 17,
                         child: Image.asset(
                           "assets/icons/disLike.png",
                           scale: 1.5,
                         ),
                       )
                     : SizedBox(
-                        width: 18,
-                        height: 17,
+                        width: size.width > 500 ? 23 : 18,
+                        height: size.width > 500 ? 22 : 17,
                         child: Image.asset(
                           "assets/icons/unDislike.png",
                           scale: 1.5,
@@ -244,8 +247,9 @@ class _LikeWidgetState extends State<LikeWidget> {
                 widget.dislikeCount != 0
                     ? Text(
                         widget.dislikeCount.toString(),
-                        style: const TextStyle(
-                            fontSize: 16, color: kButtonSecondaryColor),
+                        style: TextStyle(
+                            fontSize: size.width > 500 ? 20 : 16,
+                            color: kButtonSecondaryColor),
                       )
                     : Container()
               ],

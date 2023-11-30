@@ -296,6 +296,7 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Row(
       children: [
         GestureDetector(
@@ -303,7 +304,9 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
             authToken == "" ? loginConfirmationDialog() : playlistbottomsheet();
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 8),
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width > 500 ? 33 : 25.0,
+                vertical: size.width > 500 ? 10 : 8),
             decoration: BoxDecoration(
                 border: Border.all(color: kButtonSecondaryColor, width: 1),
                 borderRadius: BorderRadius.circular(50),
@@ -328,8 +331,8 @@ class _PlaylistWidgetState extends State<PlaylistWidget> {
                         ),
                       )
                     : SizedBox(
-                        width: 18,
-                        height: 17,
+                        width: size.width > 500 ? 23 : 18,
+                        height: size.width > 500 ? 22 : 17,
                         child: Image.asset(
                           "assets/icons/unplaylist.png",
                           scale: 1.5,

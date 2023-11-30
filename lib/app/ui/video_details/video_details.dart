@@ -104,6 +104,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () {
         videoDetailController.videoId("");
@@ -360,10 +361,15 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
     userId,
   ) {
     var followcheck = numberOfFollwers == 0 ? "Follwer" : "Follwers";
+    Size size = MediaQuery.of(context).size;
     return SliverAppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kBackGroundColor,
-      expandedHeight: Platform.isAndroid ? 170 : 145,
+      expandedHeight: Platform.isAndroid
+          ? 170
+          : size.width > 500
+              ? 193
+              : 145,
       floating: false,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

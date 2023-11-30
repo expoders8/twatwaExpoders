@@ -40,6 +40,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       body: RefreshIndicator(
@@ -112,7 +113,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                     }
                                   },
                                   child: SizedBox(
-                                    height: 90,
+                                    height: size.width > 500 ? 200 : 90,
                                     child: Stack(
                                       children: [
                                         Card(
@@ -121,19 +122,24 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 3, vertical: 3),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       decoration: BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(4)),
-                                                      height: 100,
-                                                      width: 100,
+                                                      height: size.width > 500
+                                                          ? 200
+                                                          : 100,
+                                                      width: size.width > 500
+                                                          ? 250
+                                                          : 100,
                                                       child: Image.network(
                                                         data.videoThumbnailImagePath
                                                             .toString(),
@@ -191,7 +197,11 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                                                     .start,
                                                             children: [
                                                               SizedBox(
-                                                                width: 135,
+                                                                width:
+                                                                    size.width >
+                                                                            500
+                                                                        ? 300
+                                                                        : 135,
                                                                 child: Text(
                                                                   data.title
                                                                       .toString(),
@@ -199,11 +209,13 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
-                                                                  style: const TextStyle(
+                                                                  style: TextStyle(
                                                                       color:
                                                                           kTextsecondarytopColor,
-                                                                      fontSize:
-                                                                          13,
+                                                                      fontSize: size.width >
+                                                                              500
+                                                                          ? 16
+                                                                          : 13,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w500),
@@ -214,10 +226,14 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                                               Text(
                                                                 "${data.numberOfViews} views",
                                                                 style:
-                                                                    const TextStyle(
+                                                                    TextStyle(
                                                                   color:
                                                                       kTextsecondarybottomColor,
-                                                                  fontSize: 11,
+                                                                  fontSize:
+                                                                      size.width >
+                                                                              500
+                                                                          ? 15
+                                                                          : 11,
                                                                 ),
                                                               ),
                                                             ],
@@ -323,21 +339,24 @@ class _MyVideoPageState extends State<MyVideoPage> {
   }
 
   videoUploding(String videoUploadStatus) {
+    Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-        height: 90,
+        height: size.width > 500 ? 200 : 90,
         width: Get.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
           color: const Color.fromARGB(255, 87, 90, 176).withOpacity(0.3),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 30, left: 245),
+          padding: EdgeInsets.only(
+              top: 30, left: size.width > 500 ? Get.width - 150 : 245),
           child: Text(
             "$videoUploadStatus..",
-            style: const TextStyle(
+            style: TextStyle(
                 color: kButtonColor,
+                fontSize: size.width > 500 ? 18 : 14,
                 fontFamily: kFuturaPTMedium,
                 fontWeight: FontWeight.bold),
           ),

@@ -29,6 +29,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Obx(() {
       if (videoController.isLoading.value) {
         return SingleChildScrollView(
@@ -68,7 +69,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                   // if (discoverData.isNotEmpty) {
                   var data = discoverData[index];
                   return SizedBox(
-                    height: 210,
+                    height: size.width > 500 ? 320 : 210,
                     child: Column(
                       children: [
                         Padding(
@@ -76,8 +77,8 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 17,
-                                height: 17,
+                                width: size.width > 500 ? 21 : 17,
+                                height: size.width > 500 ? 21 : 17,
                                 child: Image.asset(
                                   data.categoryName == "Education Videos"
                                       ? "assets/icons/education.png"
@@ -91,12 +92,12 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                                   : "",
                                 ),
                               ),
-                              const SizedBox(width: 5),
+                              SizedBox(width: size.width > 500 ? 10 : 5),
                               Text(
                                 data.categoryName.toString(),
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: kTextsecondarytopColor,
-                                    fontSize: 13,
+                                    fontSize: size.width > 500 ? 18 : 13,
                                     fontFamily: kFuturaPTDemi),
                               ),
                             ],
@@ -112,7 +113,7 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                               itemBuilder: (context, index) {
                                 var discoverData1 = data.videoList;
                                 return SizedBox(
-                                  height: 200,
+                                  height: size.width > 500 ? 300 : 200,
                                   child: ListView.builder(
                                     padding: const EdgeInsets.only(
                                         left: 15, right: 5),
@@ -150,8 +151,12 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                               child: Stack(
                                                 children: [
                                                   SizedBox(
-                                                    width: 150,
-                                                    height: 100,
+                                                    width: size.width > 500
+                                                        ? 250
+                                                        : 150,
+                                                    height: size.width > 500
+                                                        ? 200
+                                                        : 100,
                                                     child: Image.network(
                                                       educationData
                                                           .videoThumbnailImagePath
@@ -177,14 +182,18 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(4)),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4),
+                                                      padding: EdgeInsets.all(
+                                                          size.width > 500
+                                                              ? 10
+                                                              : 4),
                                                       child: Text(
                                                         "$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}",
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                             color: kWhiteColor,
-                                                            fontSize: 12),
+                                                            fontSize:
+                                                                size.width > 500
+                                                                    ? 16
+                                                                    : 12),
                                                       ),
                                                     ),
                                                   )
@@ -207,10 +216,13 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                                       maxLines: 2,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color:
                                                               kTextsecondarytopColor,
-                                                          fontSize: 14,
+                                                          fontSize:
+                                                              size.width > 500
+                                                                  ? 18
+                                                                  : 14,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
@@ -218,10 +230,13 @@ class _CategoryVideoHomeViewState extends State<CategoryVideoHomeView> {
                                                   const SizedBox(height: 5),
                                                   Text(
                                                     "${educationData.numberOfViews.toString()} views",
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color:
                                                             kTextsecondarybottomColor,
-                                                        fontSize: 12),
+                                                        fontSize:
+                                                            size.width > 500
+                                                                ? 16
+                                                                : 12),
                                                   ),
                                                 ],
                                               ),
