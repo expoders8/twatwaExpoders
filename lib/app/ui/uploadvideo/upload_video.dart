@@ -243,7 +243,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                                           "Lorem Ipsum is simply dummy",
                                           style: TextStyle(
                                             color: kTextsecondarybottomColor,
-                                            fontSize: 11,
+                                            fontSize: 10.5,
                                           ),
                                         ),
                                   const SizedBox(height: 5),

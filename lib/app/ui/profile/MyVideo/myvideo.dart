@@ -117,6 +117,9 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                     child: Stack(
                                       children: [
                                         Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
                                           color: kCardColor,
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -188,7 +191,7 @@ class _MyVideoPageState extends State<MyVideoPage> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   left: 8.0,
                                                                   top: 7),
                                                           child: Column(

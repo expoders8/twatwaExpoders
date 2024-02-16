@@ -88,6 +88,9 @@ class _OtherUserVideoPageState extends State<OtherUserVideoPage> {
                                   child: SizedBox(
                                     height: 90,
                                     child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
                                       color: kCardColor,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(

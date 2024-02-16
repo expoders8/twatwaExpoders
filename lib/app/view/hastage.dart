@@ -34,7 +34,8 @@ class _HasTageViewState extends State<HasTageView> {
           height: 45,
           width: Get.width,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(7)),
+            borderRadius: const BorderRadius.all(Radius.circular(3)),
+            color: kWhiteColor,
             border: Border.all(
               color: kButtonSecondaryColor,
             ),
@@ -59,6 +60,8 @@ class _HasTageViewState extends State<HasTageView> {
                 )
                 .toList(),
             searchable: true,
+            backgroundColor: kWhiteColor,
+            checkColor: kButtonColor,
             chipDisplay: MultiSelectChipDisplay(
               shape: RoundedRectangleBorder(
                 side: const BorderSide(
@@ -70,6 +73,7 @@ class _HasTageViewState extends State<HasTageView> {
               height: 60,
               textStyle: const TextStyle(color: kButtonSecondaryColor),
             ),
+
             onConfirm: (values) {
               getAllHasTageController.selectTagList(values);
               // setState(() {
@@ -87,7 +91,7 @@ class _HasTageViewState extends State<HasTageView> {
             ),
             buttonIcon: const Icon(
               Icons.arrow_drop_down_rounded,
-              color: kBlack45Color,
+              color: kWhiteColor,
             ),
             buttonText: const Text(
               "Select Hashtags",

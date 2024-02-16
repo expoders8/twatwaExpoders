@@ -288,7 +288,8 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                         labelColor: kButtonColor,
                                         isScrollable: true,
                                         indicatorColor: kButtonColor,
-                                        dividerColor: kAmberColor,
+                                        dividerColor: kTextSecondaryColor,
+                                        dividerHeight: 0.2,
                                         tabs: [
                                           Tab(text: 'UP NEXT VIDEOS'),
                                           Tab(text: 'ABOUT'),
@@ -1347,7 +1348,8 @@ class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           labelColor: kButtonColor,
           isScrollable: true,
           indicatorColor: kButtonColor,
-          dividerColor: kAmberColor,
+          dividerColor: kTextSecondaryColor,
+          dividerHeight: 0.2,
           tabs: [
             Tab(text: 'UP NEXT VIDEOS'),
             Tab(text: 'ABOUT'),

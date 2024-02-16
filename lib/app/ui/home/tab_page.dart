@@ -72,8 +72,12 @@ class _TabPageState extends State<TabPage> {
         child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(29)),
         backgroundColor: kButtonColor,
-        child: const Icon(Icons.video_call),
+        child: const Icon(
+          Icons.video_call,
+          color: kWhiteColor,
+        ),
         onPressed: () {
           showTypeBottomSheet();
         },

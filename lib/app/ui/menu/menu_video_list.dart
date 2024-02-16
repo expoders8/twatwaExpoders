@@ -51,44 +51,48 @@ class _SearchVideoListPageState extends State<SearchVideoListPage> {
             ),
           ),
         ),
-        title: TextField(
-          controller: videolistcontroller,
-          style: const TextStyle(color: kButtonSecondaryColor),
-          decoration: InputDecoration(
-            hintText: 'Search',
-            hintStyle: const TextStyle(color: kButtonSecondaryColor),
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.fromLTRB(17, 17, 0, 17),
-            prefixIcon: Image.asset(
-              "assets/icons/search.png",
-              scale: 24,
-              color: kButtonSecondaryColor,
-            ),
-            suffixIcon: IconButton(
-              icon: AvatarGlow(
-                animate: islisteing,
-                repeat: true,
-                endRadius: 50,
-                glowColor: kWhiteColor,
-                duration: const Duration(milliseconds: 1000),
-                child: const Image(
-                  image: AssetImage(
-                    "assets/icons/mic.png",
-                  ),
-                  width: 15,
+        actions: [
+          IconButton(
+            icon: AvatarGlow(
+              animate: islisteing,
+              repeat: true,
+              endRadius: 50,
+              glowColor: kWhiteColor,
+              duration: const Duration(milliseconds: 1000),
+              child: const Image(
+                image: AssetImage(
+                  "assets/icons/mic.png",
                 ),
+                width: 15,
               ),
-              onPressed: () async {
-                listen();
-              },
             ),
+            onPressed: () async {
+              listen();
+            },
           ),
-          onChanged: (value) => {
-            setState(() {
-              searchVideoController.searchQuery(value);
-              searchVideoController.fetchVideo();
-            }),
-          },
+        ],
+        title: Expanded(
+          child: TextField(
+            controller: videolistcontroller,
+            style: const TextStyle(color: kButtonSecondaryColor),
+            decoration: InputDecoration(
+              hintText: 'Search',
+              hintStyle: const TextStyle(color: kButtonSecondaryColor),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.fromLTRB(17, 14, 0, 17),
+              prefixIcon: Image.asset(
+                "assets/icons/search.png",
+                scale: 24,
+                color: kButtonSecondaryColor,
+              ),
+            ),
+            onChanged: (value) => {
+              setState(() {
+                searchVideoController.searchQuery(value);
+                searchVideoController.fetchVideo();
+              }),
+            },
+          ),
         ),
         elevation: 1,
       ),

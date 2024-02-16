@@ -21,8 +21,6 @@ class ShareWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () async {
-        LoaderX.show(context, 70.0);
-
         // String url = Platform.isIOS ? appStoreUrl : playStoreUrl;
         final String textdata;
         final String titledata;
@@ -78,11 +76,6 @@ class ShareWidget extends StatelessWidget {
                 scale: 1.5,
               ),
             ),
-            // const SizedBox(width: 5),
-            // const Text(
-            //   "625",
-            //   style: TextStyle(fontSize: 14, color: kButtonSecondaryColor),
-            // )
           ],
         ),
       ),
