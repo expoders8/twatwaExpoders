@@ -64,9 +64,9 @@ class _MoneyPaymentSuccessfulPageState
                   "assets/icons/payment_successful.png",
                 ),
                 const SizedBox(height: 60),
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       "Congratulations you are premium member now.🤟",
                       style: TextStyle(

@@ -695,13 +695,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           : 100
                       : _controller.value.aspectRatio <= 0.80
                           ? currentIndex == 0
-                              ? 160
+                              ? 150
                               : currentIndex == 1
-                                  ? 140
+                                  ? 122
                                   : currentIndex == 2
-                                      ? 140
+                                      ? 120
                                       : currentIndex == 3
-                                          ? 120
+                                          ? 100
                                           : currentIndex == 4
                                               ? 100
                                               : currentIndex == 5
@@ -710,7 +710,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                                       ? 50
                                                       : currentIndex == 7
                                                           ? 50
-                                                          : 190
+                                                          : 150
                           : Platform.isIOS
                               ? size.width > 500
                                   ? 120
@@ -874,7 +874,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     ]);
   }
 
-  void _handleDoubleTap() {
+  void handleDoubleTap() {
     // final currentPosition = _controller.value.position.inSeconds;
     // final duration = _controller.value.duration.inSeconds;
 
@@ -899,7 +899,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       _controller
           .seekTo(Duration(seconds: _controller.value.position.inSeconds - 5));
     } else {
-      _controller.seekTo(Duration(seconds: 0));
+      _controller.seekTo(const Duration(seconds: 0));
     }
   }
 

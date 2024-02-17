@@ -282,7 +282,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       left: 8.0,
                                                                       top: 6),
                                                               child: Text(
@@ -299,7 +299,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                                             Container(
                                                               margin:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       left: 126,
                                                                       top: 6),
                                                               child: Text(
@@ -325,7 +325,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                                           width: 250,
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   left: 8.0),
                                                           child: Text(
                                                             data.comment
@@ -391,7 +391,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                                               child: Container(
                                                                 height: 35,
                                                                 padding: const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     horizontal:
                                                                         19.0,
                                                                     vertical:
@@ -630,11 +630,11 @@ class _CommentsPageState extends State<CommentsPage> {
                           Navigator.of(context).pop();
                           removeConfirmationDialog(commentId);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 12.0, bottom: 12),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.delete,
                                 color: kTextsecondarytopColor,

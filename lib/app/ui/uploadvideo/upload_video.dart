@@ -370,9 +370,9 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                               )
                             : Container(),
                         const SizedBox(height: 40),
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               "Details",
                               style: TextStyle(
@@ -409,9 +409,9 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                           validationMsg: 'Please enter about video',
                         ),
                         const SizedBox(height: 30),
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               "Thumbnail",
                               style: TextStyle(
@@ -481,9 +481,9 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                               )
                             : Container(),
                         const SizedBox(height: 20),
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               "Hashtags",
                               style: TextStyle(

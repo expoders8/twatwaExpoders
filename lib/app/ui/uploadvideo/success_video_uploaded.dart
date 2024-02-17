@@ -57,9 +57,9 @@ class _VideoUploadedPageState extends State<VideoUploadedPage> {
                   scale: 1.8,
                 ),
                 const SizedBox(height: 40),
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       "Congratulations you are live now.🤟",
                       style: TextStyle(

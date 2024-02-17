@@ -91,9 +91,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Subscriptions",
                                 maxLines: 2,
@@ -143,9 +143,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Recommended videos",
                                 maxLines: 2,
@@ -195,9 +195,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Activity on my channel",
                                 maxLines: 2,
@@ -247,9 +247,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Activity on my comments",
                                 maxLines: 2,
@@ -299,9 +299,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Replies to my comments",
                                 maxLines: 2,
@@ -352,9 +352,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Mentions",
                                 style: TextStyle(
@@ -403,9 +403,9 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Activity on other channels",
                                 style: TextStyle(

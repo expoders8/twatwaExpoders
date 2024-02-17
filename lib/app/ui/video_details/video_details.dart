@@ -104,7 +104,6 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () {
         videoDetailController.videoId("");
@@ -290,6 +289,7 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                         indicatorColor: kButtonColor,
                                         dividerColor: kTextSecondaryColor,
                                         dividerHeight: 0.2,
+                                        tabAlignment: TabAlignment.center,
                                         tabs: [
                                           Tab(text: 'UP NEXT VIDEOS'),
                                           Tab(text: 'ABOUT'),
@@ -598,8 +598,8 @@ class _VideoDetailsPageState extends State<VideoDetailsPage>
                                           borderRadius:
                                               BorderRadius.circular(25)),
                                       // width: 150,
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           Text(
                                             'DONATE',
                                             style: TextStyle(
@@ -1273,8 +1273,8 @@ class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                                         width: 1),
                                     borderRadius: BorderRadius.circular(25)),
                                 // width: 150,
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Text(
                                       'DONATE',
                                       style: TextStyle(
@@ -1350,6 +1350,7 @@ class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           indicatorColor: kButtonColor,
           dividerColor: kTextSecondaryColor,
           dividerHeight: 0.2,
+          tabAlignment: TabAlignment.center,
           tabs: [
             Tab(text: 'UP NEXT VIDEOS'),
             Tab(text: 'ABOUT'),

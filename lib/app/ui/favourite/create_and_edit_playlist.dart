@@ -92,9 +92,9 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 40),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "PLAYLIST NAME",
                         style: TextStyle(
@@ -122,9 +122,9 @@ class _CreateAndEditPlaylistPageState extends State<CreateAndEditPlaylistPage> {
                     validationMsg: 'Please enter Playlist Name',
                   ),
                   const SizedBox(height: 30),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "SHARE WITH",
                         style: TextStyle(

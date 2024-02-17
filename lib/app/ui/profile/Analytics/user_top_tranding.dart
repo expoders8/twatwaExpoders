@@ -106,7 +106,7 @@ class _UserTopTrandingHomeViewState extends State<UserTopTrandingHomeView> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              width: 135,
+                                              width: 125,
                                               child: Text(
                                                 data.title.toString(),
                                                 maxLines: 2,
@@ -148,17 +148,15 @@ class _UserTopTrandingHomeViewState extends State<UserTopTrandingHomeView> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
+                                  width: 45,
+                                  height: 45,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                       border: Border.all(
                                           width: 1, color: kWhiteColor)),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 8),
+                                  child: Center(
                                     child: Text(
-                                      userTopTrendingVideoController
-                                          .videoList[0].data!.length
-                                          .toString(),
+                                      index.toString(),
                                       style: const TextStyle(
                                           color: kTextSecondaryColor,
                                           fontSize: 18,

@@ -72,11 +72,11 @@ class _PopularHomeViewState extends State<PopularHomeView> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+              const Padding(
+                padding: EdgeInsets.only(left: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     SizedBox(height: 10),
                     SizedBox(
                       width: 130,

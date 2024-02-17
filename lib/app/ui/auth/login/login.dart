@@ -139,9 +139,9 @@ class _LoginPageState extends State<LoginPage> {
                                     Get.toNamed(Routes.forgotPasswordPage,
                                         parameters: userEmail);
                                   },
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    children: const [
+                                    children: [
                                       Text(
                                         "Forgotten Password?",
                                         style: TextStyle(

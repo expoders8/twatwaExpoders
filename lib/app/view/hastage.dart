@@ -52,7 +52,6 @@ class _HasTageViewState extends State<HasTageView> {
         if (getAllHasTageController.tagList.isNotEmpty) {
           var data = getAllHasTageController.tagList[0];
           return MultiSelectDialogField(
-            // initialValue: selectedCategory,
             items: data
                 .map(
                   (category) =>
@@ -64,16 +63,18 @@ class _HasTageViewState extends State<HasTageView> {
             checkColor: kButtonColor,
             chipDisplay: MultiSelectChipDisplay(
               shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                    color: kButtonColor,
-                    width: 0.6), // Set your desired border color here
-                borderRadius: BorderRadius.circular(20.0), // Adjust as needed
+                side: const BorderSide(color: kButtonColor, width: 0.6),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              icon: const Icon(
+                Icons.check,
+                color: kButtonColor,
+                size: 18,
               ),
               chipColor: kBackGroundColor,
               height: 60,
               textStyle: const TextStyle(color: kButtonSecondaryColor),
             ),
-
             onConfirm: (values) {
               getAllHasTageController.selectTagList(values);
               // setState(() {
@@ -82,7 +83,6 @@ class _HasTageViewState extends State<HasTageView> {
             },
             title: const Text("Hashtags"),
             listType: MultiSelectListType.CHIP,
-
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(7)),
               border: Border.all(

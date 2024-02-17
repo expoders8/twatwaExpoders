@@ -40,14 +40,13 @@ class _OtherUserHomePageState extends State<OtherUserHomePage> {
                               "assets/images/imagebg.png",
                             ),
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 7),
+                                padding: EdgeInsets.only(left: 8.0, top: 7),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     SizedBox(
                                       width: 135,
                                       child: Text(

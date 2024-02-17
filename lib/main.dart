@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       title: 'OpenTrend',
       themeMode: ThemeMode.system,
       theme: Provider.of<ThemeProvider>(context, listen: false).getTheme(),
-      initialRoute: AppPages.initial,
+      initialRoute: Routes.tabPage,
       getPages: AppPages.routes,
       initialBinding: BindingsBuilder(() {
         networkController.checkInitialConnectivity();

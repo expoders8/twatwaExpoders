@@ -204,12 +204,12 @@ class _PaymentTypeSavedCardState extends State<PaymentTypeSavedCard> {
                         const SizedBox(
                           height: 5,
                         ),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   "CARD HOLDER",
                                   style: TextStyle(
@@ -233,7 +233,7 @@ class _PaymentTypeSavedCardState extends State<PaymentTypeSavedCard> {
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   "EXPIRES",
                                   style: TextStyle(

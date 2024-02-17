@@ -294,7 +294,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 left: 8.0,
                                                                 top: 6),
                                                         child: Text(
@@ -310,7 +310,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                                                       ),
                                                       Container(
                                                         margin: const EdgeInsets
-                                                                .only(
+                                                            .only(
                                                             left: 140, top: 6),
                                                         child: Text(
                                                           difference >= 1
@@ -597,11 +597,11 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                           Navigator.of(context).pop();
                           removeConfirmationDialog(commentId);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 12.0, bottom: 12),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.delete,
                                 color: kTextsecondarytopColor,
